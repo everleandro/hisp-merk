@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "drocket": "file:../../../../media/ever/DATA/Vue/drocket/drocket-1.0.19.tgz",
+    "drocket": "^1.0.20",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "vue-router": "latest"
