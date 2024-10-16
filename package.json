@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "drocket": "^1.0.20",
+    "drocket": "^1.0.21",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "vue-router": "latest"

@@ -28,6 +28,7 @@
 
     <e-main>
       <e-container>
+
         <NuxtPage />
       </e-container>
     </e-main>
@@ -58,9 +59,11 @@ watch(() => router, () => {
 
 }, { deep: true, immediate: true });
 </script>
+
 <style lang="scss">
 .e-app[type="default-layout"] {
   background-color: var(--grey);
+
 
   .e-drawer__prepend {
     background-color: var(--primary-dark);
@@ -69,7 +72,7 @@ watch(() => router, () => {
   &::before {
     content: ' ';
     display: block;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 100%;
@@ -79,6 +82,19 @@ watch(() => router, () => {
     background-position: 50% 0;
     background-size: cover;
     background-image: url('/assets/images/bg.webp');
+
+  }
+
+  &::after {
+    content: ' ';
+    background-color: var(--secondary);
+    opacity: 0.2;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
   }
 }
 </style>

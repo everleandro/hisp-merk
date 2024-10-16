@@ -4,7 +4,7 @@
             <div class="card-seller__header d-flex align-center">
                 <img :src="user" />
                 <div class="card-seller__header-info">
-                    <name class="mb-3"> Jhon Smith </name>
+                    <span class="mb-3 seller-name"> Jhon Smith </span>
                     <span>Cocinero</span>
                 </div>
                 <e-spacer></e-spacer>
@@ -48,7 +48,7 @@ import user from "assets/images/user.png";
             margin-right: 10px;
         }
 
-        name {
+        .seller-name {
             font-weight: bold;
         }
     }

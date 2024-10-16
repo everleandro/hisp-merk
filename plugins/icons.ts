@@ -8,6 +8,7 @@ export const iconFactory: Record<string, IconPath | Array<IconPath> | string> =
     shop: "shop",
     bellOff: "bell-off",
     message: "message",
+    map: "map-off",
     cart: "cart",
     exit: "exit",
     fav: "fav",

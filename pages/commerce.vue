@@ -18,7 +18,7 @@
                         <e-spacer></e-spacer>
                         <div class="d-flex justify-center align-center">
                             <e-button :icon="$icon.star" text color="yellow" />
-                            <rating>4.9</rating>
+                            <div>4.9</div>
                         </div>
                     </div>
                 </e-col>
@@ -31,7 +31,11 @@
             </e-row>
         </div>
         <div class="commerce-page__product-container">
-            <h3 class="pa-3">Productos</h3>
+            <div class="pa-3 align-center d-block mt-3 d-md-flex">
+                <h2 class="mb-3">Productos</h2>
+                <e-spacer></e-spacer>
+                <e-textfield :prepend-icon="$icon.magnify" class="white mb-3"></e-textfield>
+            </div>
             <e-row>
                 <e-col v-for="i in 5" cols="24" sm="8" md="6" lg="4" :key="i">
                     <card-product />
