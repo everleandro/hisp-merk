@@ -5,7 +5,7 @@
       <e-spacer></e-spacer>
       <e-button :icon="$icon.bellOff" text class="ml-1" color="white"></e-button>
       <e-button :icon="$icon.message" text class="ml-1" color="white"></e-button>
-      <e-button :icon="$icon.cart" text class="ml-1" color="white"></e-button>
+      <e-button :icon="$icon.cart" to="/cart" text class="ml-1" color="white"></e-button>
     </e-bar>
 
     <e-drawer v-model="drawerModel" fixed class="primary">

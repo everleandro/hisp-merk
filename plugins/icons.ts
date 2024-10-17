@@ -3,6 +3,11 @@ import type { IconPath } from "drocket";
 export const iconFactory: Record<string, IconPath | Array<IconPath> | string> =
   {
     filter: "filter",
+    minus: "minus",
+    plus: "plus",
+    close: "exit",
+    trash: "delete",
+    photo: "photo",
     magnify: "magnify",
     store: "store",
     shop: "shop",
