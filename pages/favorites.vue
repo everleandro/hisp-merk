@@ -1,5 +1,6 @@
 <template>
     <div class="favorite-page">
+
         <e-bar depressed>
             <h1 class="secondary--text">Favoritos</h1>
             <e-spacer />
@@ -8,11 +9,11 @@
         <div class="tab__container">
             <transition :name="listTrasition">
                 <e-row :key="`${state.view}`">
-                    <e-col v-for="i in 5" v-show="state.view === switchType.option2" cols="24" sm="8" md="6" lg="4"
+                    <e-col v-for="i in 5" v-show="state.view === switchType.option1" cols="24" sm="8" md="6" lg="4"
                         :key="i">
                         <card-product />
                     </e-col>
-                    <e-col v-for="i in 5" v-show="state.view === switchType.option1" cols="24" sm="12" md="8" lg="6"
+                    <e-col v-for="i in 5" v-show="state.view === switchType.option2" cols="24" sm="12" md="8" lg="6"
                         :key="i">
                         <card-commerce />
                     </e-col>

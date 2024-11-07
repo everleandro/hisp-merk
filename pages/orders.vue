@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex order-page__header">
+        <div class="d-flex order-page__header mb-4">
             <h1 class="secondary--text">Mis pedidos</h1>
             <e-spacer></e-spacer>
             <e-textfield :prepend-icon="$icon.magnify" retain-color class="white"></e-textfield>
@@ -15,10 +15,9 @@
 <style lang="scss">
 .order-page {
     &__header {
-        padding: 16px;
         align-items: center;
 
-        @include _xs {
+        @include mixin.xs {
             flex-direction: column;
 
             .e-field {

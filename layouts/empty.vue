@@ -1,12 +1,22 @@
 <template>
-  <e-app>
-    <e-main class="empty-layout">
-      <e-container class="pa-0">
-        <NuxtPage />
+  <e-app type="empty-layout">
+    <main>
+      <e-container>
+        <slot />
       </e-container>
-    </e-main>
+    </main>
   </e-app>
 </template>
 <script lang="ts" setup>
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.e-app[type="empty-layout"] {
+  .e-container {
+    margin-top: 40px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // height: 100vh;
+  }
+}
+</style>

@@ -1,16 +1,16 @@
 <template>
     <div class="commerce-page">
+        <div class="commerce-page__header">
+            <Swiper slides-per-view="auto" :modules="[SwiperAutoplay, SwiperEffectCreative]" :autoplay="{
+                delay: 8000,
+                disableOnInteraction: true,
+            }" space-between="12" :loop-additional-slides="10" :loop="false">
+                <SwiperSlide v-for="slide in 6" :key="slide" :clickable="true">
+                    <img src="@/assets/images/commerce-bg.webp" alt="">
+                </SwiperSlide>
+            </Swiper>
+        </div>
         <div class="white">
-            <div class="commerce-page__header">
-                <e-bar class="commerce-bar" depressed>
-                    <e-button :icon="$icon.arrowBack" small depressed class="white" color="secondary"
-                        @click="$router.back()"></e-button>
-                    <e-spacer></e-spacer>
-                    <e-button :icon="$icon.hearth" small depressed class="white" color="secondary"></e-button>
-                    <e-button :icon="$icon.share" small depressed class="white" color="secondary"></e-button>
-                </e-bar>
-                <img src="@/assets/images/commerce-bg.webp" alt="">
-            </div>
             <e-row class="ma-0">
                 <e-col cols="24">
                     <div class="d-flex align-center">
@@ -45,14 +45,21 @@
     </div>
 </template>
 <script lang="ts" setup>
-import user from "assets/images/user.png";
+
+onMounted(() => {
+    // setHeaderImageList(["@/assets/images/commerce-bg.webp", "@/assets/images/commerce-bg.webp"])
+
+})
 </script>
 
 <style lang="scss">
+.commerce-bar {
+    z-index: 1;
+    backdrop-filter: blur(5px);
+    background-color: transparent
+}
+
 .commerce-page {
-    .e-bar .white {
-        color: unset;
-    }
 
     &__product-container {
         backdrop-filter: blur(10px);
@@ -67,16 +74,12 @@ import user from "assets/images/user.png";
             object-fit: cover;
             top: 0;
 
-            @include _from_sm {
+            @include mixin.from_sm {
                 aspect-ratio: 3 / 1;
             }
         }
     }
 
-    .commerce-bar {
-        z-index: 1;
-        backdrop-filter: blur(5px);
-        position: absolute;
-    }
+
 }
 </style>

@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
   },
+  imports: {
+    dirs: ["./stores"],
+  },
   vite: {
     build: {
       sourcemap: true,
@@ -14,9 +17,10 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: "modern-compiler",
-          additionalData: `@import "assets/styles/_global.scss";`,
+          additionalData: `@use "assets/styles/_global.scss" as *; @use "drocket/mixin.scss";`,
         },
       },
     },
   },
+  modules: ["@nuxtjs/device", "nuxt-swiper", "@pinia/nuxt"],
 });

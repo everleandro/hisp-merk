@@ -1,6 +1,6 @@
 <template>
-    <div class="card-product">
-        <div class="card-product__header">
+    <div :class="classes">
+        <div v-ripple class="card-product__header" @click="showDetails">
             <e-button small :icon="$icon.fav" text color="primary"></e-button>
             <img src="https://via.placeholder.com/300" alt="product image" />
         </div>
@@ -11,14 +11,37 @@
                 Cupiditate in officia cum voluptatem iste exercitationem, consequatur distinctio incidunt deleniti
                 explicabo.</p>
             <e-spacer></e-spacer>
-            <span class="card-product__price">$100</span>
             <div class="card-product__actions py-3">
+                <span class="card-product__price">$100</span>
 
-                <e-button color="primary" x-small depressed block>añadir al carrito</e-button>
+                <e-button color="primary" x-small depressed outlined :icon="$icon.cart" />
             </div>
         </div>
     </div>
 </template>
+<script lang="ts" setup>
+export interface Props {
+    vertical?: boolean,
+    squared?: boolean,
+}
+const props = withDefaults(defineProps<Props>(), { vertical: false })
+const details = ref(false);
+const classes = computed(() => {
+    return {
+        'card-product': true,
+        'card-product--vertical': props.vertical,
+        'card-product--squared': props.squared,
+    }
+})
+const emit = defineEmits<{
+    (e: 'show:details', value: boolean): void
+}>()
+
+const showDetails = () => {
+    console.log('show details 1');
+    emit('show:details', true);
+}
+</script>
 <style lang="scss">
 .card-product {
     border-radius: 1.5px;
@@ -79,14 +102,53 @@
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 1;
-            /* number of lines to show */
-            line-clamp: 1;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
         }
     }
 
-    @include _from_sm {
+    &--vertical {
+        flex-direction: column;
+        // align-items: center;
+        width: 100%;
+
+        .card-product {
+            &__header {
+                width: 100%;
+                aspect-ratio: 9 / 10;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+    }
+
+    &--squared {
+        flex-direction: column;
+        width: 100%;
+
+        .card-product {
+            &__header {
+                width: 100%;
+                aspect-ratio: 10 / 6;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+    }
+
+    @include mixin.from_sm {
         &__header {
             width: 100%;
             aspect-ratio: 9 / 10;

@@ -25,6 +25,7 @@ const state = reactive({
     viewType: switchType.option1
 })
 
+
 const listTrasition = computed(() => state.viewType === switchType.option1 ? 'tab-reverse-transition' : 'tab-transition')
 </script>
 <style lang="scss"></style>

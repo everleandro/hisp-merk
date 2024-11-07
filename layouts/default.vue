@@ -1,100 +1,93 @@
 <template>
-  <e-app type="default-layout">
-    <e-bar app fixed color="primary">
-      <e-button icon="menu" text class="ml-1" @click="drawerModel = !drawerModel" color="white"></e-button>
-      <e-spacer></e-spacer>
-      <e-button :icon="$icon.bellOff" text class="ml-1" color="white"></e-button>
-      <e-button :icon="$icon.message" text class="ml-1" color="white"></e-button>
-      <e-button :icon="$icon.cart" to="/cart" text class="ml-1" color="white"></e-button>
-    </e-bar>
+  <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
+    <e-bar app fixed class="primary">
+      <e-button icon="menu" text class="ml-3 d-none d-sm-block" color="white"
+        @click="data.drawerModelDesktop = !data.drawerModelDesktop" />
 
-    <e-drawer v-model="drawerModel" fixed class="primary">
-      <template #prepend>
-        <e-list-item :prepend-avatar="user" title="Jhon Smith" color="white" subtitle="smith.93@gmail.com">
-        </e-list-item>
-        <e-divider></e-divider>
-      </template>
-      <e-list>
-        <e-list-item v-for="link in links" :prepend-icon="link.icon" color="white" large :to="link.to">
-          {{ link.title }}
-        </e-list-item>
-      </e-list>
-      <template #append>
-        <div class="pa-2">
-          <e-button :prepend-icon="$icon.exit" color="white" text outlined block small>cerrar Sesion</e-button>
-        </div>
-      </template>
-    </e-drawer>
+      <app-logo class="ml-3" />
+      <e-spacer />
+      <e-button :icon="$icon.bell" text class="ml-1" color="white" />
+    </e-bar>
+    <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" right mobile :links="MOBILE_DRAWER_LINKS" />
+    <app-drawer v-else v-model="data.drawerModelDesktop" :links="DESKTOP_LINKS" />
 
     <e-main>
       <e-container>
-
-        <NuxtPage />
+        <slot />
       </e-container>
     </e-main>
+    <footer class="mobile__footer primary d-flex d-sm-none">
+      <e-tab-group v-model="data.tabModel" grow>
+        <e-tab v-for="(link, i) in MOBILE_LINKS" :key="i" :prepend-icon="link.icon" stacked :to="link.to" color="white">
+          {{ link.title }}
+        </e-tab>
+      </e-tab-group>
+    </footer>
+
   </e-app>
 </template>
 <script lang="ts" setup>
-import { useBreakpoint } from 'drocket'
-
-const drawerModel = ref(true);
-const { $icon } = useNuxtApp();
-const router = useRouter();
-const { viewport } = useBreakpoint()
-
-import user from "assets/images/user.png";
-const links = [
-  { icon: $icon.fav, title: "Favoritos", to: "/favorites" },
-  { icon: $icon.search, title: "Busqueda", to: "/search" },
-  { icon: $icon.orders, title: "Pedidos", to: "/orders" },
-  { icon: $icon.profile, title: "Perfil", to: "/profile" },
-];
-
-watch(() => router, () => {
-  if (drawerModel.value && (viewport.xs || viewport.sm || viewport.md)) {
-    drawerModel.value = false
-  } else if (!drawerModel.value && (viewport.xl || viewport.lg)) {
-    drawerModel.value = true
-  }
-
-}, { deep: true, immediate: true });
+import { DESKTOP_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
+const app = useApp();
+const data = reactive({
+  drawerModelMobile: false,
+  drawerModelDesktop: true,
+  tabModel: 1
+})
 </script>
 
 <style lang="scss">
-.e-app[type="default-layout"] {
-  background-color: var(--grey);
-
-
-  .e-drawer__prepend {
-    background-color: var(--primary-dark);
+.e-app {
+  .e-overlay {
+    z-index: 1001;
   }
 
-  &::before {
-    content: ' ';
-    display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.1;
-    background-repeat: no-repeat;
-    background-position: 50% 0;
-    background-size: cover;
-    background-image: url('/assets/images/bg.webp');
-
+  .e-main {
+    padding-top: 64px !important;
   }
 
-  &::after {
-    content: ' ';
-    background-color: var(--secondary);
-    opacity: 0.2;
+  &[type="default-layout"] {
+    .e-drawer__prepend {
+      background-color: var(--primary-dark);
+    }
+  }
+
+  .mobile__footer {
     position: fixed;
-    left: 0;
-    top: 0;
+    bottom: 0;
     width: 100%;
-    height: 100%;
-    z-index: -1;
+    box-shadow: 0px -2px 5px 0px rgba(0, 0, 0, 0.1);
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    /* El 20px es un valor base si el dispositivo no soporta env */
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2;
+
+    .e-tab.e-tab {
+      min-width: unset;
+    }
+
+    .e-icon--size-default {
+      font-size: 18px;
+    }
+
+    .e-tab__slider {
+      display: none;
+    }
+
+    .e-slide-group {
+      flex: 1;
+
+      .e-btn {
+        font-size: 12px;
+        font-weight: 300;
+        text-transform: unset;
+      }
+    }
+  }
+
+  .e-main {
+    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 54px);
   }
 }
 </style>

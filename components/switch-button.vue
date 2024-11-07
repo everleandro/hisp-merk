@@ -1,12 +1,12 @@
 <template>
     <div class="switch-button">
-        <e-button text :color="switcherViweColor(switchType.option1)" class="white"
+        <e-button text :color="switcherViweColor(switchType.option1)" :class="switcherViweClass(switchType.option1)"
             @click="switchView(switchType.option1)">
-            <e-icon :icon="$icon.store"></e-icon>
-        </e-button>
-        <e-button text :color="switcherViweColor(switchType.option2)" class="white"
-            @click="switchView(switchType.option2)">
             <e-icon :icon="$icon.shop"></e-icon>
+        </e-button>
+        <e-button text :color="switcherViweColor(switchType.option2)" :class="switcherViweClass(switchType.option2)"
+            @click="switchView(switchType.option2)">
+            <e-icon :icon="$icon.store"></e-icon>
         </e-button>
     </div>
 
@@ -32,7 +32,10 @@ const switchView = (type: switchType) => {
 }
 
 const switcherViweColor = (type: switchType) => {
-    return props.modelValue === type ? 'gray-dark' : 'gray'
+    return props.modelValue === type ? 'secondary' : 'dark-gray'
+}
+const switcherViweClass = (type: switchType) => {
+    return props.modelValue === type ? 'white' : 'white-02'
 }
 
 </script>

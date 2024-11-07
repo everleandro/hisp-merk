@@ -13,8 +13,8 @@
                 </p>
             </div>
             <div class="card-order__actions">
-                <e-button small color="primary">Comprar nuevamente</e-button>
-                <e-button small color="primary">Evaluar vendedor</e-button>
+                <e-button small color="primary" outlined :x-small="$device.isMobile">Comprar nuevamente</e-button>
+                <e-button small color="primary" outlined :x-small="$device.isMobile">Evaluar vendedor</e-button>
             </div>
         </div>
         <div class="card-order__details">
@@ -66,6 +66,10 @@
 
     .product-image {
         padding-right: 12px;
+
+        @include mixin.xs {
+            flex: .4;
+        }
 
         img {
             height: 100px;
@@ -123,12 +127,18 @@
             margin: 0;
         }
 
+        h2 {
+            font-size: 1rem;
+
+            margin-bottom: 10px;
+
+            @include mixin.xs {}
+        }
+
         h2,
         p {
-
-
-            @include _xs {
-                text-align: center;
+            @include mixin.xs {
+                text-align: right;
             }
         }
     }
@@ -137,9 +147,9 @@
         display: flex;
         padding: 12px;
 
-        @include _xs {
-            flex-direction: column;
+        @include mixin.xs {
             align-items: center;
+            flex-wrap: wrap;
         }
     }
 
@@ -148,16 +158,18 @@
         flex-direction: column;
         justify-content: space-evenly;
 
-        @include _xs {
+        @include mixin.xs {
+            flex-direction: row;
+            margin-top: 12px;
             flex-grow: 1;
             width: 100%;
         }
 
         .e-btn {
-            margin-bottom: 12px;
             margin-left: 0;
 
-            @include _from_sm {
+            @include mixin.from_sm {
+                margin-bottom: 12px;
                 margin: 0;
             }
         }

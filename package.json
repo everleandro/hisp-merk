@@ -10,10 +10,17 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "drocket": "^1.0.21",
+    "pinia": "^2.2.6",
+    "@pinia/nuxt": "^0.7.0",
+    "@nuxtjs/device": "^3.2.4",
+    "drocket": "^1.0.24",
     "nuxt": "^3.13.0",
+    "nuxt-swiper": "^1.2.2",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "overrides": {
+    "vue": "latest"
   },
   "devDependencies": {
     "sass": "^1.79.4"
