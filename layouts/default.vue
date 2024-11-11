@@ -6,7 +6,7 @@
 
       <app-logo class="ml-3" />
       <e-spacer />
-      <e-button :icon="$icon.bell" text class="ml-1" color="white" />
+      <e-button :icon="$icon.cart" text class="ml-1" color="white" to="/cart"/>
     </e-bar>
     <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" right mobile :links="MOBILE_DRAWER_LINKS" />
     <app-drawer v-else v-model="data.drawerModelDesktop" :links="DESKTOP_LINKS" />

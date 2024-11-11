@@ -35,6 +35,7 @@
                 </div>
                 <div class="d-flex justify-flex-end full-width mt-3">
                     <e-button color="primary" text @click="dialog = false">close</e-button>
+                    <e-button color="primary" @click="dialog = false">Submit</e-button>
                 </div>
             </div>
         </e-dialog>

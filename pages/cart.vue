@@ -57,7 +57,7 @@ const { viewport } = useBreakpoint()
         align-items: center;
         margin-bottom: 12px;
 
-        @include _xs {
+        @include mixin.xs {
             flex-direction: column;
             margin-bottom: 40px;
         }
@@ -66,7 +66,7 @@ const { viewport } = useBreakpoint()
     &__check-out {
         margin-bottom: 48px;
 
-        @include _xs {
+        @include mixin.xs {
             margin-bottom: 0;
             padding: 8px 0;
             background: rgba(255, 255, 255, .5);

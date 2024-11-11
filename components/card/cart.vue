@@ -14,14 +14,13 @@
                     <p class="card-cart__price ma-0">$1000</p>
                 </div>
             </div>
+        </div>
+        <e-divider class="my-3" />
+        <div class="card-cart__actions">
+            <cart-quantity v-model="quantity" />
+            <e-spacer class="d-block d-md-none" />
             <e-spacer />
-            <e-divider class="my-3" />
-            <div class="card-cart__actions">
-                <e-spacer class="d-none d-md-block" />
-                <cart-quantity v-model="quantity" />
-                <e-spacer class="d-block d-md-none" />
-                <e-button text x-small color="secondary" class="ml-3">Eliminar</e-button>
-            </div>
+            <e-button text x-small color="primary" outlined class="ml-3">Eliminar</e-button>
         </div>
     </li>
 </template>
@@ -35,56 +34,70 @@ const quantity = ref(0)
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
-    flex-direction: column;
+    // flex-direction: column;
 
-    @include _from_sm {
-        flex-direction: row;
-    }
+    flex-direction: row;
+    flex-wrap: wrap;
+
+
 
     img {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
         border-radius: 8px;
         object-fit: cover;
         margin-bottom: 16px;
 
-        @include _from_sm {
+        @include mixin.from_sm {
             margin-right: 16px;
+            width: 140px;
+            height: 140px;
         }
     }
 
     h4 {
+        @include mixin.xs {
+            font-size: small;
+        }
+
         text-transform: uppercase;
     }
 
     &__container {
         flex: 1;
         display: flex;
-        flex-direction: column;
 
-        @include _xs {
-            &>div.d-flex {
+        flex-direction: row;
+
+        &>div.d-flex {
+            flex: 1;
+
+            @include mixin.xs {
                 flex-direction: column;
 
                 h4,
                 p {
-                    text-align: center;
+                    text-align: justify;
                 }
             }
         }
+
     }
 
     &__price {
         font-size: 1.5rem;
         font-weight: 600;
 
-
+        @include mixin.xs {
+            text-align: right;
+        }
     }
 
     &__actions {
         display: flex;
+        flex: 1;
 
-        e-button {
+        .e-bbtn {
             margin-right: 8px;
         }
     }
