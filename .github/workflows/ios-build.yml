@@ -3,11 +3,11 @@ name: Build iOS App
 on:
   push:
     branches:
-      - main  # O la rama que uses
+      - main # O la rama que uses
 
 jobs:
   build-ios:
-    runs-on: macos-latest  # Usa una máquina Mac de GitHub Actions
+    runs-on: macos-latest # Usa una máquina Mac de GitHub Actions
 
     steps:
       - name: Checkout code
@@ -16,7 +16,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # O la versión que uses
+          node-version: 18 # O la versión que uses
 
       - name: Install dependencies
         run: npm install
@@ -51,7 +51,8 @@ jobs:
           xcodebuild -exportArchive -archivePath build/App.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build/ipa
 
       - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-app
           path: ios/build/ipa/*.ipa
+          retention-days: 5 # Opcional: define cuántos días se guardará el archivo

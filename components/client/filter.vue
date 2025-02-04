@@ -43,14 +43,14 @@
 </template>
 <script lang="ts" setup>
 import { switchType } from '~/components/switch-button.vue'
-import { ProductCategory } from '~/types'
+import { Category } from '~/types'
 export interface Props {
     view: switchType
 }
 const props = withDefaults(defineProps<Props>(), { view: switchType.option1 })
 
 const dialog = ref(false)
-const availbableCategories = [{ text: 'All', value: -1 }, ...Object.values(ProductCategory).map((value) => ({ text: value, value }))]
+const availbableCategories = [{ text: 'All', value: -1 }, ...Object.values(Category).map((value) => ({ text: value, value }))]
 const filter = reactive({
     search: '',
     category: -1,
