@@ -29,52 +29,35 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-      - name: Remove iOS platform if exists
+      - name: Ensure iOS platform exists
         run: |
-          echo "Removing existing iOS platform..."
-          if [ -d "ios" ]; then
-            rm -rf ios
-          fi
-          if [ -f "ios/Podfile.lock" ]; then
-            echo "Removing existing Podfile.lock..."
-            rm ios/Podfile.lock
+          if [ ! -d "ios" ]; then
+            echo "Adding iOS platform..."
+            npx cap add ios
+          else
+            echo "iOS platform already exists."
           fi
 
-      - name: Add iOS platform
+      - name: Copy & Sync Capacitor files
         run: |
-          echo "Adding iOS platform..."
-          npx cap add ios || exit 1
-
-      - name: Sync Capacitor files
-        run: |
+          echo "Copying Capacitor assets..."
+          npx cap copy ios
           echo "Syncing Capacitor files..."
           npx cap sync ios
 
-      - name: Ensure Podfile exists
-        run: |
-          echo "Checking if Podfile exists..."
-          if [ ! -f "ios/Podfile" ]; then
-            echo "Error: Podfile not found!"
-            exit 1
-          fi
-
       - name: Install CocoaPods
         run: |
-          echo "Installing CocoaPods..."
-          sudo gem install cocoapods
-          pod setup
-          cd ios
-          if [ -f "Podfile" ]; then
-            pod install --verbose
-          else
-            echo "Error: Podfile not found!"
-            exit 1
+          if ! command -v pod &> /dev/null; then
+            echo "CocoaPods not found. Installing..."
+            sudo gem install cocoapods
           fi
+          pod setup
+          cd ios && pod install --verbose
 
       - name: Check ExportOptions.plist
         run: |
           if [ ! -f "ios/ExportOptions.plist" ]; then
-            echo "ExportOptions.plist not found!"
+            echo "Error: ExportOptions.plist not found!"
             exit 1
           fi
 
@@ -102,7 +85,7 @@ jobs:
           name: ios-app
           path: ios/build/ipa/*.ipa
 
-      - name: Clean up
+      - name: Clean up build files
         run: |
-          echo "Cleaning up..."
+          echo "Cleaning up build artifacts..."
           rm -rf ios/build
