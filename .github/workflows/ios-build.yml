@@ -29,8 +29,11 @@ jobs:
       - name: Install Capacitor
         run: npm install @capacitor/cli
 
-      - name: Add iOS platform
-        run: npx cap add ios
+      - name: Ensure iOS platform exists
+        run: |
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
 
       - name: Copy files to iOS project
         run: npx cap copy ios
