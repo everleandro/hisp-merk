@@ -38,9 +38,12 @@ jobs:
       - name: Copy files to iOS project
         run: npx cap copy ios
 
-      - name: Install CocoaPods
+      - name: Ensure Podfile exists and install CocoaPods
         run: |
           cd ios
+          if [ ! -f "Podfile" ]; then
+            npx cap sync ios
+          fi
           pod install
 
       - name: Archive iOS App
