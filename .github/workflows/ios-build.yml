@@ -13,13 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      - name: Install Node.js and dependencies
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Usamos la versión 18 de Node.js
-
-      - name: Install dependencies
-        run: npm install
+          node-version: 18
+        run: |
+          npm install
 
       - name: Build Nuxt app
         run: |
@@ -29,21 +28,15 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-      - name: Clean iOS platform
+      - name: Remove iOS platform if exists
         run: |
-          echo "Cleaning iOS platform..."
+          echo "Removing existing iOS platform..."
           if [ -d "ios" ]; then
-            echo "Removing existing ios directory..."
             rm -rf ios
           fi
           if [ -f "ios/Podfile.lock" ]; then
             echo "Removing existing Podfile.lock..."
             rm ios/Podfile.lock
-          fi
-          # Limpiar cualquier archivo de configuración (si es necesario)
-          if [ -f "capacitor.config.ts" ]; then
-            echo "Removing capacitor.config.ts..."
-            rm capacitor.config.ts
           fi
 
       - name: Add iOS platform
@@ -68,8 +61,24 @@ jobs:
       - name: Install CocoaPods
         run: |
           echo "Installing CocoaPods..."
+          sudo gem install cocoapods
+          pod setup
           cd ios
-          pod install --verbose
+          if ! pod install --verbose; then
+            echo "Pod install failed, regenerating iOS platform..."
+            cd ..
+            npx cap add ios
+            npx cap sync ios
+            cd ios
+            pod install --verbose
+          fi
+
+      - name: Check ExportOptions.plist
+        run: |
+          if [ ! -f "ios/ExportOptions.plist" ]; then
+            echo "ExportOptions.plist not found!"
+            exit 1
+          fi
 
       - name: Archive iOS App
         run: |
@@ -94,4 +103,8 @@ jobs:
         with:
           name: ios-app
           path: ios/build/ipa/*.ipa
-          retention-days: 5 # Opcional: define cuántos días se guardará el archivo
+
+      - name: Clean up
+        run: |
+          echo "Cleaning up..."
+          rm -rf ios/build
