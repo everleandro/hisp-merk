@@ -26,35 +26,47 @@ jobs:
           npm run build
           npx nuxi generate
 
-      - name: Install Capacitor
+      - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-      - name: Ensure iOS platform exists
+      - name: Ensure iOS platform is added
         run: |
           if [ ! -d "ios" ]; then
             npx cap add ios
           fi
 
-      - name: Copy files to iOS project
-        run: npx cap copy ios
+      - name: Sync Capacitor files
+        run: npx cap sync ios
 
-      - name: Ensure Podfile exists and install CocoaPods
+      - name: Install CocoaPods
         run: |
           cd ios
-          if [ ! -f "Podfile" ]; then
-            npx cap sync ios
-          fi
-          pod install
+          pod install --verbose
+
+      - name: Set up keychain for code signing (if needed)
+        run: |
+          security create-keychain -p "" build.keychain
+          security list-keychains -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings -t 3600 -l ~/Library/Keychains/build.keychain
 
       - name: Archive iOS App
         run: |
           cd ios
-          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Release archive -archivePath build/App.xcarchive
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            -allowProvisioningUpdates \
+            archive -archivePath build/App.xcarchive
 
       - name: Export IPA
         run: |
           cd ios
-          xcodebuild -exportArchive -archivePath build/App.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build/ipa
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath build/ipa
 
       - name: Upload IPA as Artifact
         uses: actions/upload-artifact@v4
