@@ -29,7 +29,18 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-    - name: Add iOS platform
+      - name: Remove iOS platform if exists
+        run: |
+          echo "Removing existing iOS platform..."
+          if [ -d "ios" ]; then
+            rm -rf ios
+          fi
+          if [ -f "ios/Podfile.lock" ]; then
+            echo "Removing existing Podfile.lock..."
+            rm ios/Podfile.lock
+          fi
+
+      - name: Add iOS platform
         run: |
           echo "Adding iOS platform..."
           npx cap add ios || exit 1
