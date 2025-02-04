@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.luna.app',
-  appName: 'luna',
+  appId: 'com.CM.app',
+  appName: 'CM',
   webDir: 'dist'
 };
 
