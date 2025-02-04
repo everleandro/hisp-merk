@@ -29,12 +29,30 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
+      - name: Ensure iOS platform exists
+        run: |
+          if [ ! -d "ios" ]; then
+            echo "iOS platform not found. Adding iOS platform..."
+            npx cap add ios
+          fi
+
+      - name: Sync Capacitor files
+        run: |
+          echo "Copying and syncing Capacitor assets..."
+          npx cap copy ios
+          npx cap sync ios
+
       - name: Ensure Xcode project exists
         run: |
           if [ ! -d "ios/App.xcworkspace" ] && [ ! -f "ios/App.xcodeproj" ]; then
-            echo "No Xcode project found. Re-adding iOS platform..."
+            echo "No Xcode project found! Re-adding iOS platform..."
             rm -rf ios
             npx cap add ios
+            npx cap sync ios
+          fi
+          if [ ! -d "ios/App.xcworkspace" ] && [ ! -f "ios/App.xcodeproj" ]; then
+            echo "Error: Xcode project was not created correctly!"
+            exit 1
           fi
 
       - name: Ensure Podfile exists
@@ -43,20 +61,7 @@ jobs:
             echo "No Podfile found, creating one..."
             cd ios
             pod init
-            if [ -f "Podfile" ]; then
-              echo "Podfile successfully created."
-            else
-              echo "Failed to create Podfile!"
-              exit 1
-            fi
           fi
-
-      - name: Copy & Sync Capacitor files
-        run: |
-          echo "Copying Capacitor assets..."
-          npx cap copy ios
-          echo "Syncing Capacitor files..."
-          npx cap sync ios
 
       - name: Install CocoaPods
         run: |
