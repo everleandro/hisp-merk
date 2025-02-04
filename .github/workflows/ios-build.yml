@@ -44,22 +44,22 @@ jobs:
 
       - name: Ensure Xcode project exists
         run: |
-          if [ ! -d "ios/App.xcworkspace" ] && [ ! -f "ios/App.xcodeproj" ]; then
+          if [ ! -d "ios/App/App.xcworkspace" ] && [ ! -f "ios/App/App.xcodeproj" ]; then
             echo "No Xcode project found! Re-adding iOS platform..."
             rm -rf ios
             npx cap add ios
             npx cap sync ios
           fi
-          if [ ! -d "ios/App.xcworkspace" ] && [ ! -f "ios/App.xcodeproj" ]; then
+          if [ ! -d "ios/App/App.xcworkspace" ] && [ ! -f "ios/App/App.xcodeproj" ]; then
             echo "Error: Xcode project was not created correctly!"
             exit 1
           fi
 
-      - name: Ensure Podfile exists
+      - name: Ensure Podfile exists in correct location
         run: |
-          if [ ! -f "ios/Podfile" ]; then
-            echo "No Podfile found, creating one..."
-            cd ios
+          if [ ! -f "ios/App/Podfile" ]; then
+            echo "No Podfile found in ios/App, creating one..."
+            cd ios/App
             pod init
           fi
 
@@ -68,7 +68,7 @@ jobs:
           echo "Installing CocoaPods..."
           sudo gem install cocoapods
           pod setup
-          cd ios
+          cd ios/App
           if [ -f "Podfile" ]; then
             pod install --verbose
           else
@@ -78,14 +78,14 @@ jobs:
 
       - name: Check ExportOptions.plist
         run: |
-          if [ ! -f "ios/ExportOptions.plist" ]; then
+          if [ ! -f "ios/App/ExportOptions.plist" ]; then
             echo "Error: ExportOptions.plist not found!"
             exit 1
           fi
 
       - name: Archive iOS App
         run: |
-          cd ios
+          cd ios/App
           xcodebuild -workspace App.xcworkspace \
             -scheme App \
             -sdk iphoneos \
@@ -95,7 +95,7 @@ jobs:
 
       - name: Export IPA
         run: |
-          cd ios
+          cd ios/App
           xcodebuild -exportArchive \
             -archivePath build/App.xcarchive \
             -exportOptionsPlist ExportOptions.plist \
@@ -105,9 +105,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-app
-          path: ios/build/ipa/*.ipa
+          path: ios/App/build/ipa/*.ipa
 
       - name: Clean up build files
         run: |
           echo "Cleaning up build artifacts..."
-          rm -rf ios/build
+          rm -rf ios/App/build
