@@ -29,17 +29,22 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-      - name: Clean Capacitor iOS platform
+      - name: Clean iOS platform
         run: |
           echo "Cleaning iOS platform..."
           if [ -d "ios" ]; then
+            echo "Removing existing ios directory..."
             rm -rf ios
           fi
           if [ -f "ios/Podfile.lock" ]; then
+            echo "Removing existing Podfile.lock..."
             rm ios/Podfile.lock
           fi
-          # Limpiar cualquier caché de Capacitor
-          npx cap clean
+          # Limpiar cualquier archivo de configuración (si es necesario)
+          if [ -f "capacitor.config.ts" ]; then
+            echo "Removing capacitor.config.ts..."
+            rm capacitor.config.ts
+          fi
 
       - name: Add iOS platform
         run: |
