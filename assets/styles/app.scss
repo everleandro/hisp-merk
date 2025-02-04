@@ -32,50 +32,10 @@
     .swiper {
         z-index: 0;
     }
-
-    &::before {
-        content: ' ';
-        display: block;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.3;
-        background-repeat: no-repeat;
-        background-position: 50% 0;
-        background-size: inherit;
-        background-image: url('/assets/images/bg.webp');
-
-    }
-
-    &::after {
-        content: ' ';
-        background-color: var(--secondary);
-        opacity: 0.2;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-    }
 }
 
-.white {
-    &-02 {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-    }
-
-    &-03 {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-    }
-
-    &-04 {
-        background-color: rgba(255, 255, 255, 0.4) !important;
-    }
-
-    &-05 {
-        background-color: rgba(255, 255, 255, 0.5) !important;
-    }
+h1,
+h2,
+h3 {
+    font-weight: 300;
 }

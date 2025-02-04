@@ -1,51 +1,28 @@
 <template>
     <div class="home-page">
         <product-detail v-model="productDetails" key="details" />
-        <client-filter v-model:view="state.viewType" />
-        <div class="pa-2 mt-4">
-            <div class="tab__container">
-                <transition :name="listTrasition">
-                    <e-row :key="`${state.viewType}`">
-                        <e-col v-show="state.viewType === switchType.option1" cols="24" key="swip-product"
-                            class="swip-product-vertical">
-                            <Swiper slides-per-view="auto" space-between="12" :loop-additional-slides="10"
-                                :loop="false">
-                                <SwiperSlide v-for="slide in 10" :key="slide" :clickable="true">
-                                    <card-product vertical @show:details="showProductDetails" />
-                                </SwiperSlide>
-                            </Swiper>
-                        </e-col>
-                        <e-col v-for="i in 5" v-show="state.viewType === switchType.option1" cols="24" sm="8" md="6"
-                            lg="4" :key="`${i}-product`">
-                            <card-product @show:details="showProductDetails" />
-                        </e-col>
-                        <e-col v-for="i in 5" v-show="state.viewType === switchType.option2" cols="24" sm="12" md="8"
-                            lg="6" :key="`${i}-commerce`">
-                            <card-commerce />
-                        </e-col>
-                        <e-col v-show="state.viewType === switchType.option1" cols="24" key="swip-product-squared"
-                            class="swip-product-squared">
-                            <Swiper slides-per-view="auto" space-between="12" :loop-additional-slides="10"
-                                :loop="false">
-                                <SwiperSlide v-for="slide in 10" :key="slide" :clickable="true">
-                                    <card-product squared @show:details="showProductDetails" />
-                                </SwiperSlide>
-                            </Swiper>
-                        </e-col>
-                    </e-row>
-                </transition>
-            </div>
+        <div class="">
+            <filter-category v-model="state.category" />
         </div>
+        <div class="ma-3">
+            <home-header :offer-list="[1, 2, 3, 4, 5, 6]" />
+        </div>
+        <product-list title="Feature Products." />
+        <div class="pa-3">
+            <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title />
+        </div>
+        <product-list title="Recomended" row-item :itemsPerView="1.5" />
     </div>
 </template>
 <script lang="ts" setup>
 import { switchType } from '~/components/switch-button.vue'
+import { Category } from '~/types';
 const state = reactive({
-    viewType: switchType.option1
+    viewType: switchType.option1,
+    category: Category.All
 })
 const productDetails = ref(false);
 
-const listTrasition = computed(() => state.viewType === switchType.option1 ? 'tab-reverse-transition' : 'tab-transition')
 const showProductDetails = () => {
     console.log('show details 2');
     productDetails.value = true;

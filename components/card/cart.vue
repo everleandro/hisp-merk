@@ -1,6 +1,6 @@
 <template>
     <li class="card-cart white">
-        <div class=" card-cart__header d-flex justify-center align-center">
+        <div class=" card-cart__header p d-flex justify-center align-center">
             <img src="@/assets/images/product-default.png" alt="">
         </div>
         <div class="card-cart__container">
@@ -56,11 +56,12 @@ const quantity = ref(0)
     }
 
     h4 {
+        text-transform: uppercase;
+
         @include mixin.xs {
             font-size: small;
         }
 
-        text-transform: uppercase;
     }
 
     &__container {

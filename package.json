@@ -10,12 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "pinia": "^2.2.6",
-    "@pinia/nuxt": "^0.7.0",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
     "@nuxtjs/device": "^3.2.4",
-    "drocket": "^1.0.24",
+    "@pinia/nuxt": "^0.7.0",
+    "drocket": "^1.0.25",
     "nuxt": "^3.13.0",
     "nuxt-swiper": "^1.2.2",
+    "pinia": "^2.2.6",
     "vue": "latest",
     "vue-router": "latest"
   },
@@ -23,6 +26,7 @@
     "vue": "latest"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.1.2",
     "sass": "^1.79.4"
   }
 }

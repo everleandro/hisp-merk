@@ -1,13 +1,5 @@
 import type { ProductData } from "@/types";
 import { ProductCategory } from "@/types";
-export interface BarSetting {
-  title?: string | undefined;
-  logo?: boolean;
-  backButton?: boolean;
-  menuButton?: boolean;
-  barClass?: string;
-  bellButton?: boolean;
-}
 export const useProduct = defineStore("product", {
   state: () => ({
     list: <ProductData[]>[

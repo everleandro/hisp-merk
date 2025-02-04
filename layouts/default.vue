@@ -1,12 +1,11 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
-    <e-bar app fixed class="primary">
-      <e-button icon="menu" text class="ml-3 d-none d-sm-block" color="white"
-        @click="data.drawerModelDesktop = !data.drawerModelDesktop" />
-
-      <app-logo class="ml-3" />
+    <e-bar app fixed depressed class="white">
+      <e-button icon="menu" text class="mr-3" @click="data.drawerModelDesktop = !data.drawerModelDesktop" />
       <e-spacer />
-      <e-button :icon="$icon.cart" text class="ml-1" color="white" to="/cart"/>
+      <app-logo negative />
+      <e-spacer />
+      <e-button text :icon="$icon.bell" />
     </e-bar>
     <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" right mobile :links="MOBILE_DRAWER_LINKS" />
     <app-drawer v-else v-model="data.drawerModelDesktop" :links="DESKTOP_LINKS" />
@@ -16,12 +15,9 @@
         <slot />
       </e-container>
     </e-main>
-    <footer class="mobile__footer primary d-flex d-sm-none">
-      <e-tab-group v-model="data.tabModel" grow>
-        <e-tab v-for="(link, i) in MOBILE_LINKS" :key="i" :prepend-icon="link.icon" stacked :to="link.to" color="white">
-          {{ link.title }}
-        </e-tab>
-      </e-tab-group>
+    <footer class="mobile__footer d-flex d-sm-none white pa-2">
+      <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" :icon="link.icon" text color="gray-light"
+        small />
     </footer>
 
   </e-app>
@@ -34,10 +30,54 @@ const data = reactive({
   drawerModelDesktop: true,
   tabModel: 1
 })
+
+const filter = reactive({
+  search: '',
+  category: -1,
+  min: '',
+  max: '',
+  popularity: false,
+  news: false,
+})
+
 </script>
 
 <style lang="scss">
+body {
+  // overflow: hidden;
+}
+
 .e-app {
+  .e-bar {
+    &.primary>* {
+      color: unset;
+    }
+
+    height: 54px;
+
+    @include mixin.from_sm {
+      height: 64px;
+    }
+  }
+
+  // .e-main {
+  //   max-height: 100vh;
+  //   overflow-x: hidden;
+
+  //   &__wrapper {
+  //     max-height: 100vh;
+  //     overflow: auto;
+  //   }
+  // }
+
+  .e-container {
+    padding: 0;
+
+    @include mixin.from_sm {
+      padding: 12px;
+    }
+  }
+
   .e-overlay {
     z-index: 1001;
   }
@@ -56,34 +96,19 @@ const data = reactive({
     position: fixed;
     bottom: 0;
     width: 100%;
-    box-shadow: 0px -2px 5px 0px rgba(0, 0, 0, 0.1);
-    padding-bottom: env(safe-area-inset-bottom, 20px);
+    border-top: 1px solid var(--gray-light);
+    border-radius: 12px 12px 0 0;
+    padding-bottom: calc(env(safe-area-inset-bottom, 8px) + 8px) !important;
     /* El 20px es un valor base si el dispositivo no soporta env */
     justify-content: space-around;
     align-items: center;
     z-index: 2;
 
-    .e-tab.e-tab {
-      min-width: unset;
+    .router-link-active {
+      color: white;
+      background-color: var(--primary);
     }
 
-    .e-icon--size-default {
-      font-size: 18px;
-    }
-
-    .e-tab__slider {
-      display: none;
-    }
-
-    .e-slide-group {
-      flex: 1;
-
-      .e-btn {
-        font-size: 12px;
-        font-weight: 300;
-        text-transform: unset;
-      }
-    }
   }
 
   .e-main {

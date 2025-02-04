@@ -78,6 +78,8 @@ const actionBehavior = (action: actions) => {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
+    border: 1px solid var(--gray);
 
     &__container {
         display: flex;
@@ -121,7 +123,5 @@ const actionBehavior = (action: actions) => {
         overflow-x: hidden;
     }
 
-    border-radius: 4px;
-    border: 1px solid var(--gray);
 }
 </style>
