@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string> <!-- Puede ser app-store, ad-hoc, enterprise o development -->
+    <key>teamID</key>
+    <string>YOUR_TEAM_ID</string> <!-- Reemplázalo con tu Apple Developer Team ID -->
+    <key>uploadBitcode</key>
+    <false/> <!-- False si no quieres bitcode, true si lo necesitas -->
+    <key>uploadSymbols</key>
+    <true/> <!-- True para subir símbolos de depuración a Apple -->
+    <key>compileBitcode</key>
+    <false/> <!-- False para evitar la compilación de bitcode -->
+    <key>thinning</key>
+    <string>&lt;none&gt;</string> <!-- Puede ser "<none>" o "thin-for-all-variants" -->
+</dict>
+</plist>
