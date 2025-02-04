@@ -29,20 +29,22 @@ jobs:
       - name: Install Capacitor CLI
         run: npm install @capacitor/cli
 
-      - name: Ensure iOS platform is added
+      - name: Remove iOS platform if exists
         run: |
-          if [ ! -d "ios" ]; then
-            npx cap add ios
-          fi
+          rm -rf ios
+
+      - name: Add iOS platform
+        run: |
+          npx cap add ios
 
       - name: Sync Capacitor files
-        run: npx cap sync ios
+        run: |
+          npx cap sync ios
 
-      - name: Check if Podfile exists
+      - name: Ensure Podfile exists
         run: |
           if [ ! -f "ios/Podfile" ]; then
             echo "Podfile not found! Regenerating iOS platform..."
-            rm -rf ios
             npx cap add ios
             npx cap sync ios
           fi
