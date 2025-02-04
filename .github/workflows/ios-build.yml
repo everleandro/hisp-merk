@@ -43,7 +43,7 @@ jobs:
       - name: Add iOS platform
         run: |
           echo "Adding iOS platform..."
-          npx cap add ios || exit 1
+          npx cap add ios --verbose || exit 1
 
       - name: Sync Capacitor files
         run: |
