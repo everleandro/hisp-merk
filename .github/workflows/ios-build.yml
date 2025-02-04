@@ -32,19 +32,23 @@ jobs:
       - name: Remove iOS platform if exists
         run: |
           if [ -d "ios" ]; then
+            echo "Removing existing iOS platform..."
             rm -rf ios
           fi
 
       - name: Add iOS platform
         run: |
+          echo "Adding iOS platform..."
           npx cap add ios
 
       - name: Sync Capacitor files
         run: |
+          echo "Syncing Capacitor files..."
           npx cap sync ios
 
       - name: Ensure Podfile exists
         run: |
+          echo "Checking if Podfile exists..."
           if [ ! -f "ios/Podfile" ]; then
             echo "Podfile not found! Regenerating iOS platform..."
             npx cap add ios
@@ -53,6 +57,7 @@ jobs:
 
       - name: Install CocoaPods
         run: |
+          echo "Installing CocoaPods..."
           cd ios
           pod install --verbose
 
