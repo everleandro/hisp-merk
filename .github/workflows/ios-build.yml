@@ -44,13 +44,19 @@ jobs:
           npx cap copy ios
           echo "Syncing Capacitor files..."
           npx cap sync ios
-          
+
       - name: Ensure Podfile exists
         run: |
           if [ ! -f "ios/Podfile" ]; then
-            echo "No Podfile found, re-adding iOS platform..."
-            rm -rf ios
-            npx cap add ios
+            echo "No Podfile found, initializing CocoaPods..."
+            cd ios
+            pod init
+            if [ -f "Podfile" ]; then
+              echo "Podfile successfully created."
+            else
+              echo "Failed to create Podfile!"
+              exit 1
+            fi
           fi
 
       - name: Install CocoaPods
