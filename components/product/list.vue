@@ -3,7 +3,9 @@
         <div class="product-list__header pa-3">
             <h2 v-if="title" class="my-4 ">{{ title }}</h2>
             <e-spacer />
-            <e-button text small><span class="show-button-text">show all</span></e-button>
+            <e-button text small :append-icon="$icon.chevronRight">
+                <span class="show-button-text">more</span>
+            </e-button>
         </div>
         <swiper :slidesPerView="itemsPerView" :spaceBetween="30" class="mySwiper pa-3">
             <swiper-slide v-for="i in 5" :key="i">
@@ -27,13 +29,18 @@ const props = withDefaults(defineProps<Props>(), { itemsPerView: 2.5 })
     list-style-type: none;
 
     .show-button-text {
-        text-transform: none;
-        font-weight: lighter;
+        // text-transform: none;
+        font-weight: 400;
     }
 
     &__header {
         display: flex;
         align-items: center;
+
+        .e-btn::before {
+            opacity: .05;
+
+        }
     }
 }
 </style>

@@ -1,20 +1,23 @@
 <template>
-    <ol class="filter-category">
+    <ol class="filter-category scrollbar--hidden">
         <li v-for="(category, key) in categories" :key="key" class="filter-category__item pa-1"
             :class="active(category.id) && 'filter-category__item--active'" @click="model = category.id">
             <div class="button-wrapper">
-                <e-button :icon="category.icon" depressed small />
+                <e-button text>
+                    <component :is="category.icon" />
+                </e-button>
             </div>
             <span class="item__text">{{ category.title }}</span>
         </li>
     </ol>
 </template>
 <script lang="ts" setup>
-import icons from '~/constants/icons';
+import svg from '~/constants/icons-svg';
 import { Category } from '~/types';
 export interface Props {
     modelValue: Category
 }
+
 const props = withDefaults(defineProps<Props>(), { modelValue: Category.All })
 
 const emit = defineEmits<{
@@ -30,10 +33,14 @@ const active = (id: Category) => {
 }
 
 const categories = [
-    { icon: icons.mirror, title: "Beauty", id: Category.Beauty },
-    { icon: icons.glasses, title: "Accesories", id: Category.Accesories },
-    { icon: icons.male, title: "Man", id: Category.Man },
-    { icon: icons.female, title: "Women", id: Category.Women },
+    { icon: svg.Beauty, title: "Beauty", id: Category.Beauty },
+    { icon: svg.Breckfast, title: "Breakfast", id: Category.Breakfast },
+    { icon: svg.Clothes, title: "Clothes", id: Category.Clothes },
+    { icon: svg.Coffe, title: "Coffe", id: Category.Coffe },
+    { icon: svg.FastFood, title: "Fast Food", id: Category.FastFood },
+    { icon: svg.Home, title: "Home", id: Category.Home },
+    { icon: svg.Meat, title: "Meat", id: Category.Meat },
+    { icon: svg.Pizza, title: "Pizza", id: Category.Pizza },
 ]
 
 </script>
@@ -72,28 +79,34 @@ const categories = [
         .button-wrapper {
             padding: 3px;
             border-radius: 9999px;
-            border: 1px solid;
             border-color: rgba(0, 0, 0, .1);
+        }
+
+        .e-btn {
+            height: 60px;
+            padding: 0;
+            width: 60px;
+            border-radius: 9999px;
+
+            &:before {
+                opacity: 0.05;
+            }
         }
 
         &--active {
             color: var(--primary);
 
-            .button-wrapper {
-                border-color: currentColor;
-            }
-
             .e-btn {
-                background-color: var(--primary);
+                color: var(--primary) !important;
                 color: white;
+
+                &::before {
+                    opacity: .2;
+                }
             }
         }
 
-        .e-btn {
-            &:before {
-                opacity: 0.05;
-            }
-        }
+
     }
 }
 </style>

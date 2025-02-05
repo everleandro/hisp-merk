@@ -19,7 +19,7 @@
         </e-list>
         <template #append>
             <div class="pa-2">
-                <e-button :prepend-icon="$icon.logout" block @click="logOut" outlined>
+                <e-button :prepend-icon="$icon.logout" block @click="logOut" color="primary" outlined>
                     cerrar Sesion
                 </e-button>
             </div>

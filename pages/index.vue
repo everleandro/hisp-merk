@@ -7,11 +7,34 @@
         <div class="ma-3">
             <home-header :offer-list="[1, 2, 3, 4, 5, 6]" />
         </div>
-        <product-list title="Feature Products." />
+        <app-list title="Feature Products." :itemsPerView="2.5">
+            <product-card />
+        </app-list>
+
         <div class="pa-3">
             <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title />
         </div>
-        <product-list title="Recomended" row-item :itemsPerView="1.5" />
+        <app-list title="Recomended" :itemsPerView="1.5">
+            <product-card row />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
     </div>
 </template>
 <script lang="ts" setup>

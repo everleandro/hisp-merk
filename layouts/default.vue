@@ -15,10 +15,10 @@
         <slot />
       </e-container>
     </e-main>
-    <footer class="mobile__footer d-flex d-sm-none white pa-2">
+    <!-- <footer class="mobile__footer d-flex d-sm-none white pa-2">
       <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" :icon="link.icon" text color="gray-light"
         small />
-    </footer>
+    </footer> -->
 
   </e-app>
 </template>

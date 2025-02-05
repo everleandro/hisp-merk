@@ -1,7 +1,11 @@
 export enum Category {
   All = "all",
   Beauty = "beauty",
-  Accesories = "accesories",
-  Man = "man",
-  Women = "women",
+  Breakfast = "breakfast",
+  Clothes = "clothes",
+  Coffe = "coffe",
+  FastFood = "fast-food",
+  Home = "home",
+  Meat = "meat",
+  Pizza = "pizza",
 }
