@@ -1,21 +1,26 @@
 <template>
-    <e-drawer v-model="model" fixed class="primary" :right="right" :data-type="mobile ? 'mobile' : 'desktop'">
+    <e-drawer v-model="model" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'">
         <template #prepend>
-            <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" color="white"
-                subtitle="smith.93@gmail.com">
+            <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com">
             </e-list-item>
             <e-divider></e-divider>
         </template>
         <e-list>
-            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="white" large
+            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="secondary" :to="link.to">
+                {{ link.title }}
+            </e-list-item>
+        </e-list>
+        <e-list>
+            <e-list-item class="pa-3">OTHERS</e-list-item>
+            <e-list-item v-for="(link, i) in otherLinks" :prepend-icon="link.icon" :key="i" color="secondary"
                 :to="link.to">
                 {{ link.title }}
             </e-list-item>
         </e-list>
         <template #append>
             <div class="pa-2">
-                <e-button :prepend-icon="$icon.logout" color="white" block small @click="logOut" outlined>cerrar
-                    Sesion
+                <e-button :prepend-icon="$icon.logout" block @click="logOut" outlined>
+                    cerrar Sesion
                 </e-button>
             </div>
         </template>
@@ -33,7 +38,8 @@ export interface Props {
     modelValue: boolean,
     mobile?: boolean,
     right?: boolean,
-    links: Link[]
+    links: Link[],
+    otherLinks: Link[],
 }
 const props = withDefaults(defineProps<Props>(), { right: false })
 

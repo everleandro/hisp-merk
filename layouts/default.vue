@@ -1,14 +1,14 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
     <e-bar app fixed depressed class="white">
-      <e-button icon="menu" text class="mr-3" @click="data.drawerModelDesktop = !data.drawerModelDesktop" />
+      <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
       <e-spacer />
       <app-logo negative />
       <e-spacer />
       <e-button text :icon="$icon.bell" />
     </e-bar>
-    <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" right mobile :links="MOBILE_DRAWER_LINKS" />
-    <app-drawer v-else v-model="data.drawerModelDesktop" :links="DESKTOP_LINKS" />
+    <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" mobile :links="MOBILE_DRAWER_LINKS"
+      :other-links="OTHERS_LINKS" />
 
     <e-main>
       <e-container>
@@ -23,11 +23,10 @@
   </e-app>
 </template>
 <script lang="ts" setup>
-import { DESKTOP_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
+import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
 const app = useApp();
 const data = reactive({
   drawerModelMobile: false,
-  drawerModelDesktop: true,
   tabModel: 1
 })
 
@@ -43,10 +42,6 @@ const filter = reactive({
 </script>
 
 <style lang="scss">
-body {
-  // overflow: hidden;
-}
-
 .e-app {
   .e-bar {
     &.primary>* {
@@ -60,15 +55,6 @@ body {
     }
   }
 
-  // .e-main {
-  //   max-height: 100vh;
-  //   overflow-x: hidden;
-
-  //   &__wrapper {
-  //     max-height: 100vh;
-  //     overflow: auto;
-  //   }
-  // }
 
   .e-container {
     padding: 0;
