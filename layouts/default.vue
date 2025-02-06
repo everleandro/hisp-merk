@@ -1,11 +1,20 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
     <e-bar app fixed depressed class="white">
-      <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
-      <e-spacer />
-      <app-logo negative />
-      <e-spacer />
-      <e-button text :icon="$icon.bell" />
+      <template v-if="tempBarContent">
+        <e-button :icon="$icon.chevronLeft" @click="goBack" small />
+        <e-spacer />
+        <h2>{{ tempBarContent?.title }}</h2>
+        <e-spacer />
+        <e-button text :icon="$icon.bell" />
+      </template>
+      <template v-else>
+        <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
+        <e-spacer />
+        <app-logo negative />
+        <e-spacer />
+        <e-button text :icon="$icon.bell" />
+      </template>
     </e-bar>
     <app-drawer v-model="data.drawerModelMobile" :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS" />
 
@@ -23,20 +32,23 @@
 </template>
 <script lang="ts" setup>
 import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
-const app = useApp();
+export interface ContentBar {
+  title: string
+}
+const router = useRouter();
 const data = reactive({
   drawerModelMobile: false,
   tabModel: 1
 })
+const tempBarContent = ref<ContentBar | null>(null);
+const setTempBarContent = (content: ContentBar) => {
+  tempBarContent.value = content
+}
 
-const filter = reactive({
-  search: '',
-  category: -1,
-  min: '',
-  max: '',
-  popularity: false,
-  news: false,
-})
+const goBack = () => {
+  router.back();
+};
+provide('setTempBarContent', setTempBarContent);
 
 </script>
 

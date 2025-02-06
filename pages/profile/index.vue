@@ -6,7 +6,7 @@
                     <e-avatar size="64" :src="user"></e-avatar>
                 </template>
                 <template #append>
-                    <e-button :icon="$icon.setting" text to="/profile/data"></e-button>
+                    <e-button :icon="$icon.setting" text to="/profile/setting"></e-button>
                 </template>
             </e-list-item>
         </e-list>
