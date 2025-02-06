@@ -7,18 +7,17 @@
       <e-spacer />
       <e-button text :icon="$icon.bell" />
     </e-bar>
-    <app-drawer v-if="$device.isMobile" v-model="data.drawerModelMobile" mobile :links="MOBILE_DRAWER_LINKS"
-      :other-links="OTHERS_LINKS" />
+    <app-drawer v-model="data.drawerModelMobile" :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS" />
 
     <e-main>
       <e-container>
         <slot />
       </e-container>
     </e-main>
-    <!-- <footer class="mobile__footer d-flex d-sm-none white pa-2">
-      <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" :icon="link.icon" text color="gray-light"
-        small />
-    </footer> -->
+    <footer class="mobile__footer d-flex d-sm-none white ">
+      <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" stacked :prepend-icon="link.icon" text
+        color="gray-light">{{ link.title }}</e-button>
+    </footer>
 
   </e-app>
 </template>
@@ -83,16 +82,25 @@ const filter = reactive({
     bottom: 0;
     width: 100%;
     border-top: 1px solid var(--gray-light);
-    border-radius: 12px 12px 0 0;
-    padding-bottom: calc(env(safe-area-inset-bottom, 8px) + 8px) !important;
-    /* El 20px es un valor base si el dispositivo no soporta env */
-    justify-content: space-around;
+
+    padding-bottom: env(safe-area-inset-bottom, 8px) !important;
+    justify-content: space-between;
+
     align-items: center;
     z-index: 2;
 
     .router-link-active {
-      color: white;
-      background-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .e-btn {
+      font-weight: normal;
+      text-transform: capitalize;
+      border-radius: 0px;
+
+      &::before {
+        opacity: .1;
+      }
     }
 
   }

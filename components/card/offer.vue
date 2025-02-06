@@ -13,8 +13,11 @@ export interface Props {
     title?: string,
     subtitle?: string,
     reverse?: boolean,
+    squared?: boolean,
     smallTitle?: boolean,
+    transparent?: boolean,
     color?: string,
+    afterColor?: string,
 }
 const props = defineProps<Props>();
 const classes = computed(() => {
@@ -22,11 +25,13 @@ const classes = computed(() => {
         'card-offer pa-4 d-flex': true,
         [`${props.color}--text`]: !!props.color,
         "card-offer--reverse": props.reverse,
+        "card-offer--squared": props.squared,
+        "card-offer--transparent": props.transparent,
         "card-offer--small-title": props.smallTitle,
     }
 })
 const textColor = computed(() => {
-    return props.color ? 'white--text' : 'root-color--text'
+    return props.color && !props.transparent ? 'white--text' : 'root-color--text'
 })
 </script>
 <style lang="scss">
@@ -39,8 +44,12 @@ const textColor = computed(() => {
     overflow: hidden;
     justify-content: end;
     flex-direction: row-reverse;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, currentColor 100%);
     height: 200px;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, currentColor 100%);
+
+    &--transparent {
+        background: transparent;
+    }
 
     h1 {
         font-size: 2rem;
@@ -64,6 +73,10 @@ const textColor = computed(() => {
         left: 0;
         height: 100%;
         position: absolute;
+    }
+
+    &--squared {
+        border-radius: 0;
     }
 
     &--reverse {

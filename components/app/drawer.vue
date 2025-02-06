@@ -67,21 +67,21 @@ const logOut = () => {
 .e-drawer {
     z-index: 1002;
 
-    &[data-type="desktop"] {
-        display: none;
+    // &[data-type="desktop"] {
+    //     display: none;
 
-        @include mixin.from_sm {
-            display: block;
-        }
-    }
+    //     @include mixin.from_sm {
+    //         display: block;
+    //     }
+    // }
 
-    &[data-type="mobile"] {
-        display: block;
+    // &[data-type="mobile"] {
+    //     display: block;
 
-        @include mixin.from_sm {
-            display: none;
-        }
-    }
+    //     @include mixin.from_sm {
+    //         display: none;
+    //     }
+    // }
 
 }
 </style>

@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), { negative: false })
 <style lang="scss">
 .app-logo {
     span {
-        font-size: xx-large;
+        font-size: x-large;
         font-weight: bold;
     }
 

@@ -1,35 +1,49 @@
 <template>
-    <div class="profile-page">
-        <e-list>
-            <e-list-item :prepend-avatar="user" large title="jhon smith" subtitle="jhon@gmail.com"
-                :append-icon="$icon.arrowBack" />
+    <section class="profile-page">
+        <e-list class="profile-user-info my-8">
+            <e-list-item :prepend-avatar="user" x-large title="jhon smith" subtitle="jhon@gmail.com">
+                <template #prepend>
+                    <e-avatar size="64" :src="user"></e-avatar>
+                </template>
+                <template #append>
+                    <e-button :icon="$icon.setting" text to="/profile/data"></e-button>
+                </template>
+            </e-list-item>
         </e-list>
-        <div class="pa-3">
-            <e-expansion-panel>
-                <e-expansion color="secondary" header-title="Personal Data">
-                    <div class="ma-4 secondary--text">
-                        <e-form ref="form">
-                            <e-textfield v-model="test" cols="24" label="First Name" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="Last Name" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="Phone Number" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="Email address" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="City" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="appartment" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="State" lg="12" />
-                            <e-textfield v-model="test" cols="24" label="Zip" lg="12" />
-                        </e-form>
-                    </div>
-                </e-expansion>
-                
-            </e-expansion-panel>
+        <div class="profile-sections ma-3">
+            <e-list>
+                <template v-for="(section, key) in profileSeciton" :key="key">
+                    <e-list-item :prepend-icon="section.icon" :title="section.title" :append-icon="$icon.chevronRight"
+                        :to="section.to" />
+                    <e-divider v-if="profileSeciton.length - 1 != key" class="my-2" />
+                </template>
+            </e-list>
         </div>
-    </div>
+    </section>
 </template>
 <script lang="ts" setup>
 import user from "@/assets/images/user.png";
-const state = reactive({
-    expansionProperty: 1
-})
+import icons from "~/constants/icons";
+const profileSeciton = [
+    { title: "Address", icon: icons.address, to: "/profile/address" },
+    { title: "Payment method", icon: icons.paymentMethod, to: "/profile/payment-method" },
+    { title: "Voucher", icon: icons.voucher, to: "/profile/voucher" },
+    { title: "My Wishlist", icon: icons.hearth, to: "/profile/wish-list" },
+    { title: "Rate This App", icon: icons.star, to: "/profile/rate-app" }
+]
 const test = ref('');
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.profile {
+    &-user-info {
+        --list-item-prepend-width: 74px;
+    }
+
+    &-sections {
+        border: 1px solid rgba(0, 0, 0, .1);
+        border-radius: 4px;
+        // overflow: hidden;
+        box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
+    }
+}
+</style>

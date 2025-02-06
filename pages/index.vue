@@ -7,34 +7,50 @@
         <div class="ma-3">
             <home-header :offer-list="[1, 2, 3, 4, 5, 6]" />
         </div>
+
+        <app-list title="Feature Products." :itemsPerView="2.5">
+            <product-card />
+        </app-list>
+        <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title squared color="secondary"
+            transparent />
+
+        <app-list title="Recomended" :itemsPerView="1.5">
+            <product-card row />
+        </app-list>
+
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
         <app-list title="Feature Products." :itemsPerView="2.5">
             <product-card />
         </app-list>
 
-        <div class="pa-3">
-            <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title />
-        </div>
+        <app-list title="Recomended" :itemsPerView="1.3">
+            <commerce-card />
+        </app-list>
+        <app-list title="Feature Products." :itemsPerView="2.5">
+            <product-card />
+        </app-list>
+        <!-- <div class="pa-3"> -->
+        <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title squared color="secondary"
+            transparent />
+        <!-- </div> -->
         <app-list title="Recomended" :itemsPerView="1.5">
             <product-card row />
         </app-list>
+
         <app-list title="Recomended" :itemsPerView="1.3">
             <commerce-card />
         </app-list>
+        <app-list title="Feature Products." :itemsPerView="2.5">
+            <product-card />
+        </app-list>
+
         <app-list title="Recomended" :itemsPerView="1.3">
             <commerce-card />
         </app-list>
-        <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
-        </app-list>
-        <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
-        </app-list>
-        <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
-        </app-list>
-        <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
-        </app-list>
+
+
     </div>
 </template>
 <script lang="ts" setup>
