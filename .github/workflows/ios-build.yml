@@ -3,11 +3,11 @@ name: Build iOS App
 on:
   push:
     branches:
-      - main # O la rama que uses
+      - main # Cambia esta línea según la rama que uses
 
 jobs:
   build-ios:
-    runs-on: macos-latest # Usa una máquina Mac de GitHub Actions
+    runs-on: macos-latest # Usamos una máquina macOS de GitHub Actions
 
     steps:
       - name: Checkout code
@@ -42,19 +42,6 @@ jobs:
           npx cap copy ios
           npx cap sync ios
 
-      - name: Ensure Xcode project exists
-        run: |
-          if [ ! -d "ios/App/App.xcworkspace" ] && [ ! -f "ios/App/App.xcodeproj" ]; then
-            echo "No Xcode project found! Re-adding iOS platform..."
-            rm -rf ios
-            npx cap add ios
-            npx cap sync ios
-          fi
-          if [ ! -d "ios/App/App.xcworkspace" ] && [ ! -f "ios/App/App.xcodeproj" ]; then
-            echo "Error: Xcode project was not created correctly!"
-            exit 1
-          fi
-
       - name: Ensure Podfile exists in correct location
         run: |
           if [ ! -f "ios/App/Podfile" ]; then
@@ -76,12 +63,25 @@ jobs:
             exit 1
           fi
 
-      - name: Check ExportOptions.plist
+      - name: Create ExportOptions.plist
         run: |
-          if [ ! -f "ios/App/ExportOptions.plist" ]; then
-            echo "Error: ExportOptions.plist not found!"
-            exit 1
-          fi
+          echo "Creating ExportOptions.plist with APPLE_TEAM_ID"
+          cat <<EOF > ios/App/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>teamID</key>
+              <string>${{ secrets.APPLE_TEAM_ID }}</string>
+              <key>method</key>
+              <string>app-store</string>
+              <key>uploadBitcode</key>
+              <true/>
+              <key>uploadSymbols</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
 
       - name: Archive iOS App
         run: |
@@ -90,15 +90,18 @@ jobs:
             -scheme App \
             -sdk iphoneos \
             -configuration Release \
+            -archivePath build/App.xcarchive \
+            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
+            CODE_SIGN_STYLE=Automatic \
             -allowProvisioningUpdates \
-            archive -archivePath build/App.xcarchive
+            archive
 
       - name: Export IPA
         run: |
           cd ios/App
           xcodebuild -exportArchive \
             -archivePath build/App.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
+            -exportOptionsPlist ios/App/ExportOptions.plist \
             -exportPath build/ipa
 
       - name: Upload IPA as Artifact
