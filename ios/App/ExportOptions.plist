@@ -3,16 +3,20 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>app-store</string> <!-- Puede ser app-store, ad-hoc, enterprise o development -->
+    <string>development</string> <!-- O 'development' si es para pruebas -->
     <key>teamID</key>
-    <string>YOUR_TEAM_ID</string> <!-- Reemplázalo con tu Apple Developer Team ID -->
-    <key>uploadBitcode</key>
-    <false/> <!-- False si no quieres bitcode, true si lo necesitas -->
-    <key>uploadSymbols</key>
-    <true/> <!-- True para subir símbolos de depuración a Apple -->
+    <string>$(APPLE_TEAM_ID)</string> <!-- Se reemplazará en GitHub Actions -->
+    <key>signingStyle</key>
+    <string>automatic</string>
     <key>compileBitcode</key>
-    <false/> <!-- False para evitar la compilación de bitcode -->
-    <key>thinning</key>
-    <string>&lt;none&gt;</string> <!-- Puede ser "<none>" o "thin-for-all-variants" -->
+    <true/>
+    <key>stripSwiftSymbols</key>
+    <true/>
+    <key>manageAppVersionAndBuildNumber</key>
+    <true/>
+    <key>uploadSymbols</key>
+    <true/>
+    <key>uploadBitcode</key>
+    <true/>
 </dict>
 </plist>
