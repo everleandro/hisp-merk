@@ -7,7 +7,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useProfile({ title: 'Delivery Address' });
+useAppBar({ title: 'Delivery Address' });
 const activeAddress = ref(0);
 const checkActive = (index: number) => activeAddress.value === index;
 </script>

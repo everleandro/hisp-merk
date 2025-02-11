@@ -6,7 +6,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useProfile({ title: 'Voucher' });
+useAppBar({ title: 'Voucher' });
 const voucherList = [
     {
         title: 'Black Friday',

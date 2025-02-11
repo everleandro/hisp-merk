@@ -1,9 +1,9 @@
 <template>
-    <ol class="filter-category scrollbar--hidden">
+    <ol :class="classes">
         <li v-for="(category, key) in categories" :key="key" class="filter-category__item pa-1"
-            :class="active(category.id) && 'filter-category__item--active'" @click="model = category.id">
+            :class="active(category.id) && 'filter-category__item--active'" @click="handleCategoryClick(category.id)">
             <div class="button-wrapper">
-                <e-button text>
+                <e-button text x-large>
                     <component :is="category.icon" />
                 </e-button>
             </div>
@@ -15,23 +15,35 @@
 import svg from '~/constants/icons-svg';
 import { Category } from '~/types';
 export interface Props {
-    modelValue: Category
+    modelValue?: Category,
+    inline?: boolean
+    grid?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), { modelValue: Category.All })
 
 const emit = defineEmits<{
-    (e: 'update:modelValue', value: Category): void
+    (e: 'update:modelValue', value: Category): void,
+    (e: 'click:category', value: string | number | null): void,
 }>()
 
 const model = computed({
     get: () => props.modelValue,
     set: (value: Category) => emit('update:modelValue', value)
 })
+
 const active = (id: Category) => {
     return model.value === id
 }
-
+const classes = computed(() => ({
+    'filter-category': true,
+    'filter-category--inline scrollbar--hidden': props.inline,
+    'filter-category--grid': props.grid
+}))
+const handleCategoryClick = (id: Category) => {
+    emit('click:category', id)
+    model.value = id
+}
 const categories = [
     { icon: svg.Beauty, title: "Beauty", id: Category.Beauty },
     { icon: svg.Breckfast, title: "Breakfast", id: Category.Breakfast },
@@ -47,9 +59,39 @@ const categories = [
 <style lang="scss">
 .filter-category {
     display: flex;
-    justify-content: space-between;
-    overflow-x: auto;
     max-width: 100%;
+
+
+    &--inline {
+        justify-content: space-between;
+        overflow-x: auto;
+
+        .filter-category__item {
+            &:not(:first-child) {
+                margin-left: 24px;
+            }
+
+            &:first-child {
+                margin-left: 12px;
+            }
+
+            &:last-child {
+                margin-right: 12px;
+            }
+        }
+    }
+
+    &--grid {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: wrap;
+        align-items: flex-start;
+
+        .filter-category__item {
+            flex: 0 0 33.3333%;
+            min-height: 129px;
+        }
+    }
 
     &__item {
         display: flex;
@@ -58,17 +100,7 @@ const categories = [
         align-items: center;
         flex: 0;
 
-        &:not(:first-child) {
-            margin-left: 24px;
-        }
 
-        &:first-child {
-            margin-left: 12px;
-        }
-
-        &:last-child {
-            margin-right: 12px;
-        }
 
         .item__text {
             color: currentColor;

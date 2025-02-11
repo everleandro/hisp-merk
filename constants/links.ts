@@ -1,7 +1,7 @@
 import Icons from "~/constants/icons";
 const Home = { icon: Icons.store, title: "Home", to: "/home" };
 const Discover = { icon: Icons.magnify, title: "Discover", to: "/discover" };
-const MyOrders = { icon: Icons.orders, title: "Pedidos", to: "/orders" };
+const MyOrders = { icon: Icons.orders, title: "Pedidos", to: "/order" };
 const Favorite = { icon: Icons.fav, title: "Favoritos", to: "/favorites" };
 const Profile = { icon: Icons.profile, title: "Profile", to: "/profile" };
 const Setting = { icon: Icons.setting, title: "Setting", to: "/setting" };

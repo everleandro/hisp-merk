@@ -21,7 +21,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useProfile({ title: 'My Wish List' });
+useAppBar({ title: 'My Wish List' });
 enum viewType {
     product = 1,
     commerce = 2

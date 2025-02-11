@@ -1,16 +1,11 @@
 <template>
-    <div class="client-filter">
-        <div class="client-filter__search ma-2">
-            <e-textfield v-model="filter.search" :prepend-icon="$icon.magnify" placeholder="Buscar..." />
-        </div>
-        <div class="d-flex">
-            <div class="client-filter__options ma-2">
-                <e-button text :prepend-icon="$icon.filter" class="white" color="gray-dark" @click="dialog = !dialog">
-                    Filtros
-                </e-button>
-            </div>
-            <e-spacer></e-spacer>
-            <switch-button :model-value="view" class="ma-2" @update:model-value="switchView" />
+    <div class="app-filter">
+        <div class="app-filter__search pa-3">
+            <e-textfield v-model="filter.search" color="secondary" :prepend-icon="$icon.magnify" retain-color
+                placeholder="Buscar..." />
+            <e-button class="ml-3" color="secondary" @click="dialog = !dialog">
+                <e-icon :icon="$icon.filter"></e-icon>
+            </e-button>
         </div>
         <e-dialog v-model="dialog" max-width="500">
             <div class="pa-4">
@@ -45,7 +40,7 @@
 import { switchType } from '~/components/switch-button.vue'
 import { Category } from '~/types'
 export interface Props {
-    view: switchType
+    view?: switchType
 }
 const props = withDefaults(defineProps<Props>(), { view: switchType.option1 })
 
@@ -70,7 +65,7 @@ const switchView = (type: switchType) => {
 
 </script>
 <style lang="scss">
-.client-filter {
+.app-filter {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -82,6 +77,8 @@ const switchView = (type: switchType) => {
 
     &__search {
         flex: 1;
+        flex-wrap: nowrap;
+        display: flex;
         background-color: var(--white);
     }
 }

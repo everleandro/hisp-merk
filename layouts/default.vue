@@ -16,7 +16,8 @@
       <template v-else>
         <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
         <e-spacer />
-        <app-logo negative />
+        <h2 v-if="title">{{ title }}</h2>
+        <app-logo v-else negative />
         <e-spacer />
         <e-button text :icon="$icon.bell" />
       </template>
@@ -40,18 +41,30 @@ import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/lin
 import type { TemporaryBar } from '@/types/temporary-bar'
 const route = useRoute()
 const data = reactive({
-  drawerModelMobile: false,
-  tabModel: 1
+  drawerModelMobile: false
 })
 const temporaryBar = ref<TemporaryBar | null>(null);
-
+const title = ref<string>('');
 const isActive = (path: string) => route.path.startsWith(path);
 
 const setTempBarContent = (content: TemporaryBar) => {
-  temporaryBar.value = content
+  if (content)
+    temporaryBar.value = { ...(temporaryBar.value || {}), ...content }
+  else temporaryBar.value = content
 }
 provide('setTempBarContent', setTempBarContent);
 
+watch(() => route, (_, to) => {
+  const result = [...OTHERS_LINKS, ...MOBILE_DRAWER_LINKS].find((link) => link.to === to?.path)
+  if (result)
+    switch (to?.path) {
+      case '/home':
+        title.value = ''
+        break;
+      default:
+        title.value = result.title
+    }
+}, { deep: true, immediate: true });
 </script>
 
 <style lang="scss">

@@ -1,184 +1,53 @@
 <template>
-    <div class="card-order">
+    <e-card class="card-order pa-3">
+        <div class="card-order__header d-flex mb-3">
+            <h3>Order #1514</h3>
+            <e-spacer />
+            <span>13/25/2021</span>
+        </div>
         <div class="card-order__body">
-            <div class="product-image">
-                <img src="@/assets/images/product-default.png" />
-            </div>
-            <div class="product-info">
-                <h2>Producto Especial De mantequilla</h2>
-                <p><span>Estado: </span> <span class="text--bold">Preparado</span> </p>
+            <p class="tracking-number">
+                <span class="mr-1">Tracking number: </span>
+                <b>IK91237761292093</b>
+            </p>
+            <div class="d-flex">
                 <p>
-                    <span>Precio: </span>
-                    <span class="price">$ 100.00</span>
+                    <span class="mr-1">Quantity: </span>
+                    <b>2</b>
+                </p>
+                <e-spacer />
+                <p>
+                    <span class="mr-1">Subtotal:</span>
+                    <b>2</b>
                 </p>
             </div>
-            <div class="card-order__actions">
-                <e-button small color="primary" outlined :x-small="$device.isMobile">Comprar nuevamente</e-button>
-                <e-button small color="primary" outlined :x-small="$device.isMobile">Evaluar vendedor</e-button>
-            </div>
         </div>
-        <div class="card-order__details">
-            <e-divider></e-divider>
-            <e-expansion color="secondary" header-title="Detalles del pedido">
-                <div class="secondary--text">
-                    <div class="row-info">
-                        <p class="row-info__label">
-                            Nº PEDIDO
-                        </p>
-                        <p class="row-info__text">1299</p>
-                    </div>
-                    <div class="row-info">
-                        <p class="row-info__label">
-                            Cantidad
-                        </p>
-                        <p class="row-info__text">4</p>
-                    </div>
-                    <div class="row-info">
-                        <p class="row-info__label">
-                            FECHA Y HORA DE ENTREGA
-                        </p>
-                        <p class="row-info__text">Jueves 01 de Octubre, 16:00h</p>
-                    </div>
-                    <div class="row-info">
-                        <p class="row-info__label">
-                            DIRECCIÓN
-                        </p>
-                        <p class="row-info__text">Carrer Poeta Miguel Hernandez, 67, 03201, Elx, Alicante</p>
-                        <e-icon :icon="$icon.map" class="ml-3"></e-icon>
-                    </div>
-                </div>
-            </e-expansion>
+        <div class="card-order__footer d-flex">
+            <span class="success--text">DELIVERED</span>
+            <e-spacer />
+            <e-button small outlined rounded depressed to="/order/1">View details</e-button>
         </div>
-
-    </div>
+    </e-card>
 </template>
 <style lang="scss">
 .card-order {
-    box-shadow: 2px 2px 6px 0 rgba(0, 29, 44, 0.2);
     background-color: #fff;
     border-radius: 5px;
-    color: var(--secondary);
+    flex: 1;
 
-    .e-expansion {
-        box-shadow: none;
-        border-radius: 0;
-    }
-
-    .product-image {
-        padding-right: 12px;
-
-        @include mixin.xs {
-            flex: .4;
-        }
-
-        img {
-            height: 100px;
-        }
-    }
-
-    &__details {
-
-        .row-info {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px;
-
-            &:not(:last-child) {
-                border-bottom: 1px solid var(--gray-light);
-            }
-
-            &__label {
-                text-transform: uppercase;
-                font-size: 14px;
-                color: var(--gray-dark);
-                opacity: 0.7;
-            }
-
-            &__text {
-                font-size: 14px;
-                font-weight: 500;
-                text-align: end;
-            }
-
-            p {
-                flex: 50%;
-                margin: 0;
-            }
-        }
-    }
-
-    .product-info {
+    &__header {
         flex: 1;
+    }
 
-        h2 {
-            font-weight: 500;
-        }
-
-        .text--bold {
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .price {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin: 0;
-        }
-
-        h2 {
-            font-size: 1rem;
-
-            margin-bottom: 10px;
-
-            @include mixin.xs {}
-        }
-
-        h2,
-        p {
-            @include mixin.xs {
-                text-align: right;
-            }
+    p {
+        span {
+            opacity: 0.9;
         }
     }
 
-    &__body {
-        display: flex;
-        padding: 12px;
-
-        @include mixin.xs {
-            align-items: center;
-            flex-wrap: wrap;
-        }
-    }
-
-    &__actions {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-
-        @include mixin.xs {
-            flex-direction: row;
-            margin-top: 12px;
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        .e-btn {
-            margin-left: 0;
-
-            @include mixin.from_sm {
-                margin-bottom: 12px;
-                margin: 0;
-            }
-        }
-    }
-
-    &__subtitle {
-        font-size: 14px;
-        color: var(--gray-dark);
-        opacity: 0.7;
+    &__footer {
+        flex-grow: 1;
+        align-items: center;
     }
 }
 </style>

@@ -21,7 +21,7 @@ import type { CardBank } from '~/types/card-bank';
 import { cardType } from '~/types/card-bank';
 import { DateBuilder as UtilDate } from 'drocket';
 const router = useRouter();
-useProfile({ title: 'New Payment Method' });
+useAppBar({ title: 'New Payment Method' });
 
 const data = reactive({
     dialogModel: false,

@@ -19,7 +19,7 @@
 </template>
 <script lang="ts" setup>
 import user from "assets/images/user.png";
-useProfile({ title: 'Profile Settings' });
+useAppBar({ title: 'Profile Settings' });
 </script>
 <style lang="scss">
 .profile-setting {

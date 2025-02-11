@@ -1,6 +1,6 @@
 import type { TemporaryBar } from "~/types/temporary-bar";
 import icons from "~/constants/icons";
-export function useProfile(config: Partial<TemporaryBar>) {
+export function useAppBar(config: Partial<TemporaryBar> = {}) {
   const setTempBarContent =
     inject<(newConfig: TemporaryBar | null) => void>("setTempBarContent");
 
@@ -8,16 +8,7 @@ export function useProfile(config: Partial<TemporaryBar>) {
   const route = useRoute();
 
   onNuxtReady(() => {
-    if (!config.leftButtonList) {
-      config.leftButtonList = [
-        {
-          icon: icons.chevronLeft,
-          action: () => goUpOneLevel(),
-        },
-      ];
-    }
-
-    if (setTempBarContent) setTempBarContent({ ...config });
+    if (Object.keys(config).length > 0) setBar(config);
   });
 
   onBeforeRouteLeave((to) => {
@@ -30,7 +21,6 @@ export function useProfile(config: Partial<TemporaryBar>) {
 
   const goUpOneLevel = () => {
     const pathSegments = route.path.split("/").filter(Boolean); // Divide la ruta y elimina vacíos
-    console.log(pathSegments);
     if (pathSegments.length > 1) {
       pathSegments.pop(); // Elimina el último segmento
       router.push("/" + pathSegments.join("/")); // Redirige a la nueva ruta
@@ -38,4 +28,17 @@ export function useProfile(config: Partial<TemporaryBar>) {
       router.push("/"); // Redirige a la raíz
     }
   };
+  const setBar = (_config: Partial<TemporaryBar> = {}) => {
+    if (!_config.leftButtonList) {
+      _config.leftButtonList = [
+        {
+          icon: icons.chevronLeft,
+          action: () => goUpOneLevel(),
+        },
+      ];
+    }
+
+    if (setTempBarContent) setTempBarContent({ ..._config });
+  };
+  return { setBar };
 }

@@ -17,7 +17,7 @@ import type { CardBank } from '~/types/card-bank';
 
 // import required modules
 import { EffectCards } from 'swiper/modules';
-useProfile({ title: 'Payment Methods' });
+useAppBar({ title: 'Payment Methods' });
 const cards = [
     {
         name: 'John Doe',

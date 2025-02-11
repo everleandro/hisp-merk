@@ -31,7 +31,7 @@ const profileSeciton = [
     { title: "My Wishlist", icon: icons.hearth, to: "/profile/wish-list" },
     { title: "Rate This App", icon: icons.star, to: "/profile/rate-app" }
 ]
-const test = ref('');
+
 </script>
 <style lang="scss">
 .profile {
