@@ -20,6 +20,7 @@ const Icons = {
   bell: "bell-outline",
   message: "message",
   map: "map-off",
+  mapMarker: "map-marker",
   cart: "cart",
   exit: "close",
   logout: "logout",

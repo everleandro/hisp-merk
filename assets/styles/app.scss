@@ -8,6 +8,10 @@
     transition: all 100ms;
 }
 
+.e-bar.white>* {
+    color: var(--root-color);
+}
+
 .page-enter-from,
 .page-leave-to {
     opacity: 0;
@@ -44,8 +48,6 @@
     }
 }
 
-h1,
-h2,
-h3 {
-    font-weight: 300;
+.e-btn.btn--transparent::before {
+    opacity: .05;
 }

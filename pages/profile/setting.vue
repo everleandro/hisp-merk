@@ -19,17 +19,7 @@
 </template>
 <script lang="ts" setup>
 import user from "assets/images/user.png";
-const setTempBarContent = inject<((newConfig: Record<string, string> | undefined) => void)>('setTempBarContent');
-onMounted(() => {
-    console.log('setting mounted', setTempBarContent);
-    if (setTempBarContent)
-        setTempBarContent({ title: 'Profile Settings' });
-});
-onUnmounted(() => {
-    console.log('unmounted');
-    if (setTempBarContent)
-        setTempBarContent(undefined);
-});
+useProfile({ title: 'Profile Settings' });
 </script>
 <style lang="scss">
 .profile-setting {

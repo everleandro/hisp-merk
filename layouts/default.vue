@@ -1,12 +1,17 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
     <e-bar app fixed depressed class="white">
-      <template v-if="tempBarContent">
-        <e-button :icon="$icon.chevronLeft" @click="goBack" small />
+      <template v-if="temporaryBar">
+        <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :icon="btn.icon" @click="btn.action" small text
+          class="btn--transparent">
+        </e-button>
         <e-spacer />
-        <h2>{{ tempBarContent?.title }}</h2>
+        <h2 class="pr-8">{{ temporaryBar.title }}</h2>
         <e-spacer />
-        <e-button text :icon="$icon.bell" />
+        <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :icon="btn.icon" @click="btn.action" small
+          text class="btn--transparent">
+          {{ btn.text }}
+        </e-button>
       </template>
       <template v-else>
         <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
@@ -24,30 +29,27 @@
       </e-container>
     </e-main>
     <footer class="mobile__footer d-flex d-sm-none white ">
-      <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" stacked :prepend-icon="link.icon" text
-        color="gray-light">{{ link.title }}</e-button>
+      <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" class="ma-0" stacked :prepend-icon="link.icon"
+        :class="{ 'router-link-active': isActive(link.to) }" text color="gray-light">{{ link.title }}</e-button>
     </footer>
 
   </e-app>
 </template>
 <script lang="ts" setup>
 import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
-export interface ContentBar {
-  title: string
-}
-const router = useRouter();
+import type { TemporaryBar } from '@/types/temporary-bar'
+const route = useRoute()
 const data = reactive({
   drawerModelMobile: false,
   tabModel: 1
 })
-const tempBarContent = ref<ContentBar | null>(null);
-const setTempBarContent = (content: ContentBar) => {
-  tempBarContent.value = content
-}
+const temporaryBar = ref<TemporaryBar | null>(null);
 
-const goBack = () => {
-  router.back();
-};
+const isActive = (path: string) => route.path.startsWith(path);
+
+const setTempBarContent = (content: TemporaryBar) => {
+  temporaryBar.value = content
+}
 provide('setTempBarContent', setTempBarContent);
 
 </script>
@@ -55,9 +57,7 @@ provide('setTempBarContent', setTempBarContent);
 <style lang="scss">
 .e-app {
   .e-bar {
-    &.primary>* {
-      color: unset;
-    }
+
 
     height: 54px;
 
@@ -109,6 +109,7 @@ provide('setTempBarContent', setTempBarContent);
       font-weight: normal;
       text-transform: capitalize;
       border-radius: 0px;
+      flex: 1 1 auto;
 
       &::before {
         opacity: .1;

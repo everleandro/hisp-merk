@@ -22,10 +22,8 @@
     </svg>
 </template>
 <script lang="ts" setup>
-export interface Props {
-    size?: number
-}
-const props = withDefaults(defineProps<Props>(), { size: 45 })
+import type { IconSvgProps } from './props';
+const props = withDefaults(defineProps<IconSvgProps>(), { size: 45 })
 </script>
 <style scoped>
 .cls-1 {

@@ -6,7 +6,8 @@
             <e-divider></e-divider>
         </template>
         <e-list>
-            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="secondary" :to="link.to">
+            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="secondary" :to="link.to"
+                :class="{ 'router-link-active': isActive(link.to) }">
                 {{ link.title }}
             </e-list-item>
         </e-list>
@@ -32,6 +33,7 @@ import { useBreakpoint } from 'drocket'
 import type { Link } from '@/types'
 
 const router = useRouter();
+const route = useRoute();
 const { viewport } = useBreakpoint()
 
 export interface Props {
@@ -62,6 +64,7 @@ const model = computed({
 const logOut = () => {
     router.push({ path: "/" })
 }
+const isActive = (path: string) => route.path.startsWith(path);
 </script>
 <style lang="scss">
 .e-drawer {

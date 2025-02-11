@@ -17,5 +17,6 @@ const IconSvg = {
   ),
   Meat: defineAsyncComponent(() => import("@/components/icon-svg/meat.vue")),
   Pizza: defineAsyncComponent(() => import("@/components/icon-svg/pizza.vue")),
+  Visa: defineAsyncComponent(() => import("@/components/icon-svg/visa.vue")),
 };
 export default IconSvg;
