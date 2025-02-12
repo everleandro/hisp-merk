@@ -1,7 +1,7 @@
 <template>
     <e-card class="card-bank white--text pa-3">
         <div class="card-bank__header">
-            <component :is="svg[modelValue.type]" class="card-bank__header-icon" />
+            <e-icon :icon="$icon.visa" class="card-bank__header-icon" />
         </div>
         <div class="card-bank__body">
             <p>{{ cardFormatter(modelValue.number).formattedCard || '**** **** **** ****' }}</p>
@@ -19,7 +19,7 @@
     </e-card>
 </template>
 <script lang="ts" setup>
-import svg from '~/constants/icons-svg';
+import svg from '~/constants/app-icon';
 import type { CardBank } from '~/types/card-bank';
 const cardFormatter = useCardFormatter;
 const props = defineProps<{ modelValue: CardBank }>()

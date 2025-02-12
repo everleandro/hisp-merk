@@ -1,16 +1,15 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
-    <e-bar app fixed depressed class="white">
+    <e-bar app fixed depressed :class="barClass">
       <template v-if="temporaryBar">
         <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :icon="btn.icon" @click="btn.action" small text
           class="btn--transparent">
         </e-button>
         <e-spacer />
-        <h2 class="pr-8">{{ temporaryBar.title }}</h2>
+        <h2 v-if="temporaryBar.title" class="pr-8">{{ temporaryBar.title }}</h2>
         <e-spacer />
         <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :icon="btn.icon" @click="btn.action" small
           text class="btn--transparent">
-          {{ btn.text }}
         </e-button>
       </template>
       <template v-else>
@@ -29,9 +28,9 @@
         <slot />
       </e-container>
     </e-main>
-    <footer class="mobile__footer d-flex d-sm-none white ">
+    <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
       <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" class="ma-0" stacked :prepend-icon="link.icon"
-        :class="{ 'router-link-active': isActive(link.to) }" text color="gray-light">{{ link.title }}</e-button>
+        :class="{ 'router-link-active': isActive(link.to) }" text color="secondary">{{ link.title }}</e-button>
     </footer>
 
   </e-app>
@@ -43,6 +42,9 @@ const route = useRoute()
 const data = reactive({
   drawerModelMobile: false
 })
+const { footerSetting } = useFooter()
+
+const barClass = ref('white')
 const temporaryBar = ref<TemporaryBar | null>(null);
 const title = ref<string>('');
 const isActive = (path: string) => route.path.startsWith(path);
@@ -52,7 +54,11 @@ const setTempBarContent = (content: TemporaryBar) => {
     temporaryBar.value = { ...(temporaryBar.value || {}), ...content }
   else temporaryBar.value = content
 }
+
+const setBarClass = (_class: string) => barClass.value = _class
+
 provide('setTempBarContent', setTempBarContent);
+provide('setBarClass', setBarClass);
 
 watch(() => route, (_, to) => {
   const result = [...OTHERS_LINKS, ...MOBILE_DRAWER_LINKS].find((link) => link.to === to?.path)
@@ -70,7 +76,9 @@ watch(() => route, (_, to) => {
 <style lang="scss">
 .e-app {
   .e-bar {
-
+    &.app-bar--transparent {
+      background-color: transparent;
+    }
 
     height: 54px;
 
@@ -104,15 +112,26 @@ watch(() => route, (_, to) => {
 
   .mobile__footer {
     position: fixed;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid var(--gray-light);
-
-    padding-bottom: env(safe-area-inset-bottom, 8px) !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    left: 12px;
+    width: calc(100% - 24px);
+    border-radius: 16px;
     justify-content: space-between;
-
     align-items: center;
     z-index: 2;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: .7;
+      background-color: var(--white);
+      z-index: -1;
+    }
 
     .router-link-active {
       color: var(--primary);

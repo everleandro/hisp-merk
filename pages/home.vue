@@ -2,12 +2,11 @@
     <div class="home-page">
         <product-detail v-model="productDetails" key="details" />
         <div class="">
-            <filter-category v-model="state.category" inline/>
+            <filter-category v-model="state.category" inline />
         </div>
         <div class="ma-3">
             <home-header :offer-list="[1, 2, 3, 4, 5, 6]" />
         </div>
-
         <app-list title="Feature Products." :itemsPerView="2.5">
             <product-card />
         </app-list>

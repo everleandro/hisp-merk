@@ -4,7 +4,7 @@
             :class="active(category.id) && 'filter-category__item--active'" @click="handleCategoryClick(category.id)">
             <div class="button-wrapper">
                 <e-button text x-large>
-                    <component :is="category.icon" />
+                    <app-icon :icon="category.icon" x-large></app-icon>
                 </e-button>
             </div>
             <span class="item__text">{{ category.title }}</span>
@@ -12,7 +12,7 @@
     </ol>
 </template>
 <script lang="ts" setup>
-import svg from '~/constants/icons-svg';
+import appIcons from '~/constants/app-icon';
 import { Category } from '~/types';
 export interface Props {
     modelValue?: Category,
@@ -45,14 +45,13 @@ const handleCategoryClick = (id: Category) => {
     model.value = id
 }
 const categories = [
-    { icon: svg.Beauty, title: "Beauty", id: Category.Beauty },
-    { icon: svg.Breckfast, title: "Breakfast", id: Category.Breakfast },
-    { icon: svg.Clothes, title: "Clothes", id: Category.Clothes },
-    { icon: svg.Coffe, title: "Coffe", id: Category.Coffe },
-    { icon: svg.FastFood, title: "Fast Food", id: Category.FastFood },
-    { icon: svg.Home, title: "Home", id: Category.Home },
-    { icon: svg.Meat, title: "Meat", id: Category.Meat },
-    { icon: svg.Pizza, title: "Pizza", id: Category.Pizza },
+    { icon: appIcons.breckfast, title: "Breakfast", id: Category.Breakfast },
+    { icon: appIcons.clothes, title: "Clothes", id: Category.Clothes },
+    { icon: appIcons.coffe, title: "Coffe", id: Category.Coffe },
+    { icon: appIcons.fastFood, title: "Fast Food", id: Category.FastFood },
+    { icon: appIcons.home, title: "Home", id: Category.Home },
+    { icon: appIcons.meat, title: "Meat", id: Category.Meat },
+    { icon: appIcons.pizza, title: "Pizza", id: Category.Pizza },
 ]
 
 </script>
@@ -60,7 +59,6 @@ const categories = [
 .filter-category {
     display: flex;
     max-width: 100%;
-
 
     &--inline {
         justify-content: space-between;

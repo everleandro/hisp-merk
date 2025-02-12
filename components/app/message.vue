@@ -1,5 +1,5 @@
 <template>
-    <div :class="classes">
+    <div v-ripple :class="classes">
         <div v-if="hasPrepend" class="app-message__prepend pr-3 d-flex">
             <slot name="prepend">
                 <e-icon v-if="prependIcon" :icon="prependIcon" large :color="textColor || color" />
@@ -77,6 +77,11 @@ const classes = computed(() => ({
             z-index: -1;
             transition: background-color 0.3s ease-in;
         }
+    }
+
+    &__content {
+        font-size: 12px;
+        margin-top: 6px;
     }
 
     &__body {

@@ -9,7 +9,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useAppBar({ title: 'Share your feedback' });
+useBarTemporary({ title: 'Share your feedback' });
 const rateValue = ref(0);
 const rateText = ref('');
 </script>

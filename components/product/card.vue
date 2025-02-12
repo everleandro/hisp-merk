@@ -13,6 +13,7 @@
 export interface Props {
     row?: boolean,
 }
+const router=useRouter()
 const props = withDefaults(defineProps<Props>(), { row: false })
 const details = ref(false);
 
@@ -27,7 +28,8 @@ const emit = defineEmits<{
 }>()
 
 const showDetails = () => {
-    emit('show:details', true);
+    // emit('show:details', true);
+    router.push('/store/magestic-store/product/10')
 }
 </script>
 <style lang="scss">

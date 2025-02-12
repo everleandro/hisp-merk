@@ -16,7 +16,6 @@
                 </div>
                 <div>
                     <e-form>
-                        <e-select v-model="filter.category" :items="availbableCategories" cols="24" />
                         <e-form-column cols="6" class="align-center">
                             <span class="pl-3">Precio:</span>
                         </e-form-column>

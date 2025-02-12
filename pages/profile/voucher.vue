@@ -6,7 +6,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useAppBar({ title: 'Voucher' });
+useBarTemporary({ title: 'Voucher' });
 const voucherList = [
     {
         title: 'Black Friday',

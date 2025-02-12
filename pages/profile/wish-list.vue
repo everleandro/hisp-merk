@@ -21,7 +21,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useAppBar({ title: 'My Wish List' });
+useBarTemporary({ title: 'My Wish List' });
 enum viewType {
     product = 1,
     commerce = 2
