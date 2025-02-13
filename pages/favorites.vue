@@ -15,7 +15,7 @@
                     </e-col>
                     <e-col v-for="i in 5" v-show="state.view === switchType.option2" cols="24" sm="12" md="8" lg="6"
                         :key="i">
-                        <card-commerce />
+                        <store-card />
                     </e-col>
                 </e-row>
             </transition>

@@ -3,7 +3,6 @@ import icons from "~/constants/icons";
 export function useBarTemporary(config: Partial<TemporaryBar> = {}) {
   const setTempBarContent =
     inject<(newConfig: TemporaryBar | null) => void>("setTempBarContent");
-  const setBarClass = inject<(newClass: string) => void>("setBarClass");
 
   const router = useRouter();
   const route = useRoute();

@@ -1,8 +1,7 @@
 <template>
     <div class="home-page">
-        <product-detail v-model="productDetails" key="details" />
         <div class="">
-            <filter-category v-model="state.category" inline />
+            <filter-category inline v-model="category" />
         </div>
         <div class="ma-3">
             <home-header :offer-list="[1, 2, 3, 4, 5, 6]" />
@@ -18,14 +17,14 @@
         </app-list>
 
         <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
+            <store-card />
         </app-list>
         <app-list title="Feature Products." :itemsPerView="2.5">
             <product-card />
         </app-list>
 
         <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
+            <store-card />
         </app-list>
         <app-list title="Feature Products." :itemsPerView="2.5">
             <product-card />
@@ -39,32 +38,22 @@
         </app-list>
 
         <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
+            <store-card />
         </app-list>
         <app-list title="Feature Products." :itemsPerView="2.5">
             <product-card />
         </app-list>
 
         <app-list title="Recomended" :itemsPerView="1.3">
-            <commerce-card />
+            <store-card />
         </app-list>
 
 
     </div>
 </template>
 <script lang="ts" setup>
-import { switchType } from '~/components/switch-button.vue'
 import { Category } from '~/types';
-const state = reactive({
-    viewType: switchType.option1,
-    category: Category.All
-})
-const productDetails = ref(false);
-
-const showProductDetails = () => {
-    console.log('show details 2');
-    productDetails.value = true;
-}
+const category = ref(Category.All)
 </script>
 <style lang="scss">
 .home-page {

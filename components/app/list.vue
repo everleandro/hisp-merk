@@ -1,7 +1,7 @@
 <template>
     <div class="my-4 app-list">
-        <div class="app-list__header pa-3">
-            <h2 v-if="title" class="my-4 ">{{ title }}</h2>
+        <div v-if="title" class="app-list__header pa-3">
+            <h2 class="my-4 ">{{ title }}</h2>
             <e-spacer />
             <e-button text :icon="$icon.chevronRight" />
         </div>

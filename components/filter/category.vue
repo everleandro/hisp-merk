@@ -108,7 +108,7 @@ const categories = [
 
         .button-wrapper {
             padding: 3px;
-            border-radius: 9999px;
+            border-radius: 12px;
             border-color: rgba(0, 0, 0, .1);
         }
 
@@ -116,10 +116,10 @@ const categories = [
             height: 60px;
             padding: 0;
             width: 60px;
-            border-radius: 9999px;
+            border-radius: 12px;
 
             &:before {
-                opacity: 0.05;
+                opacity: 0.15;
             }
         }
 

@@ -1,6 +1,7 @@
 export interface BarButton {
   text?: string;
   icon?: string;
+  color?: string;
   action: () => void;
 }
 export interface TemporaryBar {

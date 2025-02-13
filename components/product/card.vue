@@ -13,7 +13,7 @@
 export interface Props {
     row?: boolean,
 }
-const router=useRouter()
+const router = useRouter()
 const props = withDefaults(defineProps<Props>(), { row: false })
 const details = ref(false);
 

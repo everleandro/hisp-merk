@@ -2,14 +2,14 @@
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
     <e-bar app fixed depressed :class="barClass">
       <template v-if="temporaryBar">
-        <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :icon="btn.icon" @click="btn.action" small text
-          class="btn--transparent">
+        <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :icon="btn.icon" :color="btn.color"
+          @click="btn.action" small text class="btn--transparent">
         </e-button>
         <e-spacer />
         <h2 v-if="temporaryBar.title" class="pr-8">{{ temporaryBar.title }}</h2>
         <e-spacer />
-        <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :icon="btn.icon" @click="btn.action" small
-          text class="btn--transparent">
+        <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :color="btn.color" :icon="btn.icon"
+          @click="btn.action" small text class="btn--transparent">
         </e-button>
       </template>
       <template v-else>
@@ -80,6 +80,11 @@ watch(() => route, (_, to) => {
       background-color: transparent;
     }
 
+    &.app-bar--blured {
+      backdrop-filter: blur(3px);
+      background: transparent;
+    }
+
     height: 54px;
 
     @include mixin.from_sm {
@@ -101,7 +106,7 @@ watch(() => route, (_, to) => {
   }
 
   .e-main {
-    padding-top: 64px !important;
+    padding-top: 54px !important;
   }
 
   &[type="default-layout"] {
@@ -120,18 +125,8 @@ watch(() => route, (_, to) => {
     align-items: center;
     z-index: 2;
     overflow: hidden;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      opacity: .7;
-      background-color: var(--white);
-      z-index: -1;
-    }
+    backdrop-filter: blur(5px);
+    background: transparent;
 
     .router-link-active {
       color: var(--primary);

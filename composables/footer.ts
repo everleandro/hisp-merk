@@ -12,7 +12,6 @@ export function useFooter() {
   };
 
   const setFooterConfig = (config: FooterConfig) => {
-    console.log(config);
     footerSetting.value = { ...defaultConfig, ...config };
   };
 

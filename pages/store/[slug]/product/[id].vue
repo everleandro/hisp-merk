@@ -3,28 +3,43 @@
         <div class="product-page__header">
             <img src="@/assets/images/product/1.png" alt="img">
         </div>
-        <div class="product-page__body white">
+        <div class="product-page__body white pb-10 mb-n15">
             <div class="d-flex align-baseline pa-3 ">
                 <h1>Sport wear set</h1>
                 <e-spacer></e-spacer>
                 <span>$90.00</span>
             </div>
-            <div class="d-flex">
+            <div class="d-flex mb-3">
                 <app-rate :model-value="4" />
             </div>
+            <e-divider />
+            <e-row class="ma-0">
+                <e-col cols="12"><picker-color v-model="store.color"
+                        :colors="['primary', 'secondary', 'warning']" /></e-col>
+                <e-col cols="12"><picker-size v-model="store.size" :sizes="['XS', 'M', 'L']" /></e-col>
+            </e-row>
+            <e-divider />
             <e-expansion-panel>
-                <e-expansion header-title="Descripcion">
+                <e-expansion v-model="store.description" header-title="Descripcion">
                     <p class="pa-4 ma-0">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, minus nisi placeat ipsum
                         porro facilis molestiae nemo consectetur. Dolores quam voluptatum ipsa? Alias molestiae eligendi
                         quidem at minima dignissimos nemo?
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, minus nisi placeat ipsum
-                        porro facilis molestiae nemo consectetur. Dolores quam voluptatum ipsa? Alias molestiae eligendi
-                        quidem at minima dignissimos nemo?
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, minus nisi placeat ipsum
-                        porro facilis molestiae nemo consectetur. Dolores quam voluptatum ipsa? Alias molestiae eligendi
-                        quidem at minima dignissimos nemo?
+                        porro facilis molestiae nemo consectetur.
                     </p>
+                </e-expansion>
+                <e-expansion v-model="store.reviews" header-title="Reviews">
+                    <div class="pa-4 ma-0">
+                        <product-review-info :model-value="4.3" />
+                    </div>
+                </e-expansion>
+                <e-expansion v-model="store.reviews" header-title="Similar Products">
+                    <div class="pa-4 ma-0">
+                        <app-list :itemsPerView="2.3">
+                            <product-card />
+                        </app-list>
+                    </div>
                 </e-expansion>
             </e-expansion-panel>
         </div>
@@ -42,7 +57,12 @@ const { setFooterConfig } = useFooter()
 const { setBar } = useBarTemporary()
 const router = useRouter()
 const mounted = ref(false);
-
+const store = reactive({
+    color: 'primary',
+    reviews: true,
+    description: true,
+    size: 'XS'
+})
 
 onMounted(() => {
     setTimeout(() => {
@@ -98,9 +118,9 @@ const favAction = () => {
 
     &__header {
         position: sticky;
-        top: 12px;
+        top: 0;
         z-index: -1;
-        // margin-top: -54px;
+        margin-top: -54px;
         width: 100%;
         display: flex;
         justify-content: center;
