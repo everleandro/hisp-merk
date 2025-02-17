@@ -1,9 +1,9 @@
 <template>
-    <div class="app-text-area">
-        <label for="feedback"></label>
-        <textarea ref="textarea" v-model="text" :placeholder="placeholder" @input="handleInput" class="auto-expand"
-            rows="4"></textarea>
-        <span class="app-text-area__details">{{ modelValue.length }}</span>
+    <div :class="classes">
+        <label v-if="label" for="text-area">{{ label }}</label>
+        <textarea ref="textarea" :value="model" id="feedback" :placeholder="placeholder" @input="handleInput"
+            class="auto-expand" :rows="rows"></textarea>
+        <span v-if="limit" class="app-text-area__details">{{ modelValue.length }}</span>
     </div>
 </template>
 
@@ -11,9 +11,13 @@
 import { ref, onMounted } from 'vue';
 interface Props {
     modelValue: string
+    label?: string
+    limit?: string | number,
+    rows?: string | number,
+    elevated?: boolean,
     placeholder?: string
 }
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { rows: 8 })
 const emit = defineEmits<{
     (e: 'update:modelValue', value: string): void
 }>();
@@ -24,17 +28,25 @@ const model = computed({
 const text = ref('');
 const textarea = ref<HTMLTextAreaElement | null>(null);
 
+const classes = computed(() => ({
+    'app-text-area': true,
+    'app-text-area--elevated': props.elevated
+}))
+
 const adjustHeight = () => {
-    const el = textarea.value;
-    if (!el) return;
-    el.style.height = 'auto'; // Reset para recalcular
-    el.style.height = el.scrollHeight + 'px'; // Ajusta la altura
+    setTimeout(() => {
+        const el = textarea.value;
+        if (!el) return;
+        el.style.height = 'auto'; // Reset para recalcular
+        console.log(el.style.height)
+        el.style.height = el.scrollHeight + 'px'; // Ajusta la altura
+    })
 };
 
 const handleInput = (e: Event) => {
-    adjustHeight();
     const target = e.target as HTMLTextAreaElement;
     model.value = target.value;
+    adjustHeight()
 };
 
 onMounted(adjustHeight);
@@ -44,9 +56,24 @@ onMounted(adjustHeight);
 .app-text-area {
     padding: 12px;
     position: relative;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     color: var(--root-color);
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: currentColor;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+        opacity: .1;
+    }
+
+    &--elevated {
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
 
     &__details {
         color: var(--root-color);
@@ -59,10 +86,9 @@ onMounted(adjustHeight);
     .auto-expand {
         font-family: "Roboto", sans-serif;
         width: 100%;
-        min-height: 160px;
         max-height: 200px;
         /* Opcional: evita que crezca demasiado */
-        overflow-y: hidden;
+        overflow-y: auto;
         resize: none;
 
         /* Evita el resize manual */

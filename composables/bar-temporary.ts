@@ -25,7 +25,7 @@ export function useBarTemporary(config: Partial<TemporaryBar> = {}) {
       pathSegments.pop(); // Elimina el último segmento
       router.push("/" + pathSegments.join("/")); // Redirige a la nueva ruta
     } else {
-      router.push("/"); // Redirige a la raíz
+      router.go(-1); // Redirige a la raíz
     }
   };
 

@@ -17,13 +17,12 @@
             </div>
         </e-dialog>
         <div class="cart-quantity__actions">
-
             <e-button text x-small @click="actionBehavior(actions.prev)">
-                <e-icon :icon="prevIcon" color="secondary" />
+                <e-icon :icon="prevIcon" x-small color="secondary" />
             </e-button>
             <input :value="modelValue" readonly type="number" @click="inputClickHandler()">
             <e-button text x-small @click="actionBehavior(actions.next)">
-                <e-icon :icon="$icon.plus" color="secondary" />
+                <e-icon :icon="$icon.plus" x-small color="secondary" />
             </e-button>
         </div>
     </div>
@@ -78,8 +77,6 @@ const actionBehavior = (action: actions) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    border: 1px solid var(--gray);
 
     &__container {
         display: flex;
@@ -92,10 +89,17 @@ const actionBehavior = (action: actions) => {
     }
 
     &__actions {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--gray);
+        border-radius: 9999px;
+        overflow: hidden;
 
         .e-btn {
-            padding: 0 8px;
+            padding: 0 4px;
             border-radius: 0;
+            min-width: unset;
+            --btn-height: 1.7rem
         }
     }
 
@@ -103,11 +107,10 @@ const actionBehavior = (action: actions) => {
         width: 40px;
         text-align: center;
         font-size: 1rem;
-        border-left: 1px solid var(--gray);
-        border-right: 1px solid var(--gray);
         height: 100%;
-        width: 53px;
-        padding: 0 12px;
+        width: 33px;
+        padding: 0 2px;
+        border-radius: 0;
         color: var(--secondary);
 
         &:focus {

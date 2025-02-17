@@ -27,3 +27,6 @@
 
     </div>
 </template>
+<script lang="ts" setup>
+useBarTemporary({ title: 'Therms of use' });
+</script>

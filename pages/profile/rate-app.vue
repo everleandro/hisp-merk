@@ -3,7 +3,8 @@
         <h4>What is your opinion of D.Havana?</h4>
         <app-rate v-model="rateValue" class="mb-4" />
         <form>
-            <app-textarea v-model="rateText" placeholder="Would you like to write anything about this product?" />
+            <app-textarea v-model="rateText" elevated limit="100"
+                placeholder="Would you like to write anything about this product?" />
             <e-button block class="mt-6" color="secondary" rounded>send feedback</e-button>
         </form>
     </div>

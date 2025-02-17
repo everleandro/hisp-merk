@@ -17,6 +17,7 @@
                 :to="link.to">
                 {{ link.title }}
             </e-list-item>
+            <slot name="extra-links"></slot>
         </e-list>
         <template #append>
             <div class="pa-2">

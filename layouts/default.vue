@@ -21,10 +21,19 @@
         <e-button text :icon="$icon.bell" />
       </template>
     </e-bar>
-    <app-drawer v-model="data.drawerModelMobile" :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS" />
+    <app-drawer v-model="data.drawerModelMobile" :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS">
+      <template #extra-links>
+        <e-list-item :prepend-icon="Support.icon" color="secondary" value="support" @click="handleSupportClick">
+          {{ Support.title }}
+        </e-list-item>
+      </template>
+    </app-drawer>
 
     <e-main>
       <e-container>
+        <e-dialog v-model="data.supportDialog" fullscreen>
+          <chat v-if="data.supportDialog" @close="data.supportDialog = false" />
+        </e-dialog>
         <slot />
       </e-container>
     </e-main>
@@ -36,14 +45,15 @@
   </e-app>
 </template>
 <script lang="ts" setup>
-import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
+import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
 import type { TemporaryBar } from '@/types/temporary-bar'
 const route = useRoute()
 const data = reactive({
-  drawerModelMobile: false
+  drawerModelMobile: false,
+  supportDialog: false,
 })
 const { footerSetting } = useFooter()
-
+const { Support } = EXTRA_LINKS
 const barClass = ref('white')
 const temporaryBar = ref<TemporaryBar | null>(null);
 const title = ref<string>('');
@@ -60,6 +70,10 @@ const setBarClass = (_class: string) => barClass.value = _class
 provide('setTempBarContent', setTempBarContent);
 provide('setBarClass', setBarClass);
 
+watch(() => route.fullPath, () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 watch(() => route, (_, to) => {
   const result = [...OTHERS_LINKS, ...MOBILE_DRAWER_LINKS].find((link) => link.to === to?.path)
   if (result)
@@ -71,6 +85,17 @@ watch(() => route, (_, to) => {
         title.value = result.title
     }
 }, { deep: true, immediate: true });
+
+watch(() => data.supportDialog, (value) => {
+  if (value)
+    document.body.style.overflow = 'hidden';  //
+  else
+    document.body.style.overflow = 'auto';  //
+})
+const handleSupportClick = () => {
+  data.drawerModelMobile = false
+  data.supportDialog = true
+}
 </script>
 
 <style lang="scss">

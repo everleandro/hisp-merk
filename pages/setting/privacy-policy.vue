@@ -1,8 +1,8 @@
 <template>
     <div class="pa-3">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore sed optio cupiditate, doloremque vero
-            quibusdam corrupti dolorum minima necessitatibus, accusamus laboriosam assumenda sunt vitae consectetur,
-            minus in quis magni. Similique!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam asperiores nisi similique harum placeat
+            nihil dolor tempore eius suscipit voluptatem distinctio, quo, temporibus magni ullam deleniti provident
+            debitis ducimus mollitia?</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, nemo optio, quidem enim placeat libero
             voluptatum laboriosam non porro accusamus in id deleniti facere possimus nihil a provident? Molestiae,
             delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad perferendis hic nihil a libero
@@ -27,3 +27,6 @@
 
     </div>
 </template>
+<script lang="ts" setup>
+useBarTemporary({ title: 'Privacy Policy' });
+</script>

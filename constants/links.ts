@@ -9,6 +9,7 @@ const Setting = { icon: Icons.setting, title: "Setting", to: "/setting" };
 const Support = { icon: Icons.support, title: "Support", to: "/support" };
 const AboutUs = { icon: Icons.aboutUs, title: "About Us", to: "/about-us" };
 
-export const OTHERS_LINKS = [Setting, AboutUs, Support];
+export const OTHERS_LINKS = [Setting, AboutUs];
+export const EXTRA_LINKS = { Support };
 export const MOBILE_LINKS = [Home, Discover, MyCart, Profile];
 export const MOBILE_DRAWER_LINKS = [Home, Discover, MyOrders, Profile];
