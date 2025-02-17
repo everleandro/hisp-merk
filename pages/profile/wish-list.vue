@@ -1,5 +1,5 @@
 <template>
-    <div class="pa-3">
+    <div class="pa-3 whish-list-page">
         <app-switch v-model="store.view" :true-value="viewType.product" :false-value="viewType.commerce"
             true-text="product" false-text="commerce" class="pa-3 mb-6" />
         <e-window v-model="store.view">
@@ -30,3 +30,14 @@ const store = reactive({
     view: viewType.product
 })
 </script>
+<style lang="scss">
+.whish-list-page {
+    .app-switch {
+        position: sticky;
+        position: sticky;
+        top: 47px;
+        z-index: 1;
+        background-color: var(--white);
+    }
+}
+</style>

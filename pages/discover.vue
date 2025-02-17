@@ -6,7 +6,7 @@
         <!-- </div> -->
         <!-- </transition> -->
 
-        <e-window v-model="store.view">
+        <e-window v-model="store.view" class="mt-3">
             <e-window-item :value="viewType.category">
                 <filter-category grid @click:category="setCategory" />
             </e-window-item>

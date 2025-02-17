@@ -88,6 +88,21 @@ const categories = [
         .filter-category__item {
             flex: 0 0 33.3333%;
             min-height: 129px;
+
+            .e-btn {
+                width: 84px;
+                height: 84px;
+
+                .e-icon--size-x-large {
+                    font-size: 60px;
+                }
+            }
+
+            .item__text {
+                font-size: medium;
+                margin-top: 4px;
+
+            }
         }
     }
 
