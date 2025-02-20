@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -26,6 +25,14 @@ jobs:
 
       - name: Sync Capacitor
         run: npx cap sync ios
+
+      - name: Set Development Team for Automatic Signing
+        run: |
+          # Reemplaza YOUR_TEAM_ID con tu Apple Development Team ID
+          cd ios/App
+          /usr/bin/xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+          CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
+          -allowProvisioningUpdates
 
       - name: Decode and Install Certificates
         env:
