@@ -10,6 +10,6 @@ const Support = { icon: Icons.support, title: "Support", to: "/support" };
 const AboutUs = { icon: Icons.aboutUs, title: "About Us", to: "/about-us" };
 
 export const OTHERS_LINKS = [Setting, AboutUs];
-export const EXTRA_LINKS = { Support };
-export const MOBILE_LINKS = [Home, Discover, MyCart, Profile];
+export const EXTRA_LINKS = { Support, MyCart };
+export const MOBILE_LINKS = [Home, Discover, MyOrders, Profile];
 export const MOBILE_DRAWER_LINKS = [Home, Discover, MyOrders, Profile];

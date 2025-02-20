@@ -19,7 +19,7 @@
         <h2 v-if="title">{{ title }}</h2>
         <app-logo v-else negative />
         <e-spacer />
-        <e-button :icon="$icon.cart" small color="red"/>
+        <e-button :icon="$icon.cart" :to="MyCart.to" small color="red" />
         <e-button :icon="$icon.bell" small />
       </template>
     </e-bar>
@@ -39,10 +39,10 @@
         <slot />
       </e-container>
     </e-main>
-    <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
+    <!-- <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
       <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" class="ma-0" stacked :prepend-icon="link.icon"
         :class="{ 'router-link-active': isActive(link.to) }" text color="secondary">{{ link.title }}</e-button>
-    </footer>
+    </footer> -->
 
   </e-app>
 </template>
@@ -55,7 +55,7 @@ const data = reactive({
   supportDialog: false,
 })
 const { footerSetting } = useFooter()
-const { Support } = EXTRA_LINKS
+const { Support, MyCart } = EXTRA_LINKS
 const barClass = ref('white')
 const temporaryBar = ref<TemporaryBar | null>(null);
 const title = ref<string>('');

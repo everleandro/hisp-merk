@@ -11,12 +11,15 @@
 </script>
 <style lang="scss">
 .e-app[type="empty-layout"] {
+  padding: 0;
+  margin: 0;
+
   .e-container {
-    margin-top: 40px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    height: 100vh;
   }
 }
 </style>
