@@ -26,17 +26,19 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync ios
 
-      # Paso agregado para listar los esquemas
-      - name: List Xcode Schemes
+      - name: Set Development Team for Automatic Signing
         run: |
+          # Reemplaza YOUR_TEAM_ID con tu Apple Development Team ID
           cd ios/App
-          xcodebuild -list
+          /usr/bin/xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+          CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
+          -allowProvisioningUpdates
 
       - name: Decode and Install Certificates
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} # Aquí añades la contraseña
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}  # Aquí añades la contraseña
         run: |
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
@@ -48,12 +50,4 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Build iOS App
-        run: |
-          cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
-
-      - name: Export IPA
-        run: |
-          cd ios/App
-          xcodebuild -exportArchive -archivePath $PWD/build/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build
+      - name
