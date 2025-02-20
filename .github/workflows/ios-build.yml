@@ -30,14 +30,13 @@ jobs:
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
-          security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security import certificate.p12 -k build.keychain -P "" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
@@ -63,14 +62,3 @@ jobs:
             -archivePath $PWD/build/App.xcarchive \
             -exportOptionsPlist exportOptions.plist \
             -exportPath $PWD/build
-
-      - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-app
-          path: ios/App/build/*.ipa
-
-      - name: Clean up build files
-        run: |
-          echo "Cleaning up build artifacts..."
-          rm -rf ios/App/build
