@@ -38,7 +38,7 @@ jobs:
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}  # Aquí añades la contraseña
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
