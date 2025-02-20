@@ -1,45 +1,30 @@
-name: Build iOS App
+name: iOS Build
 
 on:
   push:
     branches:
-      - main # Cambia esto si usas otra rama
+      - main
 
 jobs:
-  build-ios:
-    runs-on: macos-latest # Usamos una máquina macOS de GitHub Actions
-
+  build:
+    runs-on: macos-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Build Nuxt app
-        run: |
-          npm run build
-          npx nuxi generate
+      - name: Build Nuxt App
+        run: npm run generate
 
-      - name: Install Capacitor CLI
-        run: npm install @capacitor/cli
-
-      - name: Ensure iOS platform exists
-        run: |
-          if [ ! -d "ios" ]; then
-            echo "iOS platform not found. Adding iOS platform..."
-            npx cap add ios
-          fi
-
-      - name: Sync Capacitor files
-        run: |
-          npx cap copy ios
-          npx cap sync ios
+      - name: Sync Capacitor
+        run: npx cap sync ios
 
       - name: Decode and Install Certificates
         env:
@@ -50,71 +35,22 @@ jobs:
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
           
-          security create-keychain -p "" build.keychain
+          security create-keychain -p "temp-password" build.keychain
           security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
+          security unlock-keychain -p "temp-password" build.keychain
+          
           security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "temp-password" build.keychain
           
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Install CocoaPods
-        run: |
-          echo "Installing CocoaPods..."
-          sudo gem install cocoapods
-          pod setup
-          cd ios/App
-          pod install --verbose
-
-      - name: Create ExportOptions.plist
-        run: |
-          echo "Creating ExportOptions.plist with APPLE_TEAM_ID"
-          cat <<EOF > ios/App/ExportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>teamID</key>
-              <string>${{ secrets.APPLE_TEAM_ID }}</string>
-              <key>method</key>
-              <string>app-store</string>
-              <key>uploadBitcode</key>
-              <true/>
-              <key>uploadSymbols</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
-
-      - name: Archive iOS App
+      - name: Build iOS App
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace \
-            -scheme App \
-            -sdk iphoneos \
-            -configuration Release \
-            -archivePath build/App.xcarchive \
-            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
-            CODE_SIGN_STYLE=Automatic \
-            -allowProvisioningUpdates \
-            archive
+          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
 
       - name: Export IPA
         run: |
           cd ios/App
-          xcodebuild -exportArchive \
-            -archivePath build/App.xcarchive \
-            -exportOptionsPlist ios/App/ExportOptions.plist \
-            -exportPath build/ipa
-
-      - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-app
-          path: ios/App/build/ipa/*.ipa
-
-      - name: Clean up build files
-        run: |
-          echo "Cleaning up build artifacts..."
-          rm -rf ios/App/build
+          xcodebuild -exportArchive -archivePath $PWD/build/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build
