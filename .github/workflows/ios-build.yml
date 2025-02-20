@@ -30,7 +30,7 @@ jobs:
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}  # Aquí agregamos la contraseña
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
@@ -51,8 +51,7 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/App.xcarchive \
             DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
-            CODE_SIGN_STYLE=Automatic \
-            PROVISIONING_PROFILE_SPECIFIER="dhavana" \
+            CODE_SIGN_STYLE=Automatic \  # Usar firma automática
             -allowProvisioningUpdates \
             archive
 
@@ -63,3 +62,14 @@ jobs:
             -archivePath $PWD/build/App.xcarchive \
             -exportOptionsPlist exportOptions.plist \
             -exportPath $PWD/build
+
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: ios/App/build/*.ipa
+
+      - name: Clean up build files
+        run: |
+          echo "Cleaning up build artifacts..."
+          rm -rf ios/App/build
