@@ -34,6 +34,8 @@ export function useBarTemporary(config: Partial<TemporaryBar> = {}) {
       _config.leftButtonList = [
         {
           icon: icons.chevronLeft,
+          class: "white",
+          color: "secondary",
           action: () => goUpOneLevel(),
         },
       ];

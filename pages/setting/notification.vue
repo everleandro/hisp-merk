@@ -1,13 +1,13 @@
 <template>
     <div class="pa-3 notification-section">
-        <e-from color="secondary">
+        <e-form color="secondary">
             <e-switch v-model="data.show" class="mb-5" label="Show notifications" hide-overlay color="secondary"
                 detail="Recibe push notifications for new messages" />
             <e-switch v-model="data.sound" class="mb-5" label="Notification sounds" hide-overlay color="secondary"
                 detail="play sounds for new messages" />
             <e-switch v-model="data.lock" class="mb-5" label="Lock screen notifcations" hide-overlay color="secondary"
                 detail="Allow notification on the lock screen" />
-        </e-from>
+        </e-form>
     </div>
 </template>
 <script lang="ts" setup>

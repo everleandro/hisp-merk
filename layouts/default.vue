@@ -2,23 +2,25 @@
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
     <e-bar app fixed depressed :class="barClass">
       <template v-if="temporaryBar">
-        <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :icon="btn.icon" :color="btn.color"
-          @click="btn.action" small text class="btn--transparent">
+        <e-button v-for="(btn, key) in temporaryBar.leftButtonList" :key :class="btn.class" :icon="btn.icon"
+          :color="btn.color" @click="btn.action" small>
         </e-button>
         <e-spacer />
         <h2 v-if="temporaryBar.title" class="pr-8">{{ temporaryBar.title }}</h2>
         <e-spacer />
-        <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :color="btn.color" :icon="btn.icon"
-          @click="btn.action" small text class="btn--transparent">
+        <e-button v-for="(btn, key) in temporaryBar.rigthButtonList" :key :class="btn.class" :color="btn.color"
+          :icon="btn.icon" @click="btn.action" small>
         </e-button>
       </template>
       <template v-else>
-        <e-button icon="menu" text class="mr-3" @click="data.drawerModelMobile = !data.drawerModelMobile" />
+        <e-button icon="menu" text class="mr-3 btn--transparent"
+          @click="data.drawerModelMobile = !data.drawerModelMobile" />
         <e-spacer />
         <h2 v-if="title">{{ title }}</h2>
         <app-logo v-else negative />
         <e-spacer />
-        <e-button text :icon="$icon.bell" />
+        <e-button :icon="$icon.cart" small color="red"/>
+        <e-button :icon="$icon.bell" small />
       </template>
     </e-bar>
     <app-drawer v-model="data.drawerModelMobile" :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS">

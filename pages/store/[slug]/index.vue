@@ -25,12 +25,14 @@ onMounted(() => {
                 icon: icon.hearth,
                 action: () => favAction,
                 color: 'primary',
+                class: 'white',
             },
         ], leftButtonList: [
             {
                 icon: icon.chevronLeft,
                 action: () => router.go(-1),
-                color: 'white',
+                color: 'secondary',
+                class: 'white',
             },
         ]
     });
