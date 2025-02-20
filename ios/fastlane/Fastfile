@@ -1,0 +1,25 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and export the app for iOS"
+  lane :build do
+    # Descargar certificados
+    match(type: "development") # O "development" dependiendo del tipo de perfil
+
+    # Compilación de la app
+    build_app(scheme: "App ")  # Cambia "YourAppScheme" por el nombre de tu esquema
+
+    # Exportar la app
+    export_options = {
+      provisioningProfiles: {
+        "com.dlahavana.dhavana" => "dhavana"  # Cambia por tu identificador de perfil
+      },
+      method: "app-store",  # O "ad-hoc" si es para distribución de prueba
+    }
+    
+    export_archive(
+      export_options: export_options,
+      output_directory: "output"
+    )
+  end
+end

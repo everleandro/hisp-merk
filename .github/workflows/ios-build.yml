@@ -1,4 +1,4 @@
-name: iOS Build
+name: iOS Build and Export
 
 on:
   push:
@@ -9,36 +9,21 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Ruby for fastlane
+        uses: ruby/setup-ruby@v1
         with:
-          node-version: 18
+          ruby-version: '2.7'  # Asegúrate de usar una versión compatible
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Nuxt App
-        run: npm run generate
-
-      - name: Sync Capacitor
-        run: npx cap sync ios
-
-      - name: Set Development Team for Automatic Signing
+      - name: Install dependencies
         run: |
-          # Reemplaza YOUR_TEAM_ID con tu Apple Development Team ID
-          cd ios/App
-          /usr/bin/xcodebuild -project App.xcodeproj -scheme App -configuration Release \
-          CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
-          -allowProvisioningUpdates
+          gem install fastlane -NV
+          cd ios
+          bundle install  # Si usas Bundler
 
-      - name: Decode and Install Certificates
-        env:
-          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
-          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} # Aquí añades la contraseña
+      - name: Set up Keychain for code signing
         run: |
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning.mobileprovision
@@ -50,12 +35,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Build iOS App
+      - name: Run fastlane build
         run: |
-          cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Release archive -archivePath $PWD/build/App.xcarchive
-
-      - name: Export IPA
-        run: |
-          cd ios/App
-          xcodebuild -exportArchive -archivePath $PWD/build/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build
+          cd ios
+          fastlane build
