@@ -71,10 +71,10 @@ jobs:
           sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = .*/PROVISIONING_PROFILE_SPECIFIER = ""/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
           sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "iPhone Developer"/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
 
-      - name: List schemes
+      - name: Listar esquemas disponibles
         run: |
           cd ios/App
-          xcodebuild -list
+          xcodebuild -workspace App.xcworkspace -list
 
       - name: Compilar app iOS
         env:
