@@ -58,17 +58,18 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Configurar firma automática
+      - name: Configurar firma automática en Xcode
         run: |
-          # Eliminar cualquier referencia a perfiles manuales en los archivos de configuración
-          sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = .*/PROVISIONING_PROFILE_SPECIFIER = ""/g' ios/app/Podfile
-          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "iPhone Developer"/g' ios/app/Podfile
-          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Podfile
+          # Forzar firma automática para todos los targets de la app
+          # Asegurarse de que la app use firma automática
+          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/App.xcodeproj/project.pbxproj
+          sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = .*/PROVISIONING_PROFILE_SPECIFIER = ""/g' ios/app/App.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "iPhone Developer"/g' ios/app/App.xcodeproj/project.pbxproj
 
-          # Asegurarnos de que los targets de Capacitor también usen firma automática
+          # Asegurarse de que los pods usen firma automática
+          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
           sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = .*/PROVISIONING_PROFILE_SPECIFIER = ""/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
           sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "iPhone Developer"/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
-          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
 
 
       - name: Compilar app iOS
