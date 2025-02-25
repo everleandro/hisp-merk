@@ -30,11 +30,6 @@ jobs:
       - name: Agregar plataforma iOS
         run: npx cap add ios
 
-      - name: Instalar CocoaPods
-        run: |
-          cd ios/App
-          pod install
-
       - name: Configurar certificados y firma
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
@@ -73,7 +68,6 @@ jobs:
 
       - name: Editar Podfile para habilitar firma automática
         run: |
-          # Editar Podfile para habilitar firma automática
           echo '
           post_install do |installer|
             installer.pods_project.targets.each do |target|
@@ -86,12 +80,16 @@ jobs:
             end
           end
           ' >> ios/Podfile
-          
+
+      - name: Instalar CocoaPods
+        run: |
+          cd ios/App
+          pod install
+
       - name: Compilar app iOS
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_SPECIFIER: "Automatic"
         run: |
           cd ios/App
           xcodebuild clean archive \
@@ -101,7 +99,7 @@ jobs:
             -archivePath $RUNNER_TEMP/App.xcarchive \
             CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
-            PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE_SPECIFIER
+            PROVISIONING_PROFILE_SPECIFIER= ""
 
       - name: Exportar IPA
         env:
