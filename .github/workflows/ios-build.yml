@@ -22,7 +22,7 @@ jobs:
       - name: Instalar dependencias
         run: |
           npm ci
-          npm run build
+          npm run generate
 
       - name: Instalar Capacitor CLI
         run: npm install -g @capacitor/cli
@@ -57,6 +57,20 @@ jobs:
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
+      - name: Configurar firma manual
+        run: |
+          echo "Aplicando configuración de firma manual..."
+          /usr/libexec/PlistBuddy -c "Set :DEVELOPMENT_TEAM ${{ secrets.APPLE_TEAM_ID }}" ios/App/App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Set :PROVISIONING_PROFILE_SPECIFIER ${{ secrets.PROVISIONING_PROFILE_NAME }}" ios/App/App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Set :CODE_SIGN_STYLE Manual" ios/App/App.xcodeproj/project.pbxproj
+
+      - name: Verificar configuración aplicada
+        run: |
+          echo "DEVELOPMENT_TEAM:"
+          grep DEVELOPMENT_TEAM ios/App/App.xcodeproj/project.pbxproj
+          echo "PROVISIONING_PROFILE_SPECIFIER:"
+          grep PROVISIONING_PROFILE_SPECIFIER ios/App/App.xcodeproj/project.pbxproj
+
 
       - name: Compilar app iOS
         env:
