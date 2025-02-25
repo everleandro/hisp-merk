@@ -91,8 +91,8 @@ jobs:
             installer.pods_project.targets.each do |target|
               if target.name == "Capacitor" || target.name == "CapacitorCordova"
                 target.build_configurations.each do |config|
-                  config.build_settings["CODE_SIGN_IDENTITY"] = "Apple Distribution"
-                  config.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = "Automatic"
+                  config.build_settings["CODE_SIGN_IDENTITY"] = '"Apple Distribution"'
+                  config.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = '"Automatic"'
                 end
               end
             end
