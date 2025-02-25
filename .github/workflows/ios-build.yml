@@ -92,6 +92,8 @@ jobs:
       - name: Crear exportOptions.plist
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
           cat > ios/App/exportOptions.plist <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
@@ -99,17 +101,23 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>development</string>
+              <string>ad-hoc</string>
               <key>teamID</key>
-              <string>$APPLE_TEAM_ID</string>
+              <string>${{ secrets.APPLE_TEAM_ID }}</string>
               <key>compileBitcode</key>
               <false/>
               <key>uploadSymbols</key>
               <true/>
               <key>signingStyle</key>
-              <string>manual</string>
+              <string>Automatic</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>${{ secrets.APPLE_BUNDLE_ID }}</key>
+                  <string>${{ secrets.PROVISIONING_PROFILE_NAME }}</string>
+              </dict>
           </dict>
           </plist>
+          EOF
 
       - name: Exportar IPA
         env:
