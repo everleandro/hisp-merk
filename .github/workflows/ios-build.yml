@@ -101,7 +101,7 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>ad-hoc</string>
+              <string>development</string>
               <key>teamID</key>
               <string>${{ secrets.APPLE_TEAM_ID }}</string>
               <key>compileBitcode</key>
@@ -109,7 +109,7 @@ jobs:
               <key>uploadSymbols</key>
               <true/>
               <key>signingStyle</key>
-              <string>Automatic</string>
+              <string>manual</string>
               <key>provisioningProfiles</key>
               <dict>
                   <key>${{ secrets.APPLE_BUNDLE_ID }}</key>
