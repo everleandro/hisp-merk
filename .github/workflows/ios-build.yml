@@ -58,14 +58,20 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # Paso para forzar firma manual para la app y los pods
+      # Paso para instalar los pods
+      - name: Instalar Pods
+        run: |
+          cd ios
+          pod install
+
+      # Paso para forzar la firma manual para la app y los pods
       - name: Forzar firma manual para la app y los pods
         run: |
           echo "Forzando firma manual para la app y los pods..."
 
           # Definir la ruta del archivo project.pbxproj
           TARGET_PBXPROJ="ios/App/App.xcodeproj/project.pbxproj"
-
+          
           # Asegurarse de que CODE_SIGN_STYLE sea 'Manual'
           if ! grep -q "CODE_SIGN_STYLE" "$TARGET_PBXPROJ"; then
             echo "CODE_SIGN_STYLE no encontrado, añadiéndolo..."
@@ -88,19 +94,26 @@ jobs:
 
           # Modificar los pods para usar firma manual también
           PODS_PBXPROJ="ios/Pods/Pods.xcodeproj/project.pbxproj"
+          
+          # Verificar si los pods están instalados y solo aplicar cambios si existe el archivo
+          if [ -f "$PODS_PBXPROJ" ]; then
+            echo "Forzando firma manual en los Pods..."
+            # Asegurarse de que los pods también usen firma manual
+            if ! grep -q "CODE_SIGN_STYLE" "$PODS_PBXPROJ"; then
+              echo "CODE_SIGN_STYLE en Pods no encontrado, añadiéndolo..."
+              sed -i '' "/buildSettings/ a\\
+                CODE_SIGN_STYLE = Manual;" "$PODS_PBXPROJ"
+            fi
 
-          # Asegurarse de que los pods también usen firma manual
-          if ! grep -q "CODE_SIGN_STYLE" "$PODS_PBXPROJ"; then
-            echo "CODE_SIGN_STYLE en Pods no encontrado, añadiéndolo..."
-            sed -i '' "/buildSettings/ a\\
-              CODE_SIGN_STYLE = Manual;" "$PODS_PBXPROJ"
+            # Asegurarse de que no haya configuración de perfil automático en los pods
+            if grep -q "PROVISIONING_PROFILE" "$PODS_PBXPROJ"; then
+              echo "Desactivando perfil automático en Pods..."
+              sed -i '' "s/PROVISIONING_PROFILE = automatic/PROVISIONING_PROFILE = ${{ secrets.PROVISIONING_PROFILE_NAME }}/" "$PODS_PBXPROJ"
+            fi
+          else
+            echo "El archivo Pods.xcodeproj no existe, no se puede modificar la configuración de los pods."
           fi
 
-          # Asegurarse de que no haya configuración de perfil automático en los pods
-          if grep -q "PROVISIONING_PROFILE" "$PODS_PBXPROJ"; then
-            echo "Desactivando perfil automático en Pods..."
-            sed -i '' "s/PROVISIONING_PROFILE = automatic/PROVISIONING_PROFILE = ${{ secrets.PROVISIONING_PROFILE_NAME }}/" "$PODS_PBXPROJ"
-          fi
 
       - name: Compilar app iOS
         env:
