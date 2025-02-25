@@ -81,9 +81,6 @@ jobs:
             end\
           end' ios/App/Podfile
 
-
-
-
       - name: Instalar CocoaPods
         run: |
           cd ios/App
