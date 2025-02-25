@@ -70,7 +70,10 @@ jobs:
           sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
           sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = .*/PROVISIONING_PROFILE_SPECIFIER = ""/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
           sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "iPhone Developer"/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
-
+      - name: List schemes
+        run: |
+          cd ios
+          xcodebuild -list
 
       - name: Compilar app iOS
         env:
