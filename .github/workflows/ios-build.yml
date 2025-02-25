@@ -58,12 +58,6 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # Paso para instalar los pods
-      - name: Instalar Pods
-        run: |
-          cd ios
-          pod install
-
       # Paso para forzar la firma manual para la app y los pods
       - name: Forzar firma manual para la app y los pods
         run: |
@@ -93,7 +87,7 @@ jobs:
           fi
 
           # Modificar los pods para usar firma manual también
-          PODS_PBXPROJ="ios/Pods/Pods.xcodeproj/project.pbxproj"
+          PODS_PBXPROJ="ios/App/Pods/Pods.xcodeproj/project.pbxproj"
           
           # Verificar si los pods están instalados y solo aplicar cambios si existe el archivo
           if [ -f "$PODS_PBXPROJ" ]; then
