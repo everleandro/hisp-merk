@@ -58,37 +58,26 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
+      # Paso para configurar la firma manual
       - name: Configurar firma manual
         run: |
           echo "Aplicando configuración de firma manual..."
-          
-          # Comprobar si DEVELOPMENT_TEAM y PROVISIONING_PROFILE_SPECIFIER están en el archivo, si no, añadirlas
-          if ! /usr/libexec/PlistBuddy -c "Print :targets" ios/App/App.xcodeproj/project.pbxproj > /dev/null 2>&1; then
-            echo "targets no encontrados, creando la configuración necesaria..."
-            
-            # Agregar DEVELOPMENT_TEAM
-            /usr/libexec/PlistBuddy -c "Add :targets:0:buildConfigurationList:0:buildConfigurations:0:buildSettings:DEVELOPMENT_TEAM string ${{ secrets.APPLE_TEAM_ID }}" ios/App/App.xcodeproj/project.pbxproj
 
-            # Agregar PROVISIONING_PROFILE_SPECIFIER
-            /usr/libexec/PlistBuddy -c "Add :targets:0:buildConfigurationList:0:buildConfigurations:0:buildSettings:PROVISIONING_PROFILE_SPECIFIER string ${{ secrets.PROVISIONING_PROFILE_NAME }}" ios/App/App.xcodeproj/project.pbxproj
-          
+          # Inspeccionamos si el archivo project.pbxproj ya tiene las claves
+          grep -q 'DEVELOPMENT_TEAM' ios/App/App.xcodeproj/project.pbxproj
+          if [ $? -eq 1 ]; then
+            echo "DEVELOPMENT_TEAM no encontrado, añadiéndolo..."
+            # Añadir DEVELOPMENT_TEAM y PROVISIONING_PROFILE_SPECIFIER en las secciones adecuadas
+            /usr/libexec/PlistBuddy -c "Add :buildSettings:DEVELOPMENT_TEAM string ${{ secrets.APPLE_TEAM_ID }}" ios/App/App.xcodeproj/project.pbxproj
+            /usr/libexec/PlistBuddy -c "Add :buildSettings:PROVISIONING_PROFILE_SPECIFIER string ${{ secrets.PROVISIONING_PROFILE_NAME }}" ios/App/App.xcodeproj/project.pbxproj
           else
-            echo "Claves ya existen, actualizando valores..."
-            # Si ya existe, actualizar las claves
-            /usr/libexec/PlistBuddy -c "Set :targets:0:buildConfigurationList:0:buildConfigurations:0:buildSettings:DEVELOPMENT_TEAM ${{ secrets.APPLE_TEAM_ID }}" ios/App/App.xcodeproj/project.pbxproj
-            /usr/libexec/PlistBuddy -c "Set :targets:0:buildConfigurationList:0:buildConfigurations:0:buildSettings:PROVISIONING_PROFILE_SPECIFIER ${{ secrets.PROVISIONING_PROFILE_NAME }}" ios/App/App.xcodeproj/project.pbxproj
+            echo "DEVELOPMENT_TEAM ya existe, actualizando..."
+            /usr/libexec/PlistBuddy -c "Set :buildSettings:DEVELOPMENT_TEAM ${{ secrets.APPLE_TEAM_ID }}" ios/App/App.xcodeproj/project.pbxproj
+            /usr/libexec/PlistBuddy -c "Set :buildSettings:PROVISIONING_PROFILE_SPECIFIER ${{ secrets.PROVISIONING_PROFILE_NAME }}" ios/App/App.xcodeproj/project.pbxproj
           fi
 
           # Configurar CODE_SIGN_STYLE para firma manual
-          /usr/libexec/PlistBuddy -c "Set :targets:0:buildConfigurationList:0:buildConfigurations:0:buildSettings:CODE_SIGN_STYLE Manual" ios/App/App.xcodeproj/project.pbxproj
-
-      - name: Verificar configuración aplicada
-        run: |
-          echo "DEVELOPMENT_TEAM:"
-          grep DEVELOPMENT_TEAM ios/App/App.xcodeproj/project.pbxproj
-          echo "PROVISIONING_PROFILE_SPECIFIER:"
-          grep PROVISIONING_PROFILE_SPECIFIER ios/App/App.xcodeproj/project.pbxproj
-
+          /usr/libexec/PlistBuddy -c "Set :buildSettings:CODE_SIGN_STYLE Manual" ios/App/App.xcodeproj/project.pbxproj
 
       - name: Compilar app iOS
         env:
