@@ -85,7 +85,7 @@ jobs:
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
-            -scheme App \
+            -scheme Capacitor \
             -configuration Release \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             CODE_SIGN_IDENTITY="Apple Distribution" \
