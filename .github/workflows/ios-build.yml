@@ -58,46 +58,49 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # Paso para configurar la firma manual y asegurarse de que el perfil de aprovisionamiento se utilice
-      - name: Configurar firma manual y aplicar perfil de aprovisionamiento
+      # Paso para forzar firma manual para la app y los pods
+      - name: Forzar firma manual para la app y los pods
         run: |
-          echo "Configurando firma manual y aplicando perfil de aprovisionamiento..."
+          echo "Forzando firma manual para la app y los pods..."
 
           # Definir la ruta del archivo project.pbxproj
           TARGET_PBXPROJ="ios/App/App.xcodeproj/project.pbxproj"
-          
-          # Verificar si DEVELOPMENT_TEAM y PROVISIONING_PROFILE_SPECIFIER existen, si no, añadirlas
-          if ! grep -q "DEVELOPMENT_TEAM" "$TARGET_PBXPROJ"; then
-            echo "DEVELOPMENT_TEAM no encontrado, añadiéndolo..."
-            sed -i '' "/buildSettings/ a\\
-              DEVELOPMENT_TEAM = ${{ secrets.APPLE_TEAM_ID }};" "$TARGET_PBXPROJ"
-          fi
-          if ! grep -q "PROVISIONING_PROFILE_SPECIFIER" "$TARGET_PBXPROJ"; then
-            echo "PROVISIONING_PROFILE_SPECIFIER no encontrado, añadiéndolo..."
-            sed -i '' "/buildSettings/ a\\
-              PROVISIONING_PROFILE_SPECIFIER = ${{ secrets.PROVISIONING_PROFILE_NAME }};" "$TARGET_PBXPROJ"
-          fi
 
-          # Asegurar que CODE_SIGN_STYLE esté en 'Manual'
+          # Asegurarse de que CODE_SIGN_STYLE sea 'Manual'
           if ! grep -q "CODE_SIGN_STYLE" "$TARGET_PBXPROJ"; then
             echo "CODE_SIGN_STYLE no encontrado, añadiéndolo..."
             sed -i '' "/buildSettings/ a\\
               CODE_SIGN_STYLE = Manual;" "$TARGET_PBXPROJ"
           fi
 
-          # Asegurar que la firma automática no esté habilitada
-          if grep -q "CODE_SIGN_IDENTITY = \"Apple Development\"" "$TARGET_PBXPROJ"; then
-            echo "Deshabilitando firma automática..."
-            sed -i '' "s/CODE_SIGN_IDENTITY = \"Apple Development\"/CODE_SIGN_IDENTITY = \"Apple Distribution\"/" "$TARGET_PBXPROJ"
-          fi
-          
-          # Verificar que el perfil de aprovisionamiento esté correctamente configurado
+          # Asegurar que el perfil de aprovisionamiento esté vinculado
           if ! grep -q "PROVISIONING_PROFILE_SPECIFIER" "$TARGET_PBXPROJ"; then
             echo "PROVISIONING_PROFILE_SPECIFIER no encontrado, añadiéndolo..."
             sed -i '' "/buildSettings/ a\\
               PROVISIONING_PROFILE_SPECIFIER = ${{ secrets.PROVISIONING_PROFILE_NAME }};" "$TARGET_PBXPROJ"
           fi
 
+          # Asegurarse de que la firma automática esté deshabilitada en todos los targets
+          if grep -q "CODE_SIGN_IDENTITY = \"Apple Development\"" "$TARGET_PBXPROJ"; then
+            echo "Deshabilitando firma automática..."
+            sed -i '' "s/CODE_SIGN_IDENTITY = \"Apple Development\"/CODE_SIGN_IDENTITY = \"Apple Distribution\"/" "$TARGET_PBXPROJ"
+          fi
+
+          # Modificar los pods para usar firma manual también
+          PODS_PBXPROJ="ios/Pods/Pods.xcodeproj/project.pbxproj"
+
+          # Asegurarse de que los pods también usen firma manual
+          if ! grep -q "CODE_SIGN_STYLE" "$PODS_PBXPROJ"; then
+            echo "CODE_SIGN_STYLE en Pods no encontrado, añadiéndolo..."
+            sed -i '' "/buildSettings/ a\\
+              CODE_SIGN_STYLE = Manual;" "$PODS_PBXPROJ"
+          fi
+
+          # Asegurarse de que no haya configuración de perfil automático en los pods
+          if grep -q "PROVISIONING_PROFILE" "$PODS_PBXPROJ"; then
+            echo "Desactivando perfil automático en Pods..."
+            sed -i '' "s/PROVISIONING_PROFILE = automatic/PROVISIONING_PROFILE = ${{ secrets.PROVISIONING_PROFILE_NAME }}/" "$PODS_PBXPROJ"
+          fi
 
       - name: Compilar app iOS
         env:
