@@ -99,16 +99,17 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>app-store</string>
+              <string>development</string>
               <key>teamID</key>
-              <string>${{ secrets.APPLE_TEAM_ID }}</string>
-              <key>uploadBitcode</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>compileBitcode</key>
               <false/>
               <key>uploadSymbols</key>
               <true/>
+              <key>signingStyle</key>
+              <string>manual</string>
           </dict>
           </plist>
-          EOF
 
       - name: Exportar IPA
         env:
