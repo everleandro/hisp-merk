@@ -139,16 +139,19 @@ jobs:
 
           echo "✅ Finalizado"
 
+          plutil -lint ios/App/exportOptions.plist
 
+      - name: Verificar exportOptions.plist
+        run: cat ios/App/exportOptions.plist
 
       - name: Exportar IPA
         run: |
           cd ios/App
           xcodebuild -exportArchive \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath $RUNNER_TEMP/Build \
-            -allowProvisioningUpdates
+          -archivePath $RUNNER_TEMP/App.xcarchive \
+          -exportOptionsPlist exportOptions.plist \
+          -exportPath $RUNNER_TEMP/Build \
+          -allowProvisioningUpdates
 
       - name: Subir IPA como artefacto
         uses: actions/upload-artifact@v4
