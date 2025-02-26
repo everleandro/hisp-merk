@@ -95,24 +95,31 @@ jobs:
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
           PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
-          cat > ios/App/exportOptions.plist <<EOF
+          cat <<EOF > ios/App/exportOptions.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
-            <dict>
+          <dict>
               <key>method</key>
               <string>ad-hoc</string>
-              <key>teamID</key>
-              <string>${APPLE_TEAM_ID}</string>
               <key>signingStyle</key>
-              <string>automatic</string>
-            </dict>
+              <string>manual</string>
+              <key>teamID</key>
+              <string>${{ secrets.APPLE_TEAM_ID }}</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>${secrets.APPLE_BUNDLE_ID}</key>
+                  <string>${{ secrets.PROVISIONING_PROFILE_NAME }}</string>
+              </dict>
+              <key>compileBitcode</key>
+              <false/>
+              <key>stripSwiftSymbols</key>
+              <true/>
+          </dict>
           </plist>
           EOF
 
       - name: Exportar IPA
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           cd ios/App
           xcodebuild -exportArchive \
