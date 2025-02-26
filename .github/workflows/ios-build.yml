@@ -58,6 +58,11 @@ jobs:
         run: |
           cd ios/App
           pod install
+      
+      - name: Reemplazar variables en exportOptions.plist
+        run: |
+          sed -i '' 's|\${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i '' 's|\${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist  
 
       - name: Compilar app iOS
         env:
