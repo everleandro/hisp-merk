@@ -90,34 +90,31 @@ jobs:
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
 
       - name: Crear exportOptions.plist
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
-          cat <<EOF > ios/App/exportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>ad-hoc</string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>teamID</key>
-              <string>${APPLE_TEAM_ID}</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>${APPLE_BUNDLE_ID}</key>
-                  <string>${PROVISIONING_PROFILE_NAME}</string>
-              </dict>
-              <key>compileBitcode</key>
-              <false/>
-              <key>stripSwiftSymbols</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > ios/App/exportOptions.plist
+          echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> ios/App/exportOptions.plist
+          echo '<plist version="1.0">' >> ios/App/exportOptions.plist
+          echo '<dict>' >> ios/App/exportOptions.plist
+          echo '    <key>method</key>' >> ios/App/exportOptions.plist
+          echo '    <string>ad-hoc</string>' >> ios/App/exportOptions.plist
+          echo '    <key>signingStyle</key>' >> ios/App/exportOptions.plist
+          echo '    <string>manual</string>' >> ios/App/exportOptions.plist
+          echo '    <key>teamID</key>' >> ios/App/exportOptions.plist
+          echo "    <string>${{ secrets.APPLE_TEAM_ID }}</string>" >> ios/App/exportOptions.plist
+          echo '    <key>provisioningProfiles</key>' >> ios/App/exportOptions.plist
+          echo '    <dict>' >> ios/App/exportOptions.plist
+          echo "        <key>${{ secrets.APPLE_BUNDLE_ID }}</key>" >> ios/App/exportOptions.plist
+          echo "        <string>${{ secrets.PROVISIONING_PROFILE_NAME }}</string>" >> ios/App/exportOptions.plist
+          echo '    </dict>' >> ios/App/exportOptions.plist
+          echo '    <key>compileBitcode</key>' >> ios/App/exportOptions.plist
+          echo '    <false/>' >> ios/App/exportOptions.plist
+          echo '    <key>stripSwiftSymbols</key>' >> ios/App/exportOptions.plist
+          echo '    <true/>' >> ios/App/exportOptions.plist
+          echo '</dict>' >> ios/App/exportOptions.plist
+          echo '</plist>' >> ios/App/exportOptions.plist
+
+      - name: Verificar perfiles de aprovisionamiento
+        run: ls ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Exportar IPA
         run: |
@@ -125,9 +122,7 @@ jobs:
             -archivePath $RUNNER_TEMP/App.xcarchive \
             -exportOptionsPlist ios/App/exportOptions.plist \
             -exportPath $RUNNER_TEMP/Build \
-            -allowProvisioningUpdates \
             -verbose
-
 
       - name: Subir IPA como artefacto
         uses: actions/upload-artifact@v4
