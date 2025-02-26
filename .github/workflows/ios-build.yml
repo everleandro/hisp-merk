@@ -72,7 +72,7 @@ jobs:
 
       - name: Listar esquemas de Xcode
         run: |
-          xcodebuild -list -workspace ios/App.xcworkspace
+          xcodebuild -list -workspace ios/App/App.xcworkspace
 
       - name: Compilar app iOS
         env:
