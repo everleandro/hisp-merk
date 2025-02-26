@@ -94,65 +94,29 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
           PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
-        run: |
-          cat <<EOF > ios/App/exportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string><![CDATA[ad-hoc]]></string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>teamID</key>
-              <string>${APPLE_TEAM_ID}</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>${APPLE_BUNDLE_ID}</key>
-                  <string>${PROVISIONING_PROFILE_NAME}</string>
-              </dict>
-              <key>compileBitcode</key>
-              <false/>
-              <key>stripSwiftSymbols</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
-      
-      - name: Listar Certificados y Perfiles de Aprovisionamiento
-        run: |
-          echo "🔍 Listando certificados instalados..."
-          security find-identity -v -p codesigning
-
-          echo "🔍 Listando perfiles de aprovisionamiento disponibles..."
-          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
-
-          echo "🔍 Mostrando detalles del primer perfil de aprovisionamiento encontrado..."
-          PROFILE_PATH=$(find ~/Library/MobileDevice/Provisioning\ Profiles/ -name "*.mobileprovision" | head -n 1)
-          
-          if [ -f "$PROFILE_PATH" ]; then
-            security cms -D -i "$PROFILE_PATH" > profile.plist
-            plutil -p profile.plist
-          else
-            echo "❌ No se encontró ningún perfil de aprovisionamiento"
-          fi
-
-          echo "✅ Finalizado"
-
-          plutil -lint ios/App/exportOptions.plist
-
-      - name: Verificar exportOptions.plist
-        run: cat ios/App/exportOptions.plist
+          run: |
+            cat <<EOF > ios/App/exportOptions.json
+            {
+              "method": "ad-hoc",
+              "signingStyle": "manual",
+              "teamID": "$APPLE_TEAM_ID",
+              "provisioningProfiles": {
+                "$APPLE_BUNDLE_ID": "$PROVISIONING_PROFILE_NAME"
+              },
+              "compileBitcode": false,
+              "stripSwiftSymbols": true
+            }
+            EOF
 
       - name: Exportar IPA
         run: |
+          echo "🔍 Exportando IPA con xcodebuild..."
+          cd ios/App
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportOptionsPlist ios/App/exportOptions.plist \
+            -exportOptionsPlist exportOptions.json \
             -exportPath $RUNNER_TEMP/Build \
-            -allowProvisioningUpdates \
-            -verbose
-
+            -allowProvisioningUpdates
 
       - name: Subir IPA como artefacto
         uses: actions/upload-artifact@v4
