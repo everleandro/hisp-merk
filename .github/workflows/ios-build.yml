@@ -58,11 +58,14 @@ jobs:
         run: |
           cd ios/App
           pod install
-      
+
       - name: Reemplazar variables en exportOptions.plist
         run: |
           sed -i '' 's|\${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
-          sed -i '' 's|\${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist  
+          sed -i '' 's|\${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
+
+      - name: Verificar contenido de exportOptions.plist
+        run: cat ios/App/exportOptions.plist
 
       - name: Compilar app iOS
         env:
@@ -84,7 +87,9 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
             -exportPath $GITHUB_WORKSPACE/build/App \
-            -exportOptionsPlist ios/App/exportOptions.plist
+            -exportOptionsPlist ios/App/exportOptions.plist \
+            -allowProvisioningUpdates \
+            -verbose
 
       - name: Subir IPA como artefacto
         uses: actions/upload-artifact@v4
