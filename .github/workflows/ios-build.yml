@@ -78,7 +78,7 @@ jobs:
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
-            -scheme Capacitor \
+            -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
