@@ -113,8 +113,20 @@ jobs:
           echo '</dict>' >> ios/App/exportOptions.plist
           echo '</plist>' >> ios/App/exportOptions.plist
 
-      - name: Verificar perfiles de aprovisionamiento
-        run: ls ~/Library/MobileDevice/Provisioning\ Profiles/
+      - name: Mostrar información del perfil de aprovisionamiento
+        run: cat ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision | grep -A 5 "<key>Name</key>"
+
+      - name: Verificar tipo de perfil de aprovisionamiento
+        run: |
+          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision | grep -A 3 "<key>ProvisionedDevices</key>"
+
+      - name: Verificar valores de Apple Team y Perfil de Aprovisionamiento
+        run: |
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}"
+          echo "APPLE_BUNDLE_ID=${{ secrets.APPLE_BUNDLE_ID }}"
+          echo "PROVISIONING_PROFILE_NAME=${{ secrets.PROVISIONING_PROFILE_NAME }}"
+
+        
 
       - name: Exportar IPA
         run: |
