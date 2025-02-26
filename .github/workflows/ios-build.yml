@@ -13,13 +13,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-
-    - name: Set up Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_12.5.app
+    - name: Select Xcode version
+      run: sudo xcode-select --switch /Applications/Xcode.app
 
     - name: Install dependencies
       run: bundle install
@@ -56,6 +51,9 @@ jobs:
         </dict>
         </plist>
         EOF
+
+    - name: Print exportOptions.plist
+      run: cat ios/App/exportOptions.plist
 
     - name: Export the app
       run: xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportPath ios/App -exportOptionsPlist ios/App/exportOptions.plist
