@@ -103,39 +103,11 @@ jobs:
           cd ios/App
           pod install
 
-      - name: Set Skip Install for static libraries
+      - name: Configurar fastlane
         run: |
-          # Modificar el archivo .xcodeproj o .xcworkspace para establecer Skip Install
-          # en las bibliotecas estáticas y frameworks que no deben ser incluidos
-          find . -name "*.xcodeproj" -exec sed -i '' 's/SkipInstall = NO;/SkipInstall = YES;/g' {} \;
+          gem install fastlane
 
-      - name: Compilar app iOS
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+      - name: Ejecutar fastlane para construir y exportar IPA
         run: |
-          cd ios/App
-          xcodebuild clean archive \
-            -workspace App.xcworkspace \
-            -scheme Capacitor \
-            -configuration Release \
-            -archivePath ${{ github.workspace }}/build/App.xcarchive \
-            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
-
-      - name: Verificar el contenido del directorio de build
-        run: |
-          ls -alh ${{ github.workspace }}/build/
-
-        # 7. Exportar el archivo IPA
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath ${{ github.workspace }}/build/App.xcarchive \
-            -exportPath ${{ github.workspace }}/build/App \
-            -exportOptionsPlist ios/App/exportOptions.plist
-
-      - name: Subir IPA como artefacto
-        uses: actions/upload-artifact@v4
-        with:
-          name: iOS-App
-          path: ${{ runner.temp }}/Build/*.ipa
+          cd ios
+          fastlane build
