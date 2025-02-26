@@ -118,6 +118,7 @@ jobs:
           </dict>
           </plist>
           EOF
+      
       - name: Listar Certificados y Perfiles de Aprovisionamiento
         run: |
           echo "🔍 Listando certificados instalados..."
@@ -127,10 +128,17 @@ jobs:
           ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
 
           echo "🔍 Mostrando detalles del primer perfil de aprovisionamiento encontrado..."
-          PROFILE=$(ls ~/Library/MobileDevice/Provisioning\ Profiles/ | head -n 1)
-          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/$PROFILE | plutil -convert json -o - -
+          PROFILE_PATH=$(find ~/Library/MobileDevice/Provisioning\ Profiles/ -name "*.mobileprovision" | head -n 1)
+          
+          if [ -f "$PROFILE_PATH" ]; then
+            security cms -D -i "$PROFILE_PATH" > profile.plist
+            plutil -p profile.plist
+          else
+            echo "❌ No se encontró ningún perfil de aprovisionamiento"
+          fi
 
           echo "✅ Finalizado"
+
 
 
       - name: Exportar IPA
