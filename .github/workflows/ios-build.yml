@@ -81,20 +81,6 @@ jobs:
           # en las bibliotecas estáticas y frameworks que no deben ser incluidos
           find . -name "*.xcodeproj" -exec sed -i '' 's/SkipInstall = NO;/SkipInstall = YES;/g' {} \;
 
-      # - name: Compilar app iOS
-      #   env:
-      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      #     APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-      #   run: |
-      #     cd ios/App
-      #     xcodebuild clean archive \
-      #       -workspace App.xcworkspace \
-      #       -scheme Capacitor \
-      #       -configuration Release \
-      #       -archivePath $RUNNER_TEMP/App.xcarchive \
-      #       DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
-      #       PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
-
       - name: Crear exportOptions.plist
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -123,16 +109,19 @@ jobs:
           </plist>
           EOF
 
-      - name: Archive the app
+      - name: Compilar app iOS
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
         run: |
           cd ios/App
-          xcodebuild -workspace ios/App/App.xcworkspace \
+          xcodebuild clean archive \
             -workspace App.xcworkspace \
             -scheme Capacitor \
-            -configuration Debug \
-            -destination 'generic/platform=iOS' \
-            -archivePath ${{ github.workspace }}/build/App.xcarchive
-            clean archive
+            -configuration Release \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
+            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
       
         # 7. Exportar el archivo IPA
       - name: Export IPA
