@@ -118,6 +118,20 @@ jobs:
           </dict>
           </plist>
           EOF
+      - name: Listar Certificados y Perfiles de Aprovisionamiento
+        run: |
+          echo "🔍 Listando certificados instalados..."
+          security find-identity -v -p codesigning
+
+          echo "🔍 Listando perfiles de aprovisionamiento disponibles..."
+          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
+
+          echo "🔍 Mostrando detalles del primer perfil de aprovisionamiento encontrado..."
+          PROFILE=$(ls ~/Library/MobileDevice/Provisioning\ Profiles/ | head -n 1)
+          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/$PROFILE | plutil -convert json -o - -
+
+          echo "✅ Finalizado"
+
 
       - name: Exportar IPA
         run: |
