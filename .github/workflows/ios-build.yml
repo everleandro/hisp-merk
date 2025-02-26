@@ -100,7 +100,7 @@ jobs:
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
-            -scheme Cappacitor \
+            -scheme Capacitor \
             -configuration Release \
             -archivePath ${{ github.workspace }}/build/App.xcarchive
 
