@@ -30,33 +30,33 @@ jobs:
       - name: Agregar plataforma iOS
         run: npx cap add ios
 
-      - name: Crear exportOptions.plist
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
-        run: |
-          cat <<EOF > ios/App/exportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>development</string>
-              <key>signingStyle</key>
-              <string>Automatic</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>${APPLE_BUNDLE_ID}</key>
-                  <string>${PROVISIONING_PROFILE_NAME}</string>
-              </dict>
-              <key>compileBitcode</key>
-              <false/>
-              <key>stripSwiftSymbols</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
+      # - name: Crear exportOptions.plist
+      #   env:
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #     APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+      #     PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+      #   run: |
+      #     cat <<EOF > ios/App/exportOptions.plist
+      #     <?xml version="1.0" encoding="UTF-8"?>
+      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      #     <plist version="1.0">
+      #     <dict>
+      #         <key>method</key>
+      #         <string>development</string>
+      #         <key>signingStyle</key>
+      #         <string>Automatic</string>
+      #         <key>provisioningProfiles</key>
+      #         <dict>
+      #             <key>${APPLE_BUNDLE_ID}</key>
+      #             <string>${PROVISIONING_PROFILE_NAME}</string>
+      #         </dict>
+      #         <key>compileBitcode</key>
+      #         <false/>
+      #         <key>stripSwiftSymbols</key>
+      #         <true/>
+      #     </dict>
+      #     </plist>
+      #     EOF
 
       - name: Configurar certificados y firma
         env:
