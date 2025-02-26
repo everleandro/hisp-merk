@@ -89,32 +89,12 @@ jobs:
             CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
 
-      - name: Crear exportOptions.plist
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
-        run: |
-          cat <<EOF > ios/App/exportOptions.json
-          {
-            "method": "ad-hoc",
-            "signingStyle": "manual",
-            "teamID": "$APPLE_TEAM_ID",
-            "provisioningProfiles": {
-              "$APPLE_BUNDLE_ID": "$PROVISIONING_PROFILE_NAME"
-            },
-            "compileBitcode": false,
-            "stripSwiftSymbols": true
-          }
-          EOF
-
       - name: Exportar IPA
         run: |
           echo "🔍 Exportando IPA con xcodebuild..."
           cd ios/App
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportOptionsPlist exportOptions.json \
             -exportPath $RUNNER_TEMP/Build \
             -allowProvisioningUpdates
 
