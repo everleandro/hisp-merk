@@ -118,31 +118,6 @@ jobs:
           </dict>
           </plist>
           EOF
-      
-      - name: Listar Certificados y Perfiles de Aprovisionamiento
-        run: |
-          echo "🔍 Listando certificados instalados..."
-          security find-identity -v -p codesigning
-
-          echo "🔍 Listando perfiles de aprovisionamiento disponibles..."
-          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
-
-          echo "🔍 Mostrando detalles del primer perfil de aprovisionamiento encontrado..."
-          PROFILE_PATH=$(find ~/Library/MobileDevice/Provisioning\ Profiles/ -name "*.mobileprovision" | head -n 1)
-          
-          if [ -f "$PROFILE_PATH" ]; then
-            security cms -D -i "$PROFILE_PATH" > profile.plist
-            plutil -p profile.plist
-          else
-            echo "❌ No se encontró ningún perfil de aprovisionamiento"
-          fi
-
-          echo "✅ Finalizado"
-
-          plutil -lint ios/App/exportOptions.plist
-
-      - name: Verificar exportOptions.plist
-        run: cat ios/App/exportOptions.plist
 
       - name: Exportar IPA
         run: |
