@@ -95,16 +95,6 @@ jobs:
       #       DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
       #       PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
 
-      - name: Archive the app
-        run: |
-          cd ios/App
-          xcodebuild clean archive \
-            -workspace App.xcworkspace \
-            -scheme Capacitor \
-            -configuration Release \
-            -archivePath ${{ github.workspace }}/build/App.xcarchive
-
-
       - name: Crear exportOptions.plist
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -132,6 +122,17 @@ jobs:
           </dict>
           </plist>
           EOF
+
+      - name: Archive the app
+        run: |
+          cd ios/App
+          xcodebuild -workspace ios/App/App.xcworkspace \
+            -workspace App.xcworkspace \
+            -scheme Capacitor \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -archivePath ${{ github.workspace }}/build/App.xcarchive
+            clean archive
       
         # 7. Exportar el archivo IPA
       - name: Export IPA
