@@ -109,22 +109,21 @@ jobs:
           # en las bibliotecas estáticas y frameworks que no deben ser incluidos
           find . -name "*.xcodeproj" -exec sed -i '' 's/SkipInstall = NO;/SkipInstall = YES;/g' {} \;
 
-      
-
       - name: Compilar app iOS
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
             -scheme Capacitor \
             -configuration Release \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -archivePath ${{ github.workspace }}/build/App.xcarchive \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
-      
+
         # 7. Exportar el archivo IPA
       - name: Export IPA
         run: |
