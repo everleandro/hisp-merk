@@ -1,59 +1,161 @@
-name: Build and Export iOS App
+name: Build iOS App
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  build:
+  build_ios:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-    - name: Select Xcode version
-      run: sudo xcode-select --switch /Applications/Xcode.app
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: bundle install
+      - name: Instalar dependencias
+        run: |
+          npm ci
+          npm run generate
 
-    - name: Build the app
-      run: bundle exec fastlane build
+      - name: Instalar Capacitor CLI
+        run: npm install -g @capacitor/cli
 
-    - name: Create exportOptions.plist
-      env:
-        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-        PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
-      run: |
-        cat <<EOF > ios/App/exportOptions.plist
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>method</key>
-            <string>ad-hoc</string>
-            <key>signingStyle</key>
-            <string>Automatic</string>
-            <key>teamID</key>
-            <string>${APPLE_TEAM_ID}</string>
-            <key>provisioningProfiles</key>
-            <dict>
-                <key>${APPLE_BUNDLE_ID}</key>
-                <string>${PROVISIONING_PROFILE_NAME}</string>
-            </dict>
-            <key>compileBitcode</key>
-            <false/>
-            <key>stripSwiftSymbols</key>
-            <true/>
-        </dict>
-        </plist>
-        EOF
+      - name: Agregar plataforma iOS
+        run: npx cap add ios
 
-    - name: Print exportOptions.plist
-      run: cat ios/App/exportOptions.plist
+      - name: Configurar certificados y firma
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          CERT_PATH=$RUNNER_TEMP/apple_certificate.p12
+          PROFILE_PATH=$RUNNER_TEMP/profile.mobileprovision
 
-    - name: Export the app
-      run: xcodebuild -exportArchive -archivePath ios/App.xcarchive -exportPath ios/App -exportOptionsPlist ios/App/exportOptions.plist
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode -o $CERT_PATH
+          echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode -o $PROFILE_PATH
+
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import $CERT_PATH -P "$APPLE_CERTIFICATE_PASSWORD" -A
+          security find-identity -v -p codesigning  # Verifica si el certificado fue importado correctamente
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          security list-keychains -d user -s build.keychain
+          security set-keychain-settings -lut 21600
+          security find-identity -v
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      - name: Configurar firma automática en Xcode
+        run: |
+          # Forzar firma automática para todos los targets de la app
+          # Asegurarse de que la app use firma automática
+          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/App.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "Apple Distribution";/g' ios/app/App.xcodeproj/project.pbxproj
+
+          # Asegurarse de que los pods usen firma automática
+          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "Apple Distribution";/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
+
+      - name: Modificar Podfile para habilitar firma automática
+        run: |
+          echo -e 'require_relative "../../node_modules/@capacitor/ios/scripts/pods_helpers"\n\nplatform :ios, "13.0"\nuse_frameworks!\n\ninstall! "cocoapods", :disable_input_output_paths => true\n\ndef capacitor_pods\n  pod "Capacitor", :path => "../../node_modules/@capacitor/ios"\n  pod "CapacitorCordova", :path => "../../node_modules/@capacitor/ios"\nend\n\ntarget "App" do\n  capacitor_pods\nend\n\npost_install do |installer|\n  assertDeploymentTarget(installer)\n\n  installer.pods_project.targets.each do |target|\n    if target.name == "Capacitor" || target.name == "CapacitorCordova"\n      target.build_configurations.each do |config|\n        config.build_settings["CODE_SIGN_IDENTITY"] = "Apple Distribution"\n        end\n    end\n  end\nend' > ios/App/Podfile
+
+      - name: Instalar CocoaPods
+        run: |
+          cd ios/App
+          pod install
+
+      - name: Actualizar Cocoapods
+        run: |
+          sudo gem install cocoapods
+          pod repo update
+
+      - name: Configurar Skip Install para todas las bibliotecas estáticas
+        run: |
+          # Cambiar al directorio donde se encuentra el archivo .xcodeproj
+          cd ios/App
+      
+          # Usamos `xcodebuild` para buscar todos los targets y establecer Skip Install a YES
+          # Esto configurará Skip Install para todas las bibliotecas estáticas en el proyecto
+          xcodebuild -project App.xcodeproj -configuration Release -alltargets | \
+          grep -e "Target: " | \
+          awk '{ print $2 }' | \
+          xargs -I {} xcodebuild -project App.xcodeproj -target {} -configuration Release SKIP_INSTALL=YES
+        
+      
+
+      - name: Compilar app iOS
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+        run: |
+          cd ios/App
+          xcodebuild clean archive \
+            -workspace App.xcworkspace \
+            -scheme Capacitor \
+            -configuration Release \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
+            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
+
+      - name: Crear exportOptions.plist
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+        run: |
+          cat <<EOF > ios/App/exportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>signingStyle</key>
+              <string>Automatic</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>${APPLE_BUNDLE_ID}</key>
+                  <string>${PROVISIONING_PROFILE_NAME}</string>
+              </dict>
+              <key>compileBitcode</key>
+              <false/>
+              <key>stripSwiftSymbols</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+      
+      - name: Verificar contenido de exportOptions.plist
+        run: |
+          cat ios/App/exportOptions.plist
+      
+      - name: Validar archivo exportOptions.plist
+        run: |
+          plutil -lint ios/App/exportOptions.plist
+          
+
+      - name: Exportar IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -exportOptionsPlist ios/App/exportOptions.plist \
+            -exportPath $RUNNER_TEMP/Build \
+            -allowProvisioningUpdates \
+            -verbose
+
+      - name: Subir IPA como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-App
+          path: ${{ runner.temp }}/Build/*.ipa
