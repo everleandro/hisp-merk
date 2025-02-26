@@ -110,4 +110,5 @@ jobs:
       - name: Ejecutar fastlane para construir y exportar IPA
         run: |
           cd ios
-          fastlane build
+          FASTLANE_DISABLE_COLORS=1 FASTLANE_SKIP_UPDATE_CHECK=1 fastlane build
+        
