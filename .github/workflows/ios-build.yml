@@ -148,7 +148,7 @@ jobs:
         run: |
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
+            -exportOptionsPlist ios/App/exportOptions.plist \
             -exportPath $RUNNER_TEMP/Build \
             -allowProvisioningUpdates \
             -verbose
