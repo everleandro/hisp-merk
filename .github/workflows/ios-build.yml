@@ -60,9 +60,21 @@ jobs:
           pod install
 
       - name: Reemplazar variables en exportOptions.plist
+        env:
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_ _NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
-          sed -i '' 's|\${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
-          sed -i '' 's|\${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
+          sed -i '' 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i '' 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
+
+      - name: Verificar contenido de exportOptions.plist con valores reales
+        env:
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+        run: |
+          echo "APPLE_BUNDLE_ID=${APPLE_BUNDLE_ID}"
+          echo "PROVISIONING_PROFILE_NAME=${PROVISIONING_PROFILE_NAME}"
+          cat ios/App/exportOptions.plist
 
       - name: Verificar contenido de exportOptions.plist
         run: cat ios/App/exportOptions.plist
