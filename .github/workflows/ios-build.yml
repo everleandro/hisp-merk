@@ -100,14 +100,16 @@ jobs:
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
               <key>signingStyle</key>
               <string>manual</string>
               <key>teamID</key>
-              <string>${APPLE_TEAM_ID}</string>
+              <string>"${APPLE_TEAM_ID}"</string>
               <key>provisioningProfiles</key>
               <dict>
-                  <key>${APPLE_BUNDLE_ID}</key>
-                  <string>${PROVISIONING_PROFILE_NAME}</string>
+                  <key>"${APPLE_BUNDLE_ID}"</key>
+                  <string>"${PROVISIONING_PROFILE_NAME}"</string>
               </dict>
               <key>compileBitcode</key>
               <false/>
@@ -116,6 +118,15 @@ jobs:
           </dict>
           </plist>
           EOF
+      
+      - name: Verificar contenido de exportOptions.plist
+        run: |
+          cat ios/App/exportOptions.plist
+      
+      - name: Validar archivo exportOptions.plist
+        run: |
+          plutil -lint ios/App/exportOptions.plist
+          
 
       - name: Exportar IPA
         run: |
