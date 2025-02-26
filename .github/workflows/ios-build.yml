@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
@@ -24,39 +24,16 @@ jobs:
           npm ci
           npm run generate
 
-      - name: Instalar Capacitor CLI
-        run: npm install -g @capacitor/cli
-
-      - name: Agregar plataforma iOS
-        run: npx cap add ios
-
-      - name: Crear exportOptions.plist
+      - name: Reemplazar variables en exportOptions.plist
         env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
           PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
-          cat <<EOF > ios/App/exportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>ad-hoc</string>
-              <key>signingStyle</key>
-              <string>Automatic</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>${APPLE_BUNDLE_ID}</key>
-                  <string>${PROVISIONING_PROFILE_NAME}</string>
-              </dict>
-              <key>compileBitcode</key>
-              <false/>
-              <key>stripSwiftSymbols</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
+          sed -i 's|\${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i 's|\${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/exportOptions.plist
+
+      - name: Agregar sync iOS
+        run: npx cap sync ios
 
       - name: Configurar certificados y firma
         env:
@@ -74,7 +51,6 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
           security import $CERT_PATH -P "$APPLE_CERTIFICATE_PASSWORD" -A
-          security find-identity -v -p codesigning  # Verifica si el certificado fue importado correctamente
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           security list-keychains -d user -s build.keychain
           security set-keychain-settings -lut 21600
@@ -83,32 +59,34 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Configurar firma automática en Xcode
-        run: |
-          # Forzar firma automática para todos los targets de la app
-          # Asegurarse de que la app use firma automática
-          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/App.xcodeproj/project.pbxproj
-          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "Apple Distribution";/g' ios/app/App.xcodeproj/project.pbxproj
-
-          # Asegurarse de que los pods usen firma automática
-          sed -i '' 's/CODE_SIGN_STYLE = Manual/CODE_SIGN_STYLE = Automatic/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
-          sed -i '' 's/CODE_SIGN_IDENTITY = .*/CODE_SIGN_IDENTITY = "Apple Distribution";/g' ios/app/Pods/Pods.xcodeproj/project.pbxproj
-
-      - name: Modificar Podfile para habilitar firma automática
-        run: |
-          echo -e 'require_relative "../../node_modules/@capacitor/ios/scripts/pods_helpers"\n\nplatform :ios, "13.0"\nuse_frameworks!\n\ninstall! "cocoapods", :disable_input_output_paths => true\n\ndef capacitor_pods\n  pod "Capacitor", :path => "../../node_modules/@capacitor/ios"\n  pod "CapacitorCordova", :path => "../../node_modules/@capacitor/ios"\nend\n\ntarget "App" do\n  capacitor_pods\nend\n\npost_install do |installer|\n  assertDeploymentTarget(installer)\n\n  installer.pods_project.targets.each do |target|\n    if target.name == "Capacitor" || target.name == "CapacitorCordova"\n      target.build_configurations.each do |config|\n        config.build_settings["CODE_SIGN_IDENTITY"] = "Apple Distribution"\n        end\n    end\n  end\nend' > ios/App/Podfile
-
       - name: Instalar CocoaPods
         run: |
           cd ios/App
           pod install
 
-      - name: Configurar fastlane
+      - name: Compilar app iOS
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
         run: |
-          gem install fastlane
+          cd ios/App
+          xcodebuild clean archive \
+            -workspace App.xcworkspace \
+            -scheme Capacitor \
+            -configuration Release \
+            -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
+            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
 
-      - name: Ejecutar fastlane para construir y exportar IPA
+        # 7. Exportar el archivo IPA
+      - name: Export IPA
         run: |
-          cd ios
-          FASTLANE_DISABLE_COLORS=1 FASTLANE_SKIP_UPDATE_CHECK=1 fastlane build
-        
+          xcodebuild -exportArchive \
+            -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
+            -exportPath $GITHUB_WORKSPACE/build/App \
+            -exportOptionsPlist ios/App/exportOptions.plist
+
+      - name: Subir IPA como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-App
+          path: ${{ runner.temp }}/Build/*.ipa
