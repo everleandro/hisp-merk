@@ -24,8 +24,6 @@ jobs:
           npm ci
           npm run generate
 
-      
-
       - name: Agregar sync iOS
         run: npx cap sync ios
 
@@ -53,6 +51,9 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
+      - name: Verificar certificados
+        run: security find-identity -v -p codesigning
+
       - name: Instalar CocoaPods
         run: |
           cd ios/App
@@ -70,6 +71,7 @@ jobs:
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
 
         # 7. Exportar el archivo IPA
       - name: Export IPA
