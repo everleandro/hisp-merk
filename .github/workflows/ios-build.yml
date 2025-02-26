@@ -122,6 +122,10 @@ jobs:
             -archivePath ${{ github.workspace }}/build/App.xcarchive \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
 
+      - name: Verificar el contenido del directorio de build
+        run: |
+          ls -alh ${{ github.workspace }}/build/
+
         # 7. Exportar el archivo IPA
       - name: Export IPA
         run: |
