@@ -89,9 +89,22 @@ jobs:
         run: |
           set -e
           cd ios/App
-          /usr/libexec/PlistBuddy -c "Set :ProvisioningStyle Manual" App.xcodeproj/project.pbxproj
-          /usr/libexec/PlistBuddy -c "Set :DevelopmentTeam $APPLE_TEAM_ID" App.xcodeproj/project.pbxproj
-          /usr/libexec/PlistBuddy -c "Set :ProvisioningProfileSpecifier $PROVISIONING_PROFILE_NAME" App.xcodeproj/project.pbxproj
+
+          FILE="App.xcodeproj/project.pbxproj"
+
+          # Revisar si ProvisioningStyle existe
+          if ! grep -q "ProvisioningStyle" $FILE; then
+            echo "⚠️ ProvisioningStyle no encontrado, agregando configuración..."
+            sed -i.bak 's/CODE_SIGN_IDENTITY = "Apple Distribution";/CODE_SIGN_IDENTITY = "Apple Distribution";\n        ProvisioningStyle = Manual;\n        DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\n        PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+          else
+            echo "✅ ProvisioningStyle ya existe. Actualizando valores..."
+            /usr/libexec/PlistBuddy -c "Set :ProvisioningStyle Manual" $FILE || true
+            /usr/libexec/PlistBuddy -c "Set :DevelopmentTeam $APPLE_TEAM_ID" $FILE || true
+            /usr/libexec/PlistBuddy -c "Set :ProvisioningProfileSpecifier $PROVISIONING_PROFILE_NAME" $FILE || true
+          fi
+
+          rm -f $FILE.bak
+
 
       - name: Compilar app iOS
         env:
