@@ -97,7 +97,9 @@ jobs:
           FILE="App.xcodeproj/project.pbxproj"
 
           # Asegurar que la firma esté configurada correctamente
-          sed -i.bak 's/ProvisioningStyle = Automatic;/ProvisioningStyle = Manual;\nDEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\nPROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+          sed -i.bak 's/ProvisioningStyle = Automatic;/ProvisioningStyle = Manual;/g' $FILE
+          sed -i.bak 's/DEVELOPMENT_TEAM = "";*/DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';/g' $FILE
+          sed -i.bak 's/PROVISIONING_PROFILE_SPECIFIER = "";*/PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
 
 
           # Verificar los cambios
