@@ -1,6 +1,6 @@
 <template>
   <div class="order-page">
-    <e-tab-group v-model="store.statusSelected" color="secondary" class="my-3 pb-1 white">
+    <e-tab-group v-model="store.statusSelected" color="secondary" class="mb-3 pb-1 white">
       <e-tab v-for="(status, i) in ['Pending', 'Delivered', 'Cancelled']" rounded :key="i" :value="i + 1" small> {{
         status }}
       </e-tab>
@@ -25,7 +25,7 @@ const store = reactive({
 .order-page {
   .e-slide-group {
     position: sticky;
-    top: 54px;
+    top: 0;
     z-index: 1;
 
     &__content {

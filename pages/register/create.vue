@@ -1,26 +1,30 @@
 templ<template>
-    <div class="register-page">
-        <div class=" register-page__content pa-6">
-            <h1 class="text-center mb-12">Create your account</h1>
-            <div class="register-page__form">
-                <div>
-                    <e-form>
-                        <e-textfield cols="24" label="Name" />
-                        <e-textfield cols="24" label="Email" />
-                        <e-textfield cols="24" label="Password" />
-                        <e-textfield cols="24" label="Confirm" />
-                        <e-form-column>
-                            <e-spacer />
-                            <e-button rounded color="secondary">
-                                <span class="px-3">Forgot password</span>
-                            </e-button>
-                        </e-form-column>
-                    </e-form>
-                </div>
-                <e-spacer></e-spacer>
-                <div class="d-flex align-center mt-12 mb-4">
-                    <p class="mb-0 mr-3"> Already have an account?</p>
-                    <e-button text to="/register/login">Log in</e-button>
+    <div class="register-page pa-6">
+        <div class="register-page__content">
+            <div class="pa-4">
+                <h1 class="text-center mb-6">Create your account</h1>
+                <e-divider class="mb-3 secondary" />
+                <div class="register-page__form">
+                    <div>
+                        <e-form>
+                            <e-textfield cols="24" label="Name" />
+                            <e-textfield cols="24" label="Email" />
+                            <e-textfield cols="24" label="Password" />
+                            <e-textfield cols="24" label="Confirm" />
+                            <e-form-column>
+                                <e-spacer />
+                                <e-button rounded color="secondary">
+                                    <span class="px-3">Forgot password</span>
+                                </e-button>
+                            </e-form-column>
+                        </e-form>
+                    </div>
+                    <e-spacer></e-spacer>
+                    <div class="d-flex align-center mt-8">
+                        <p class="mb-0 mr-3 secondary--text"> Already have an account?</p>
+                        <e-button text to="/register/login" color="blue" style="text-decoration: underline;">Log
+                            in</e-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,19 +38,35 @@ definePageMeta({
 <style lang="scss">
 .register-page {
     height: 100%;
-
-    &__form {
-        flex: 1 1 100%;
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        // align-items: center;
-    }
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('@/assets/images/header-bg.png') center center no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
 
     &__content {
+        z-index: 1;
+
+        &>div {
+            border-radius: 4px;
+            backdrop-filter: blur(6px);
+            background-color: rgba(255, 255, 255, .7);
+        }
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
-        display: flex;
-        flex-direction: column;
+        // background: rgba(0, 0, 0, 0.7);
+        z-index: 0;
     }
 }
 </style>

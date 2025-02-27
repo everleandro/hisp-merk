@@ -39,10 +39,10 @@
         <slot />
       </e-container>
     </e-main>
-    <!-- <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
+    <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
       <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" class="ma-0" stacked :prepend-icon="link.icon"
         :class="{ 'router-link-active': isActive(link.to) }" text color="secondary">{{ link.title }}</e-button>
-    </footer> -->
+    </footer>
 
   </e-app>
 </template>
@@ -101,6 +101,10 @@ const handleSupportClick = () => {
 </script>
 
 <style lang="scss">
+body {
+  overflow: hidden;
+}
+
 .e-app {
   .e-bar {
     &.app-bar--transparent {
@@ -133,7 +137,8 @@ const handleSupportClick = () => {
   }
 
   .e-main {
-    padding-top: 54px !important;
+    overflow: auto;
+    max-height: 100vh;
   }
 
   &[type="default-layout"] {
@@ -153,7 +158,7 @@ const handleSupportClick = () => {
     z-index: 2;
     overflow: hidden;
     backdrop-filter: blur(5px);
-    background: transparent;
+    background: rgba(255, 255, 255, .8);
 
     .router-link-active {
       color: var(--primary);
@@ -172,8 +177,17 @@ const handleSupportClick = () => {
 
   }
 
+  .e-bar.e-bar--app {
+    height: unset;
+    min-height: 54px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 4px);
+    padding-bottom: 4px;
+
+  }
+
   .e-main {
-    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 54px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 56px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 56px);
   }
 }
 </style>
