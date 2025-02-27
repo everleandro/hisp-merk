@@ -55,12 +55,6 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Instalar CocoaPods
-        run: |
-          set -e
-          cd ios/App
-          pod install
-
       - name: Reemplazar variables en exportOptions.plist
         env:
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
@@ -76,6 +70,12 @@ jobs:
           cat ios/App/exportOptions.plist
 
           #app-store-connect
+
+      - name: Instalar CocoaPods
+        run: |
+          set -e
+          cd ios/App
+          pod install
 
       - name: Compilar app iOS
         env:
