@@ -71,14 +71,15 @@ jobs:
         env:
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
           PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
+          METHOD: development
         run: |
           set -e
           sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i.bak 's|${METHOD}|'"${METHOD}"'|g' ios/App/exportOptions.plist
           sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
           rm ios/App/exportOptions.plist.bak
-
-          # Verificar si se reemplazó correctamente
-          cat ios/App/exportOptions.plist
+          
+          #app-store-connect
 
       # - name: Listar esquemas de Xcode
       #   run: |
@@ -96,7 +97,8 @@ jobs:
           FILE="App.xcodeproj/project.pbxproj"
 
           # Asegurar que la firma esté configurada correctamente
-          sed -i.bak 's/CODE_SIGN_IDENTITY = "Apple Distribution";/CODE_SIGN_IDENTITY = "Apple Distribution";\n        ProvisioningStyle = Manual;\n        DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\n        PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+          sed -i.bak 's/ProvisioningStyle = Automatic;/ProvisioningStyle = Manual;\nDEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\nPROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+
 
           # Verificar los cambios
           cat $FILE | grep -A 10 "ProvisioningStyle" || true
@@ -118,8 +120,8 @@ jobs:
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
+            CODE_SIGN_IDENTITY="Apple Development" \
+            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
 
       - name: Exportar IPA
         run: |
