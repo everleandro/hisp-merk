@@ -76,10 +76,9 @@ jobs:
           sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
           sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
           rm ios/App/exportOptions.plist.bak
-      
+
           # Verificar si se reemplazó correctamente
           cat ios/App/exportOptions.plist
-        
 
       # - name: Listar esquemas de Xcode
       #   run: |
@@ -103,8 +102,6 @@ jobs:
           cat $FILE | grep -A 10 "ProvisioningStyle" || true
 
           rm -f $FILE.bak
-
-
 
       - name: Compilar app iOS
         env:
