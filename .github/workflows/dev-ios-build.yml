@@ -3,7 +3,7 @@ name: Build iOS App
 on:
   push:
     branches:
-      - dev
+      - main
   pull_request:
 
 jobs:
@@ -55,21 +55,11 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Reemplazar variables en exportOptions.plist
-        env:
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
+      - name: Verificar perfil de aprovisionamiento
         run: |
           set -e
-          sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
-          sed -i.bak 's|manual|'"automatic"'|g' ios/App/exportOptions.plist
-          sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
-          rm ios/App/exportOptions.plist.bak
-
-          # Verificar si se reemplazó correctamente
-          cat ios/App/exportOptions.plist
-
-          #app-store-connect
+          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
+          security find-identity -v -p codesigning
 
       - name: Instalar CocoaPods
         run: |
@@ -77,10 +67,49 @@ jobs:
           cd ios/App
           pod install
 
+      - name: Reemplazar variables en exportOptions.plist
+        env:
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
+          METHOD: development
+        run: |
+          set -e
+          sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
+          sed -i.bak 's|${METHOD}|'"${METHOD}"'|g' ios/App/exportOptions.plist
+          rm ios/App/exportOptions.plist.bak
+
+          # Verificar si se reemplazó correctamente
+          cat ios/App/exportOptions.plist
+
+      # - name: Listar esquemas de Xcode
+      #   run: |
+      #     set -e
+      #     xcodebuild -list -workspace ios/App/App.xcworkspace
+
+      - name: Configurar Firma en Xcode
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
+        run: |
+          set -e
+          cd ios/App
+
+          FILE="App.xcodeproj/project.pbxproj"
+
+          # Asegurar que la firma esté configurada correctamente
+          sed -i.bak 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Development";\n        ProvisioningStyle = Manual;\n        DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\n        PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+
+          # Verificar los cambios
+          cat $FILE | grep -A 10 "ProvisioningStyle" || true
+
+          rm -f $FILE.bak
+
       - name: Compilar app iOS
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           cd ios/App
@@ -89,10 +118,10 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
-            -allowProvisioningUpdates
+            PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
 
       - name: Exportar IPA
         run: |
