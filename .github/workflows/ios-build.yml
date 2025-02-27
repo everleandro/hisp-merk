@@ -87,27 +87,7 @@ jobs:
       #     set -e
       #     xcodebuild -list -workspace ios/App/App.xcworkspace
 
-      - name: Configurar Firma en Xcode
-        env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
-        run: |
-          set -e
-          cd ios/App
-
-          FILE="App.xcodeproj/project.pbxproj"
-
-          # Asegurar que la firma esté configurada correctamente
-          sed -i.bak 's/ProvisioningStyle = Automatic;/ProvisioningStyle = Manual;/g' $FILE
-          sed -i.bak 's/DEVELOPMENT_TEAM = "";*/DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';/g' $FILE
-          sed -i.bak 's/PROVISIONING_PROFILE_SPECIFIER = "";*/PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
-
-
-          # Verificar los cambios
-          cat $FILE | grep -A 10 "ProvisioningStyle" || true
-
-          rm -f $FILE.bak
-
+     
       - name: Compilar app iOS
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
