@@ -77,10 +77,21 @@ jobs:
       - name: Verificar contenido de exportOptions.plist
         run: cat ios/App/exportOptions.plist
 
-      - name: Listar esquemas de Xcode
+      # - name: Listar esquemas de Xcode
+      #   run: |
+      #     set -e
+      #     xcodebuild -list -workspace ios/App/App.xcworkspace
+
+      - name: Configurar Firma en Xcode
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
-          xcodebuild -list -workspace ios/App/App.xcworkspace
+          cd ios/App
+          /usr/libexec/PlistBuddy -c "Set :ProvisioningStyle Manual" App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Set :DevelopmentTeam $APPLE_TEAM_ID" App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Set :ProvisioningProfileSpecifier $PROVISIONING_PROFILE_NAME" App.xcodeproj/project.pbxproj
 
       - name: Compilar app iOS
         env:
