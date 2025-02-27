@@ -30,6 +30,14 @@ jobs:
           set -e
           npx cap sync ios
 
+      - name: Limpiar caché de Xcode
+        run: |
+          set -e
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ~/Library/Developer/Xcode/Archives
+          rm -rf ~/Library/Developer/Xcode/Devices
+
       - name: Configurar certificados y firma
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.DEV_APPLE_CERTIFICATE_BASE64 }}
@@ -40,11 +48,9 @@ jobs:
           CERT_PATH=$RUNNER_TEMP/apple_certificate.p12
           PROFILE_PATH=$RUNNER_TEMP/profile.mobileprovision
 
-          # Decodificar los certificados y perfiles de aprovisionamiento
           echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode -o $CERT_PATH
           echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode -o $PROFILE_PATH
 
-          # Crear y desbloquear el llavero
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
@@ -54,7 +60,6 @@ jobs:
           security set-keychain-settings -lut 21600
           security find-identity -v
 
-          # Copiar el perfil de aprovisionamiento a la ubicación correcta
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
@@ -116,10 +121,10 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
-            CODE_SIGN_STYLE=manual \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
-            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_NAME"
+            PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
 
       - name: Exportar IPA
         run: |
