@@ -118,7 +118,7 @@ jobs:
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
-            -scheme App \
+            -scheme Capacitor \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
             CODE_SIGN_STYLE=Manual \
