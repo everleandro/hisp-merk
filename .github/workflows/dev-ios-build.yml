@@ -30,6 +30,14 @@ jobs:
           set -e
           npx cap sync ios
 
+      - name: Limpiar caché de Xcode
+        run: |
+          set -e
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ~/Library/Developer/Xcode/Archives
+          rm -rf ~/Library/Developer/Xcode/Devices
+
       - name: Configurar certificados y firma
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.DEV_APPLE_CERTIFICATE_BASE64 }}
