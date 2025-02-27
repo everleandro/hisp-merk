@@ -55,12 +55,8 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Verificar perfil de aprovisionamiento
-        run: |
-          set -e
-          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
-          security find-identity -v -p codesigning
-        
+      - name: Verificar certificados
+        run: security find-identity -v -p codesigning
 
       - name: Instalar CocoaPods
         run: |
