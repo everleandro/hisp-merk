@@ -112,19 +112,18 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ vars.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           cd ios/App
           xcodebuild clean archive \
             -workspace App.xcworkspace \
-            -scheme Capacitor \
+            -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
-            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_STYLE=automatic \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
-            PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
+            -allowProvisioningUpdates
 
       - name: Exportar IPA
         run: |
