@@ -82,28 +82,23 @@ jobs:
           # Verificar si se reemplazó correctamente
           cat ios/App/exportOptions.plist
 
-      # - name: Listar esquemas de Xcode
-      #   run: |
-      #     set -e
-      #     xcodebuild -list -workspace ios/App/App.xcworkspace
+      - name: Configurar Firma en Xcode
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ vars.DEV_PROVISIONING_PROFILE_NAME }}
+        run: |
+          set -e
+          cd ios/App
 
-    #   - name: Configurar Firma en Xcode
-    #     env:
-    #       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-    #       PROVISIONING_PROFILE_NAME: ${{ vars.DEV_PROVISIONING_PROFILE_NAME }}
-    #     run: |
-    #       set -e
-    #       cd ios/App
+          FILE="App.xcodeproj/project.pbxproj"
 
-    #       FILE="App.xcodeproj/project.pbxproj"
+          # Asegurar que la firma esté configurada correctamente
+          sed -i.bak 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Development";\n        ProvisioningStyle = Manual;\n        DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\n        PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
 
-    #       # Asegurar que la firma esté configurada correctamente
-    #       sed -i.bak 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Development";\n        ProvisioningStyle = Automatic;\n        DEVELOPMENT_TEAM = '"${APPLE_TEAM_ID}"';\n        PROVISIONING_PROFILE_SPECIFIER = "'"${PROVISIONING_PROFILE_NAME}"'";/g' $FILE
+          # Verificar los cambios
+          cat $FILE | grep -A 10 "ProvisioningStyle" || true
 
-    #       # Verificar los cambios
-    #       cat $FILE | grep -A 10 "ProvisioningStyle" || true
-
-    #       rm -f $FILE.bak
+          rm -f $FILE.bak
 
       - name: Compilar app iOS
         env:
@@ -118,7 +113,7 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
-            CODE_SIGN_STYLE=manual \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
             PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
