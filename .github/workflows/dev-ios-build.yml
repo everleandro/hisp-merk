@@ -78,7 +78,7 @@ jobs:
       - name: Reemplazar variables en exportOptions.plist
         env:
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
+          PROVISIONING_PROFILE_NAME: ${{ vars.DEV_PROVISIONING_PROFILE_NAME }}
           METHOD: development
         run: |
           set -e
