@@ -5,7 +5,7 @@
     <key>method</key>
     <string>${METHOD}</string>
     <key>signingStyle</key>
-    <string>manual</string>
+    <string>${SIGNING_STYLE}</string>
     <key>provisioningProfiles</key>
     <dict>
         <key>${APPLE_BUNDLE_ID}</key>
