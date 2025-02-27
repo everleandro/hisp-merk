@@ -55,8 +55,11 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Verificar certificados
-        run: security find-identity -v -p codesigning
+      - name: Verificar perfil de aprovisionamiento
+        run: |
+          set -e
+          ls -l ~/Library/MobileDevice/Provisioning\ Profiles/
+          security find-identity -v -p codesigning
 
       - name: Instalar CocoaPods
         run: |
@@ -64,18 +67,18 @@ jobs:
           cd ios/App
           pod install
 
-          - name: Reemplazar variables en exportOptions.plist
-          env:
-            APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-            PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
-          run: |
-            set -e
-            sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
-            sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
-            rm ios/App/exportOptions.plist.bak
-        
-            # Verificar si se reemplazó correctamente
-            cat ios/App/exportOptions.plist
+      - name: Reemplazar variables en exportOptions.plist
+        env:
+          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+        run: |
+          set -e
+          sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
+          sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
+          rm ios/App/exportOptions.plist.bak
+      
+          # Verificar si se reemplazó correctamente
+          cat ios/App/exportOptions.plist
         
 
       # - name: Listar esquemas de Xcode
