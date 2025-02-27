@@ -67,18 +67,19 @@ jobs:
           cd ios/App
           pod install
 
-      - name: Reemplazar variables en exportOptions.plist
-        env:
-          APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
-          METHOD: development
+      - name: Remover provisioning profile de exportOptions.plist
         run: |
           set -e
-          sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
-          sed -i.bak 's|${METHOD}|'"${METHOD}"'|g' ios/App/exportOptions.plist
-          sed -i.bak 's|${PROVISIONING_PROFILE_NAME}|'"${PROVISIONING_PROFILE_NAME}"'|g' ios/App/exportOptions.plist
-          rm ios/App/exportOptions.plist.bak
-          
+          export FILE_PATH="ios/App/exportOptions.plist"
+
+          # Remover la línea que especifica el provisioning profile
+          sed -i '' '/<key>provisioningProfiles<\/key>/d' "$FILE_PATH"
+          sed -i '' '/<dict>/d' "$FILE_PATH"
+          sed -i '' '/<\/dict>/d' "$FILE_PATH"
+
+          # Verificar que se eliminó correctamente
+          cat "$FILE_PATH"
+
           #app-store-connect
 
       # - name: Listar esquemas de Xcode
