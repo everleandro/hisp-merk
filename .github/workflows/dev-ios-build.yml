@@ -112,7 +112,7 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE: $RUNNER_TEMP/profile.mobileprovision
+          PROVISIONING_PROFILE_NAME: ${{ vars.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           cd ios/App
@@ -124,7 +124,7 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
-            PROVISIONING_PROFILE="$PROVISIONING_PROFILE"
+            PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
 
       - name: Exportar IPA
         run: |
