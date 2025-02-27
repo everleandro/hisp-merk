@@ -3,7 +3,7 @@ name: Build iOS App
 on:
   push:
     branches:
-      - main
+      - dev
   pull_request:
 
 jobs:
@@ -32,9 +32,9 @@ jobs:
 
       - name: Configurar certificados y firma
         env:
-          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.DEV_APPLE_CERTIFICATE_BASE64 }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.DEV_APPLE_PROVISIONING_PROFILE_BASE64 }}
         run: |
           set -e
           CERT_PATH=$RUNNER_TEMP/apple_certificate.p12
@@ -70,7 +70,7 @@ jobs:
       - name: Reemplazar variables en exportOptions.plist
         env:
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           sed -i.bak 's|${APPLE_BUNDLE_ID}|'"${APPLE_BUNDLE_ID}"'|g' ios/App/exportOptions.plist
@@ -88,7 +88,7 @@ jobs:
       - name: Configurar Firma en Xcode
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           cd ios/App
@@ -107,7 +107,7 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_BUNDLE_ID: ${{ secrets.APPLE_BUNDLE_ID }}
-          PROVISIONING_PROFILE_NAME: ${{ secrets.PROVISIONING_PROFILE_NAME }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.DEV_PROVISIONING_PROFILE_NAME }}
         run: |
           set -e
           cd ios/App
