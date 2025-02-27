@@ -118,7 +118,7 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $GITHUB_WORKSPACE/build/App.xcarchive \
-            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
             CODE_SIGN_IDENTITY="Apple Development" \
             PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME"
