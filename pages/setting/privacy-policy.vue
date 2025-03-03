@@ -28,5 +28,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Privacy Policy' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Privacy Policy' }, AppBarType.GO_BACK);
 </script>

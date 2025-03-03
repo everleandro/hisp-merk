@@ -34,7 +34,7 @@
                         <product-review-info :model-value="4.3" />
                     </div>
                 </e-expansion>
-                <e-expansion v-model="store.reviews" header-title="Similar Products">
+                <e-expansion v-model="store.similarProducts" header-title="Similar Products">
                     <div class="pa-4 ma-0">
                         <app-list :itemsPerView="2.3">
                             <product-card />
@@ -52,14 +52,14 @@
 </template>
 <script lang="ts" setup>
 import icon from '@/constants/icons'
-useBarTransparent()
 const { setFooterConfig } = useFooter()
-const { setBar } = useBarTemporary()
+const { setBar } = useAppBar();
 const router = useRouter()
 const mounted = ref(false);
 const store = reactive({
     color: 'primary',
     reviews: true,
+    similarProducts: true,
     description: true,
     size: 'XS'
 })
@@ -78,7 +78,7 @@ onMounted(() => {
             },
         ], leftButtonList: [
             {
-                icon: icon.chevronLeft,
+                icon: icon.arrowBack,
                 action: () => router.go(-1),
             },
         ]
@@ -111,7 +111,7 @@ const favAction = () => {
     }
 
     &__body {
-        box-shadow: 0 -3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0, 0, 0, 0.2);
+        // box-shadow: 0 -3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0, 0, 0, 0.2);
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
         z-index: 10;

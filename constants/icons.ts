@@ -24,6 +24,7 @@ const Icons = {
   bell: "bell-outline",
   message: "message",
   map: "map-off",
+  menu: "menu",
   mapMarker: "map-marker",
   cart: "cart",
   exit: "close",

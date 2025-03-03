@@ -11,7 +11,7 @@
         <store-wave />
     </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .store {
     &-wave {
         position: absolute;
@@ -23,8 +23,7 @@
     &-header {
         z-index: -1;
         position: sticky;
-        top: 0;
-        margin-top: -54px;
+        top: -54px;
 
         img {
             aspect-ratio: 2;

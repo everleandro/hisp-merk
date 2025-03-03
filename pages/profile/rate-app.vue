@@ -10,7 +10,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Share your feedback' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Share your feedback' }, AppBarType.GO_BACK);
 const rateValue = ref(0);
 const rateText = ref('');
 </script>

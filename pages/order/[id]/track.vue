@@ -16,6 +16,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Track Order' });
-
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Track Order' }, AppBarType.GO_BACK);
 </script>

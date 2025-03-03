@@ -1,5 +1,5 @@
 <template>
-    <e-drawer v-model="model" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'">
+    <e-drawer v-model="drawerModel" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'">
         <template #prepend>
             <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com">
             </e-list-item>
@@ -36,32 +36,25 @@ import type { Link } from '@/types'
 const router = useRouter();
 const route = useRoute();
 const { viewport } = useBreakpoint()
+const { drawerModel } = useAppDrawer()
 
 export interface Props {
-    modelValue: boolean,
     mobile?: boolean,
     right?: boolean,
     links: Link[],
     otherLinks: Link[],
 }
+
 const props = withDefaults(defineProps<Props>(), { right: false })
 
-const emit = defineEmits<{
-    (e: 'update:modelValue', value: boolean): void
-}>()
-
 watch(() => router, () => {
-    if (props.modelValue && (viewport.xs || viewport.sm || viewport.md)) {
-        model.value = false
-    } else if (!props.modelValue && (viewport.xl || viewport.lg)) {
-        model.value = true
+    if (drawerModel.value && (viewport.xs || viewport.sm || viewport.md)) {
+        drawerModel.value = false
+    } else if (!drawerModel.value && (viewport.xl || viewport.lg)) {
+        drawerModel.value = true
     }
 }, { deep: true, immediate: true });
 
-const model = computed({
-    get: () => props.modelValue,
-    set: (value: boolean) => emit('update:modelValue', value)
-})
 const logOut = () => {
     router.push({ path: "/" })
 }
@@ -70,22 +63,13 @@ const isActive = (path: string) => route.path.startsWith(path);
 <style lang="scss">
 .e-drawer {
     z-index: 1002;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
 
-    // &[data-type="desktop"] {
-    //     display: none;
+    &__prepend {
+        background-color: var(--primary-dark);
+    }
 
-    //     @include mixin.from_sm {
-    //         display: block;
-    //     }
-    // }
-
-    // &[data-type="mobile"] {
-    //     display: block;
-
-    //     @include mixin.from_sm {
-    //         display: none;
-    //     }
-    // }
 
 }
 </style>

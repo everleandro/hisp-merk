@@ -1,7 +1,7 @@
 <template>
   <div class="order-page">
-    <e-tab-group v-model="store.statusSelected" color="secondary" class="mb-3 pb-1 white">
-      <e-tab v-for="(status, i) in ['Pending', 'Delivered', 'Cancelled']" rounded :key="i" :value="i + 1" small> {{
+    <e-tab-group v-model="store.statusSelected" color="secondary" class="py-3 white" grow>
+      <e-tab v-for="(status, i) in ['Pending', 'Delivered', 'Cancelled']" :key="i" :value="i + 1" small> {{
         status }}
       </e-tab>
     </e-tab-group>
@@ -21,35 +21,4 @@ const store = reactive({
   statusSelected: 1
 })
 </script>
-<style lang="scss">
-.order-page {
-  .e-slide-group {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-
-    &__content {
-      justify-content: space-around;
-    }
-
-    .e-tab {
-      &.e-btn {
-        border-radius: 99999px;
-      }
-
-      &__slider {
-        display: none;
-      }
-
-      // background-color: currentColor;
-      &--selected {
-        background-color: currentColor;
-
-        .e-btn__content {
-          color: var(--white)
-        }
-      }
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

@@ -1,6 +1,6 @@
 <template>
     <div class="payment-methods-section">
-        <e-bar depressed>
+        <e-bar depressed class="pt-4">
             <h1>Card Management</h1>
             <e-spacer />
             <e-button class="btn--transparent" text color="primary" to="/profile/payment-method/new"> add New
@@ -12,12 +12,16 @@
         </swiper>
     </div>
 </template>
+
+<script lang="ts">
+export default { name: 'payment-method' }
+</script>
 <script lang="ts" setup>
 import type { CardBank } from '~/types/card-bank';
-
 // import required modules
 import { EffectCards } from 'swiper/modules';
-useBarTemporary({ title: 'Payment Methods' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Payment Methods' }, AppBarType.GO_BACK);
 const cards = [
     {
         name: 'John Doe',
@@ -40,6 +44,7 @@ const cards = [
     }
 ] as CardBank[]
 </script>
+
 <style lang="scss">
 .payment-methods-section {
     .swiper {

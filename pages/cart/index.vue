@@ -1,10 +1,7 @@
 <template>
     <div class="cart-page">
         <e-row class="ma-0">
-            <e-col>
-                <product-cart />
-            </e-col>
-            <e-col>
+            <e-col v-for="i in 3" :key="i" cols="24" md="12" lg="8">
                 <product-cart />
             </e-col>
         </e-row>
@@ -34,8 +31,12 @@
         </transition>
     </div>
 </template>
+<script lang="ts">
+export default { name: 'cart-page' }
+</script>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Your Cart' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Your Cart' }, AppBarType.GO_BACK);
 const mounted = ref(false)
 const { setFooterConfig } = useFooter()
 

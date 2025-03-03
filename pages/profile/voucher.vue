@@ -6,7 +6,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Voucher' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Voucher' }, AppBarType.GO_BACK);
 const voucherList = [
     {
         title: 'Black Friday',

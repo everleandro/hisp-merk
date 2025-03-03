@@ -28,5 +28,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Therms of use' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Therms of use' }, AppBarType.GO_BACK);
 </script>

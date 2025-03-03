@@ -54,6 +54,9 @@
 <script lang="ts" setup>
 import { Category } from '~/types';
 const category = ref(Category.All)
+definePageMeta({
+    alias: ['/home', '/']
+});
 </script>
 <style lang="scss">
 .home-page {

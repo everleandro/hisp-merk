@@ -21,8 +21,10 @@
     </div>
 </template>
 <script lang="ts" setup>
-import type { TemporaryBar } from "~/types/temporary-bar";
 import icons from "~/constants/icons";
+import { AppBarType } from '~/types/bar';
+const { setBar } = useAppBar({ title: 'Discover' }, AppBarType.GO_BACK);
+
 const router = useRouter()
 const route = useRoute()
 enum viewType {
@@ -33,30 +35,29 @@ enum viewType {
 const store = reactive({
     view: viewType.category
 })
-const setTempBarContent =
-    inject<(newConfig: TemporaryBar | null) => void>("setTempBarContent");
 
 watch(() => route.query, () => {
-    if (setTempBarContent)
-        if (route.query.category) {
-            store.view = viewType.product
-            setTempBarContent({
-                title: route.query.category as string,
-                leftButtonList: [
-                    {
-                        icon: icons.chevronLeft,
-                        action: () => router.push('/discover'),
-                    },
-                ]
-            });
-        } else {
-            store.view = viewType.category
-            setTempBarContent(null)
-        }
+
+    if (route.query.category) {
+        store.view = viewType.product
+        setBar({
+            title: route.query.category as string,
+            leftButtonList: [
+                {
+                    icon: icons.chevronLeft,
+                    action: () => router.push('/discover'),
+                },
+            ]
+        }, AppBarType.GO_BACK);
+    } else {
+        store.view = viewType.category
+        setBar()
+    }
 });
 onBeforeRouteLeave(() => {
-    if (setTempBarContent) setTempBarContent(null);
+    setBar()
 });
+
 const setCategory = (id: string | number | null) => {
     router.push({ query: { category: id } })
 }

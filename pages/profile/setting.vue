@@ -19,7 +19,8 @@
 </template>
 <script lang="ts" setup>
 import user from "assets/images/user.png";
-useBarTemporary({ title: 'Profile Settings' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Profile Settings' }, AppBarType.GO_BACK);
 </script>
 <style lang="scss">
 .profile-setting {

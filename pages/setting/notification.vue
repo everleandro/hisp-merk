@@ -11,7 +11,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Notification' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Notification' }, AppBarType.GO_BACK);
 const data = reactive({
     show: true,
     sound: false,

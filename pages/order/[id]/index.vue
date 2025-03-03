@@ -11,11 +11,15 @@
         </div>
     </div>
 </template>
+<script lang="ts">
+export default { name: 'order-detail' }
+</script>
 <script lang="ts" setup>
 import type { OrderItemInterface } from '@/types/order'
+import { AppBarType } from '~/types/bar';
 const route = useRoute()
 const router = useRouter()
-const { setBar } = useBarTemporary();
+const { appBar } = useAppBar({ title: 'Payment Methods' }, AppBarType.GO_BACK);
 const { items, ...details } = {
     number: 1514,
     tracking_number: 'IK123894901231',
@@ -29,6 +33,6 @@ const { items, ...details } = {
 }
 
 onNuxtReady(() => {
-    setBar({ title: `Order #${route.params.id}` });
+    appBar.value.title = `Order #${route.params.id}`;
 });
 </script>

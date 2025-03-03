@@ -15,6 +15,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Language' });
+import { AppBarType } from '~/types/bar';
+useAppBar({ title: 'Language' }, AppBarType.GO_BACK);
 const example = ref(1)
 </script>

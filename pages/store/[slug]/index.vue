@@ -13,26 +13,27 @@
 </template>
 <script lang="ts" setup>
 import icon from '@/constants/icons'
-useBarBlured()
 const { setFooterConfig } = useFooter()
-const { setBar } = useBarTemporary()
+const { setBar } = useAppBar();
+
 onMounted(() => {
     setFooterConfig({ show: false })
     setBar({
-        title: '',
+        title: 'las-delicias',
+        barClass: ['secondary--text', 'app-bar--blured'],
         rigthButtonList: [
             {
                 icon: icon.hearth,
                 action: () => favAction,
                 color: 'primary',
-                class: 'white',
+                btnClass: 'white',
             },
         ], leftButtonList: [
             {
-                icon: icon.chevronLeft,
+                icon: icon.arrowBack,
                 action: () => router.go(-1),
                 color: 'secondary',
-                class: 'white',
+                btnClass: 'white',
             },
         ]
     });
@@ -48,4 +49,8 @@ const favAction = () => {
 
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.store-page {
+    margin-top: -54px;
+}
+</style>

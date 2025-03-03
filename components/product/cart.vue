@@ -10,7 +10,6 @@
     </li>
 </template>
 <script lang="ts" setup>
-useBarTemporary({ title: 'Your Cart' });
 const router = useRouter()
 const test = ref(1)
 const checkbox = ref(true)
