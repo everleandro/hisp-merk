@@ -49,6 +49,7 @@
 <script lang="ts" setup>
 import { OTHERS_LINKS, MOBILE_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
 import type { TemporaryBar } from '@/types/temporary-bar'
+
 const route = useRoute()
 const data = reactive({
   drawerModelMobile: false,
@@ -75,6 +76,7 @@ provide('setBarClass', setBarClass);
 watch(() => route.fullPath, () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
 
 watch(() => route, (_, to) => {
   const result = [...OTHERS_LINKS, ...MOBILE_DRAWER_LINKS].find((link) => link.to === to?.path)
@@ -103,6 +105,17 @@ const handleSupportClick = () => {
 <style lang="scss">
 body {
   overflow: hidden;
+
+  &:before {
+    content: 'Top Inset: ' env(safe-area-inset-top);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: red;
+    color: white;
+    padding: 10px;
+    z-index: 9999;
+  }
 }
 
 .e-app {

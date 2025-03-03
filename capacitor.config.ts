@@ -6,6 +6,10 @@ const config: CapacitorConfig = {
   // webDir: '.output/public',
   webDir: "dist",
   bundledWebRuntime: false,
+  // ios: {
+  //   // Fuerza la superposición del WebView con la barra de estado
+  //   contentInset: "always",
+  // },
 };
 
 export default config;
