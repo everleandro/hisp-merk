@@ -23,7 +23,7 @@
     &-header {
         z-index: -1;
         position: sticky;
-        top: -54px;
+        top: 0;
 
         img {
             aspect-ratio: 2;

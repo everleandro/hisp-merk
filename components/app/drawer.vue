@@ -1,27 +1,27 @@
 <template>
-    <e-drawer v-model="drawerModel" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'">
+    <e-drawer v-model="drawerModel" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'" class="primary">
         <template #prepend>
-            <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com">
+            <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com"
+                color="white">
             </e-list-item>
             <e-divider></e-divider>
         </template>
         <e-list>
-            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="secondary" :to="link.to"
+            <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="white" :to="link.to"
                 :class="{ 'router-link-active': isActive(link.to) }">
                 {{ link.title }}
             </e-list-item>
         </e-list>
-        <e-list>
-            <e-list-item class="pa-3">OTHERS</e-list-item>
-            <e-list-item v-for="(link, i) in otherLinks" :prepend-icon="link.icon" :key="i" color="secondary"
-                :to="link.to">
+        <e-list color="white">
+            <e-list-item class="pa-3 white--text">OTHERS</e-list-item>
+            <e-list-item v-for="(link, i) in otherLinks" :prepend-icon="link.icon" :key="i" color="white" :to="link.to">
                 {{ link.title }}
             </e-list-item>
             <slot name="extra-links"></slot>
         </e-list>
         <template #append>
             <div class="pa-2">
-                <e-button :prepend-icon="$icon.logout" block @click="logOut" color="primary" outlined>
+                <e-button :prepend-icon="$icon.logout" block @click="logOut" color="primary-dark">
                     cerrar Sesion
                 </e-button>
             </div>

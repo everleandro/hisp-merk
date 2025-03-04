@@ -4,7 +4,7 @@
             <img src="@/assets/images/product/6.jpg" alt="product image" />
         </div>
         <div class="card-product__text">
-            <span class="card-product__title mb-3">Long Sleeve Dress</span>
+            <span class="card-product__title mb-3 secondary--text">Long Sleeve Dress</span>
             <span class="card-product__price">$ 45.00</span>
         </div>
     </li>

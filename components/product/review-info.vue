@@ -27,8 +27,8 @@
         <div class="review">
             <e-list color="primary">
                 <template v-for="i in 4" :key="i">
-                    <e-list-item :prepend-avatar="user" :title="'jhon Smith' + i" :value="i">
-                        <app-rate :model-value="4" />
+                    <e-list-item :prepend-avatar="user" color="secondary" :title="'jhon Smith' + i" :value="i">
+                        <app-rate :model-value="4" color=yellow />
                         <template #append>
                             9m ago
                         </template>

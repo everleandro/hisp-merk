@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-        <div class="">
+        <div class="pt-3">
             <filter-category inline v-model="category" />
         </div>
         <div class="ma-3">
@@ -30,7 +30,7 @@
             <product-card />
         </app-list>
         <!-- <div class="pa-3"> -->
-        <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title squared color="secondary"
+        <card-offer reverse title="new collection" subtitle="HANG OUT & PARTY" small-title squared color="blue"
             transparent />
         <!-- </div> -->
         <app-list title="Recomended" :itemsPerView="1.5">
@@ -47,8 +47,6 @@
         <app-list title="Recomended" :itemsPerView="1.3">
             <store-card />
         </app-list>
-
-
     </div>
 </template>
 <script lang="ts" setup>

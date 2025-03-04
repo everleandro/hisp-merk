@@ -3,7 +3,7 @@
         <li v-for="(category, key) in categories" :key="key" class="filter-category__item pa-1"
             :class="active(category.id) && 'filter-category__item--active'" @click="handleCategoryClick(category.id)">
             <div class="button-wrapper">
-                <e-button text x-large>
+                <e-button text x-large color="secondary">
                     <app-icon :icon="category.icon" x-large></app-icon>
                 </e-button>
             </div>
@@ -100,8 +100,8 @@ const categories = [
 
             .item__text {
                 font-size: medium;
+                color: var(--secondary);
                 margin-top: 4px;
-
             }
         }
     }
@@ -134,19 +134,16 @@ const categories = [
             border-radius: 12px;
 
             &:before {
-                opacity: 0.15;
+                opacity: 0.07;
             }
         }
 
         &--active {
-            color: var(--primary);
-
             .e-btn {
-                color: var(--primary) !important;
-                color: white;
+                color: var(--secondary) !important;
 
                 &::before {
-                    opacity: .2;
+                    opacity: .4;
                 }
             }
         }

@@ -1,16 +1,16 @@
 <template>
-    <div class="product-page">
+    <div class="product-page pb-10">
         <div class="product-page__header">
             <img src="@/assets/images/product/1.png" alt="img">
         </div>
         <div class="product-page__body white pb-10 mb-n15">
-            <div class="d-flex align-baseline pa-3 ">
+            <div class="d-flex align-baseline pa-3 secondary--text">
                 <h1>Sport wear set</h1>
                 <e-spacer></e-spacer>
                 <span>$90.00</span>
             </div>
             <div class="d-flex mb-3">
-                <app-rate :model-value="4" />
+                <app-rate :model-value="4" color="yellow" />
             </div>
             <e-divider />
             <e-row class="ma-0">
@@ -20,7 +20,7 @@
             </e-row>
             <e-divider />
             <e-expansion-panel>
-                <e-expansion v-model="store.description" header-title="Descripcion">
+                <e-expansion v-model="store.description" header-title="Descripcion" color="secondary">
                     <p class="pa-4 ma-0">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, minus nisi placeat ipsum
                         porro facilis molestiae nemo consectetur. Dolores quam voluptatum ipsa? Alias molestiae eligendi
@@ -29,12 +29,12 @@
                         porro facilis molestiae nemo consectetur.
                     </p>
                 </e-expansion>
-                <e-expansion v-model="store.reviews" header-title="Reviews">
+                <e-expansion v-model="store.reviews" header-title="Reviews" color="secondary">
                     <div class="pa-4 ma-0">
                         <product-review-info :model-value="4.3" />
                     </div>
                 </e-expansion>
-                <e-expansion v-model="store.similarProducts" header-title="Similar Products">
+                <e-expansion v-model="store.similarProducts" header-title="Similar Products" color="secondary">
                     <div class="pa-4 ma-0">
                         <app-list :itemsPerView="2.3">
                             <product-card />
@@ -52,6 +52,7 @@
 </template>
 <script lang="ts" setup>
 import icon from '@/constants/icons'
+import { AppBarType } from '@/types/bar'
 const { setFooterConfig } = useFooter()
 const { setBar } = useAppBar();
 const router = useRouter()
@@ -75,14 +76,16 @@ onMounted(() => {
             {
                 icon: icon.hearth,
                 action: () => favAction,
+                color: 'white',
             },
         ], leftButtonList: [
             {
                 icon: icon.arrowBack,
+                color: 'white',
                 action: () => router.go(-1),
             },
         ]
-    });
+    }, AppBarType.CUSTOM);
 })
 
 onBeforeRouteLeave((to) => {

@@ -28,16 +28,16 @@ const props = withDefaults(defineProps<Props>(), { negative: false })
 
     &__span {
         &--1 {
-            color: var(--primary);
+            color: var(--white);
         }
 
         &--2 {
-            color: var(--primary--dark);
+            color: var(--primary-dark);
 
         }
 
         &--3 {
-            color: var(--secondary);
+            color: var(--white);
 
         }
     }

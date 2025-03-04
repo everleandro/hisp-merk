@@ -1,9 +1,9 @@
 <template>
     <div class="my-4 app-list">
         <div v-if="title" class="app-list__header pa-3">
-            <h2 class="my-4 ">{{ title }}</h2>
+            <h2 class="my-4 secondary--text">{{ title }}</h2>
             <e-spacer />
-            <e-button text :icon="$icon.chevronRight" />
+            <e-button text color="secondary" :icon="$icon.chevronRight" />
         </div>
         <swiper :slidesPerView="itemsPerView" :spaceBetween="spaceBetween" class="mySwiper pa-3">
             <swiper-slide v-for="i in 5" :key="i">

@@ -1,5 +1,5 @@
 <template>
-    <e-bar app fixed :class="appBar.barClass">
+    <e-bar app fixed :class="appBar.barClass" class="my-0 d-flex align-center">
         <e-button v-for="(btn, key) in appBar.leftButtonList" :text="btn.text" :key :class="btn.btnClass"
             :icon="btn.icon" :color="btn.color" @click="btn.action" small>
         </e-button>
@@ -50,9 +50,13 @@ watch(() => route, (_, to) => {
 
         }
 
+        &__content {
+            flex: 1;
+        }
+
         &.app-bar--blured {
-            backdrop-filter: blur(6px);
-            background: rgba(255, 255, 255, .5);
+            backdrop-filter: blur(3px);
+            background: rgba(255, 255, 255, .2);
         }
 
         height: 54px;

@@ -9,8 +9,8 @@
                 </div>
                 <e-spacer></e-spacer>
                 <div>
-                    <e-button :icon="$icon.message" text color="primary" />
-                    <e-button :icon="$icon.phone" text color="primary" />
+                    <e-button :icon="$icon.message" text color="primary" link href="sms:+2705328993"/>
+                    <e-button :icon="$icon.phone" text color="primary" link href="tel:+2705328993"/>
                 </div>
             </div>
             <div class="card-seller__description pt-3">

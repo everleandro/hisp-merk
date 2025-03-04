@@ -4,7 +4,7 @@
     <app-bar />
     <app-drawer :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS">
       <template #extra-links>
-        <e-list-item :prepend-icon="Support.icon" color="secondary" value="support" @click="handleSupportClick">
+        <e-list-item :prepend-icon="Support.icon" color="white" value="support" @click="handleSupportClick">
           {{ Support.title }}
         </e-list-item>
       </template>
@@ -19,7 +19,6 @@
       </e-container>
     </e-main>
     <app-footer />
-
   </e-app>
 </template>
 
@@ -59,6 +58,10 @@ body {
 
 .e-app {
 
+  .e-main {
+    padding: 0 !important;
+    background-image: url('/images/bg.jpg');
+  }
 
   .e-container {
     padding: 0;
@@ -84,8 +87,8 @@ body {
 
 
 
-  .e-main {
-    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 56px) !important;
+  .e-container {
+    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 65px) !important;
     padding-top: calc(env(safe-area-inset-top, 0px) + 54px) !important;
   }
 }

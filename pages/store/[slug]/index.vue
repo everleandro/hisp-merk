@@ -13,6 +13,7 @@
 </template>
 <script lang="ts" setup>
 import icon from '@/constants/icons'
+import { AppBarType } from '@/types/bar'
 const { setFooterConfig } = useFooter()
 const { setBar } = useAppBar();
 
@@ -36,10 +37,11 @@ onMounted(() => {
                 btnClass: 'white',
             },
         ]
-    });
+    }, AppBarType.CUSTOM);
 })
 onBeforeRouteLeave(() => {
     setFooterConfig({ show: true })
+    setBar();
 });
 
 const router = useRouter()

@@ -1,8 +1,9 @@
 <template>
     <footer v-if="footerSetting.show" class="mobile__footer d-flex d-sm-none">
         <e-button v-for="(link, i) in MOBILE_LINKS" :key="i" :to="link.to" class="ma-0" stacked
-            :prepend-icon="link.icon" :class="{ 'router-link-active': isActive(link.to) }" text color="secondary">{{
-                link.title }}</e-button>
+            :prepend-icon="link.icon" :class="{ 'router-link-active': isActive(link.to) }" text color="secondary">
+            {{ link.title }}
+        </e-button>
     </footer>
 </template>
 <script lang="ts" setup>
@@ -26,6 +27,10 @@ const isActive = (path: string) => route.path.startsWith(path);
 
     .router-link-active {
         color: var(--primary);
+
+        &::before {
+            opacity: .1;
+        }
     }
 
     .e-btn {

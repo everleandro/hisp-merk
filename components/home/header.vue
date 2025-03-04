@@ -1,7 +1,7 @@
 <template>
-    <div ref="container" class="home-offer">
+    <div ref="container" class="home-offer my-12">
         <swiper class="mySwiper" :spaceBetween="30">
-            <swiper-slide v-for="i in 6"><card-offer color="primary" title="Atumn Collection 2022" /></swiper-slide>
+            <swiper-slide v-for="i in 6"><card-offer color="blue" title="Atumn Collection 2022" /></swiper-slide>
         </swiper>
     </div>
 </template>

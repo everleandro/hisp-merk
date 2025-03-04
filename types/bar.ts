@@ -2,6 +2,7 @@ import Icon from "@/constants/icons";
 export enum AppBarType {
   GO_BACK = "go-back",
   DEFAULT = "default",
+  CUSTOM = "custom",
 }
 export interface BarButton {
   text?: boolean;
@@ -20,8 +21,8 @@ export interface AppBar {
   rigthButtonList?: Array<BarButton>;
 }
 const defaultBarButton: BarButton = {
-  text: false,
-  color: "primary",
+  text: true,
+  color: "white",
   small: true,
   // btnClass: ["btn--transparent"],
 };
@@ -38,7 +39,7 @@ export class BarButton {
   }: BarButton = defaultBarButton) {
     this.text = typeof text === "boolean" ? text : defaultBarButton.text;
     this.icon = icon;
-    this.color = color || "secondary";
+    this.color = color || "white";
     this.small = typeof small === "boolean" ? small : defaultBarButton.small;
     this.to = to;
     this.btnClass = btnClass || defaultBarButton.btnClass;
@@ -47,7 +48,7 @@ export class BarButton {
 }
 
 const defaultAppBar: AppBar = {
-  barClass: "app-bar--blured",
+  barClass: "app-bar--blured primary",
   leftButtonList: <Array<BarButton>>[
     new BarButton({
       icon: Icon.menu,
@@ -58,10 +59,10 @@ const defaultAppBar: AppBar = {
       icon: Icon.cart,
       to: "/cart",
     }),
-    {
+    new BarButton({
       icon: Icon.bell,
       to: "/cart",
-    },
+    }),
   ],
 };
 

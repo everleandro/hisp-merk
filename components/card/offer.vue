@@ -36,7 +36,7 @@ const textColor = computed(() => {
 </script>
 <style lang="scss">
 .card-offer {
-    color: white;
+    color: var(--white);
     user-select: none;
     position: relative;
     box-shadow: none;
