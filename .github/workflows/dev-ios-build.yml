@@ -19,11 +19,17 @@ jobs:
         with:
           node-version: 20
 
+      - name: Limpiar caché de npm
+        run: npm cache clean --force        
+
       - name: Instalar dependencias
         run: |
           set -e
           npm ci
           npm run generate
+
+      - name: Limpiar caché de Capacitor
+        run: npx cap clean
 
       - name: Agregar sync iOS
         run: |

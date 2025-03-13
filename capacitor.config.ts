@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   // webDir: '.output/public',
   webDir: "dist",
   server: {
-    url: "http://10.0.2.2:8000", // Asegúrate de que la IP del backend esté correctamente configurada
+    url: "dhavanaapi-production.up.railway.app", // Asegúrate de que la IP del backend esté correctamente configurada
     cleartext: true, // Esto es importante si estás usando HTTP y no HTTPS
   },
   // bundledWebRuntime: false,
