@@ -5,10 +5,6 @@ const config: CapacitorConfig = {
   appName: "dhavana",
   // webDir: '.output/public',
   webDir: "dist",
-  server: {
-    url: "dhavanaapi-production.up.railway.app", // Asegúrate de que la IP del backend esté correctamente configurada
-    cleartext: true, // Esto es importante si estás usando HTTP y no HTTPS
-  },
   // bundledWebRuntime: false,
   // ios: {
   //   // Fuerza la superposición del WebView con la barra de estado
