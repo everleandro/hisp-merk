@@ -20,8 +20,8 @@ const { setBar } = useAppBar();
 onMounted(() => {
     setFooterConfig({ show: false })
     setBar({
-        title: 'las-delicias',
-        barClass: ['secondary--text', 'app-bar--blured'],
+        title: '',
+        barClass: ['secondary--text', 'app-bar--transparent'],
         rigthButtonList: [
             {
                 icon: icon.hearth,

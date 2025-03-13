@@ -1,7 +1,7 @@
 <template>
     <section class="profile-page">
         <e-list class="profile-user-info my-8">
-            <e-list-item :prepend-avatar="user" x-large title="jhon smith" subtitle="jhon@gmail.com">
+            <e-list-item :prepend-avatar="user" x-large :title="userData.get_full_name" :subtitle="userData.email">
                 <template #prepend>
                     <e-avatar size="64" :src="user"></e-avatar>
                 </template>
@@ -24,6 +24,9 @@
 <script lang="ts" setup>
 import user from "@/assets/images/user.png";
 import icons from "~/constants/icons";
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+const userData = await authStore.getUser();
 const profileSeciton = [
     { title: "Address", icon: icons.address, to: "/profile/address" },
     { title: "Payment method", icon: icons.paymentMethod, to: "/profile/payment-method" },
@@ -31,6 +34,12 @@ const profileSeciton = [
     { title: "My Wishlist", icon: icons.hearth, to: "/profile/wish-list" },
     { title: "Rate This App", icon: icons.star, to: "/profile/rate-app" }
 ]
+
+onMounted(async () => {
+    console.log(userData);
+})
+
+
 
 </script>
 <style lang="scss">

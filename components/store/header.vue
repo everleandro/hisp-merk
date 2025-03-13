@@ -21,9 +21,9 @@
     }
 
     &-header {
-        z-index: -1;
-        position: sticky;
-        top: 0;
+        // z-index: -1;
+        // position: sticky;
+        // top: 0;
 
         img {
             aspect-ratio: 2;

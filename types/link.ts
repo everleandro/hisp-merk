@@ -4,4 +4,5 @@ export type Link = {
   icon: IconPath | Array<IconPath> | string;
   title: string;
   to: string;
+  public: boolean;
 };

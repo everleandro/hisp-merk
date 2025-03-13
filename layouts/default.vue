@@ -1,8 +1,7 @@
 <template>
   <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
-
     <app-bar />
-    <app-drawer :links="MOBILE_DRAWER_LINKS" :other-links="OTHERS_LINKS">
+    <app-drawer>
       <template #extra-links>
         <e-list-item :prepend-icon="Support.icon" color="white" value="support" @click="handleSupportClick">
           {{ Support.title }}
@@ -18,7 +17,7 @@
         <slot />
       </e-container>
     </e-main>
-    <app-footer />
+    <app-footer v-if="$auth.isAuthenticated" />
   </e-app>
 </template>
 
@@ -27,6 +26,7 @@ export default { name: 'default-layout' }
 </script>
 <script lang="ts" setup>
 import { OTHERS_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
+
 const route = useRoute()
 const data = reactive({
   drawerModelMobile: false,
@@ -60,7 +60,7 @@ body {
 
   .e-main {
     padding: 0 !important;
-    background-image: url('/images/bg.jpg');
+    // background-image: url('/images/bg.jpg');
   }
 
   .e-container {

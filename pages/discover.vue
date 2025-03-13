@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import icons from "~/constants/icons";
 import { AppBarType } from '~/types/bar';
-const { setBar } = useAppBar({ title: 'Discover' }, AppBarType.GO_BACK);
+const { setBar } = useAppBar({ title: 'Discover' });
 
 const router = useRouter()
 const route = useRoute()

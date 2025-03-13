@@ -10,9 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/core": "^6.1.2",
-    "@capacitor/ios": "^6.1.2",
+    "@capacitor/android": "^7.1.0",
+    "@capacitor/core": "^7.1.0",
+    "@capacitor/ios": "^7.1.0",
+    "@capacitor/preferences": "^7.0.0",
     "@nuxtjs/device": "^3.2.4",
     "@pinia/nuxt": "^0.7.0",
     "drocket": "^1.0.26",
@@ -26,7 +27,7 @@
     "vue": "latest"
   },
   "devDependencies": {
-    "@capacitor/cli": "^6.1.2",
+    "@capacitor/cli": "^7.1.0",
     "sass": "^1.79.4"
   }
 }

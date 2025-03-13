@@ -71,17 +71,20 @@ onMounted(() => {
     }, 200)
     setFooterConfig({ show: false })
     setBar({
-        title: '',
+        title: "",
+        barClass: ['app-bar--transparent'],
         rigthButtonList: [
             {
                 icon: icon.hearth,
                 action: () => favAction,
-                color: 'white',
+                color: 'primary',
+                btnClass: 'white',
             },
         ], leftButtonList: [
             {
                 icon: icon.arrowBack,
-                color: 'white',
+                color: 'secondary',
+                btnClass: 'white',
                 action: () => router.go(-1),
             },
         ]
@@ -121,9 +124,9 @@ const favAction = () => {
     }
 
     &__header {
-        position: sticky;
-        top: 0;
-        z-index: -1;
+        // position: sticky;
+        // top: 0;
+        // z-index: -1;
         margin-top: -54px;
         width: 100%;
         display: flex;

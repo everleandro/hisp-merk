@@ -6,6 +6,7 @@ export interface BarSetting {
   barClass?: string;
   bellButton?: boolean;
 }
+
 export const useApp = defineStore("app", {
   state: () => ({
     barTitle: <string | undefined>"",

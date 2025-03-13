@@ -5,7 +5,7 @@
         </e-button>
         <e-spacer />
         <h2 v-if="appBar.title" class="pr-8">{{ appBar.title }}</h2>
-        <app-logo v-else negative />
+        <app-logo v-else-if="appBar.title === undefined" negative />
         <e-spacer />
         <e-button v-for="(btn, key) in appBar.rigthButtonList" :key :class="btn.btnClass" :color="btn.color"
             :text="btn.text" :to="btn.to" :icon="btn.icon" @click="btn.action" small>
@@ -38,8 +38,15 @@ watch(() => route, (_, to) => {
 <style lang="scss">
 .e-app {
     .e-bar {
+        height: 54px;
+
+        @include mixin.from_sm {
+            height: 64px;
+        }
+
         &.app-bar--transparent {
             background-color: transparent;
+            box-shadow: none;
         }
 
         &.e-bar--app {
@@ -59,11 +66,7 @@ watch(() => route, (_, to) => {
             background: rgba(255, 255, 255, .2);
         }
 
-        height: 54px;
 
-        @include mixin.from_sm {
-            height: 64px;
-        }
     }
 }
 </style>

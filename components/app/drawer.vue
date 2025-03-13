@@ -4,7 +4,7 @@
             <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com"
                 color="white">
             </e-list-item>
-            <e-divider></e-divider>
+            <e-divider />
         </template>
         <e-list>
             <e-list-item v-for="(link, i) in links" :prepend-icon="link.icon" :key="i" color="white" :to="link.to"
@@ -12,7 +12,7 @@
                 {{ link.title }}
             </e-list-item>
         </e-list>
-        <e-list color="white">
+        <e-list color="white" v-if="otherLinks.length > 0">
             <e-list-item class="pa-3 white--text">OTHERS</e-list-item>
             <e-list-item v-for="(link, i) in otherLinks" :prepend-icon="link.icon" :key="i" color="white" :to="link.to">
                 {{ link.title }}
@@ -21,8 +21,9 @@
         </e-list>
         <template #append>
             <div class="pa-2">
-                <e-button :prepend-icon="$icon.logout" block @click="logOut" color="primary-dark">
-                    cerrar Sesion
+                <e-button :prepend-icon="$auth.isAuthenticated ? $icon.logout : ''" block @click="sessionButton"
+                    :color="$auth.isAuthenticated ? 'primary-dark' : 'secondary'">
+                    {{ $auth.isAuthenticated ? "cerrar Sesion" : "Iniciar sesion" }}
                 </e-button>
             </div>
         </template>
@@ -30,8 +31,10 @@
 </template>
 <script lang="ts" setup>
 import user from "assets/images/user.png";
+import { useAuthStore } from '@/stores/auth';
 import { useBreakpoint } from 'drocket'
-import type { Link } from '@/types'
+import { OTHERS_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
+const authStore = useAuthStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -41,11 +44,20 @@ const { drawerModel } = useAppDrawer()
 export interface Props {
     mobile?: boolean,
     right?: boolean,
-    links: Link[],
-    otherLinks: Link[],
 }
 
-const props = withDefaults(defineProps<Props>(), { right: false })
+withDefaults(defineProps<Props>(), { right: false })
+
+const links = computed(() => {
+    if (authStore.isAuthenticated)
+        return MOBILE_DRAWER_LINKS
+    return MOBILE_DRAWER_LINKS.filter(link => link.public)
+})
+const otherLinks = computed(() => {
+    if (authStore.isAuthenticated)
+        return OTHERS_LINKS
+    return OTHERS_LINKS.filter(link => link.public)
+})
 
 watch(() => router, () => {
     if (drawerModel.value && (viewport.xs || viewport.sm || viewport.md)) {
@@ -55,8 +67,14 @@ watch(() => router, () => {
     }
 }, { deep: true, immediate: true });
 
-const logOut = () => {
-    router.push({ path: "/" })
+const sessionButton = async () => {
+    if (authStore.isAuthenticated) {
+        await authStore.logout()
+        drawerModel.value = false;
+        router.push({ path: "/" })
+    } else {
+        router.push({ path: "/login" })
+    }
 }
 const isActive = (path: string) => route.path.startsWith(path);
 </script>
@@ -64,9 +82,9 @@ const isActive = (path: string) => route.path.startsWith(path);
 .e-drawer {
     z-index: 1002;
     padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
 
     &__prepend {
+        padding-top: env(safe-area-inset-top, 0px) !important;
         background-color: var(--primary-dark);
     }
 
