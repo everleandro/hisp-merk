@@ -28,9 +28,6 @@ jobs:
           npm ci
           npm run generate
 
-      - name: Limpiar caché de Capacitor
-        run: npx cap clean
-
       - name: Agregar sync iOS
         run: |
           set -e
