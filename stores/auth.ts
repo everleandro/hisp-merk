@@ -1,6 +1,5 @@
 // stores/auth.ts
 import { defineStore } from "pinia";
-import { Preferences } from "@capacitor/preferences";
 import { Capacitor } from "@capacitor/core";
 
 const API_URL = "https://dhavanaapi-production.up.railway.app";
@@ -23,7 +22,8 @@ export const useAuthStore = defineStore("auth", {
         this.token = response.access as string;
         if (Capacitor.getPlatform() !== "web") {
           // En la app móvil, usar el plugin Preferences
-          await Preferences.set({ key: "authToken", value: this.token });
+          // await Preferences.set({ key: "authToken", value: this.token });
+          localStorage.setItem("authToken", this.token);
         } else {
           // En el navegador, usar localStorage
           localStorage.setItem("authToken", this.token);
@@ -46,7 +46,8 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       this.user = null;
       if (Capacitor.getPlatform() !== "web") {
-        await Preferences.remove({ key: "authToken" });
+        // await Preferences.remove({ key: "authToken" });
+        localStorage.removeItem("authToken");
       } else {
         localStorage.removeItem("authToken");
       }
@@ -84,8 +85,9 @@ export const useAuthStore = defineStore("auth", {
     async loadToken() {
       if (Capacitor.getPlatform() !== "web") {
         // En la app móvil, usar el plugin Preferences
-        const { value } = await Preferences.get({ key: "authToken" });
-        return value;
+        // const { value } = await Preferences.get({ key: "authToken" });
+        return Promise.resolve(localStorage.getItem("authToken"));
+        // return value;
       } else {
         // En el navegador, usar localStorage
         return Promise.resolve(localStorage.getItem("authToken"));
