@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { Preferences } from "@capacitor/preferences";
 import { Capacitor } from "@capacitor/core";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://dhavanaapi-production.up.railway.app";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
