@@ -8,7 +8,7 @@ templ<template>
                     <div>
                         <e-form color="secondary">
                             <e-textfield v-model="data.email" cols="24" label="Email" />
-                            <e-textfield v-model="data.password" cols="24" label="Password" />
+                            <e-textfield v-model="data.password" cols="24" label="Password" type="password" />
                             <e-form-column>
                                 <e-spacer />
                                 <e-button rounded color="primary" block @click="login" :loading="data.loading">
@@ -40,9 +40,9 @@ import { useAuthStore } from '@/stores/auth';
 const router = useRouter();
 const authStore = useAuthStore();
 const data = reactive({
-    email: "eric@gmail.com",
+    email: "",
     loading: false,
-    password: "password12345*",
+    password: "",
 })
 
 const login = async () => {
