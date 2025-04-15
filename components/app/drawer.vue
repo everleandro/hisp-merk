@@ -1,5 +1,5 @@
 <template>
-    <e-drawer v-model="drawerModel" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'" class="primary">
+    <e-drawer v-model="drawerModel" fixed :right="right" absolute :data-type="mobile ? 'mobile' : 'desktop'" class="primary">
         <template #prepend>
             <e-list-item v-if="$auth.isAuthenticated" :prepend-avatar="user" :title="userData.get_full_name"
                 class="mb-0" :subtitle="userData.email" color="white">
