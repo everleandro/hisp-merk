@@ -15,7 +15,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(email: string, password: string) {
       try {
-        const response = await $fetch(useApiUrl() + "/api/auth/jwt/create", {
+        const response = await $fetch(useApiUrl() + "/auth/jwt/create", {
           method: "POST",
           body: { email, password },
         });
@@ -65,7 +65,7 @@ export const useAuthStore = defineStore("auth", {
       if (!token) return;
 
       try {
-        const data = await $fetch(useApiUrl() + "/api/auth/users/me/", {
+        const data = await $fetch(useApiUrl() + "/auth/users/me/", {
           headers: {
             Authorization: `JWT ${token}`,
           },

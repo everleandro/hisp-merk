@@ -37,11 +37,11 @@ const userRules = useRules();
 const router = useRouter();
 const authStore = useAuthStore();
 const data = reactive({
-    email: "",
+    email: "ever.leandros91@gmail.com",
     inputType: "password",
     loading: false,
     formModel: true,
-    password: "",
+    password: "N0ladar3+-+*",
 })
 
 const login = async () => {

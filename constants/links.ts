@@ -51,12 +51,12 @@ const AboutUs: Link = {
 };
 
 export const OTHERS_LINKS = [Setting, AboutUs];
-export const EXTRA_LINKS = { Support, MyCart };
+// export const EXTRA_LINKS = { Support, MyCart };
+export const EXTRA_LINKS = { MyCart };
 export const MOBILE_LINKS = [Home, Discover, MyOrders, Profile];
 export const MOBILE_DRAWER_LINKS = [Home, Discover, MyOrders, Profile];
 export const PUBLIC_ROUTES = [
   ...OTHERS_LINKS,
-  Support,
   MyCart,
   ...MOBILE_LINKS,
   ...MOBILE_DRAWER_LINKS,

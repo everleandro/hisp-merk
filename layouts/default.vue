@@ -2,11 +2,11 @@
   <e-app type="default-layout">
     <app-bar />
     <app-drawer>
-      <template #extra-links>
+      <!-- <template #extra-links>
         <e-list-item :prepend-icon="Support.icon" color="white" value="support" @click="handleSupportClick">
           {{ Support.title }}
         </e-list-item>
-      </template>
+      </template> -->
     </app-drawer>
 
     <e-main class="app-scroll-container">
@@ -33,7 +33,7 @@ const data = reactive({
   supportDialog: false,
 })
 
-const { Support } = EXTRA_LINKS
+// const { Support } = EXTRA_LINKS
 
 const handleSupportClick = () => {
   data.drawerModelMobile = false
@@ -59,7 +59,7 @@ watch(route, () => {
 .e-app[type="default-layout"] {
 
   .e-main {
-    padding: 0 !important;
+    padding: 0;
     // background-image: url('/images/bg.jpg');
   }
 
@@ -89,7 +89,7 @@ watch(route, () => {
 
   .e-container {
     padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 65px) !important;
-    padding-top: calc(env(safe-area-inset-top, 0px) + 54px) !important;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0px) !important;
   }
 }
 </style>
