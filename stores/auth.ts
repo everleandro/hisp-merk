@@ -1,21 +1,21 @@
 // stores/auth.ts
 import { defineStore } from "pinia";
 import { Capacitor } from "@capacitor/core";
-
-const API_URL = "https://dhavanaapi-production.up.railway.app";
+import type { User } from "~/types/user";
+import { useApiUrl } from "~/utils/use-api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null as any,
+    user: null as User | null,
     token: null as string | null,
   }),
   getters: {
-    isAuthenticated: (state) => !!state.token,
+    isAuthenticated: (state) => !!state.user,
   },
   actions: {
     async login(email: string, password: string) {
       try {
-        const response = await $fetch(API_URL + "/api/auth/jwt/create", {
+        const response = await $fetch(useApiUrl() + "/api/auth/jwt/create", {
           method: "POST",
           body: { email, password },
         });
@@ -42,7 +42,12 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async logout() {
-      console.log("logout");
+      // try {
+      //   const response = await $fetch(API_URL + "/api/auth/token/logout", {
+      //     method: "POST",
+      //   });
+      // } catch {}
+
       this.token = null;
       this.user = null;
       if (Capacitor.getPlatform() !== "web") {
@@ -52,7 +57,6 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem("authToken");
       }
     },
-
     async getUser() {
       if (this.user) {
         return await Promise.resolve(this.user);
@@ -61,7 +65,7 @@ export const useAuthStore = defineStore("auth", {
       if (!token) return;
 
       try {
-        const data = await $fetch(API_URL + "/api/auth/users/me/", {
+        const data = await $fetch(useApiUrl() + "/api/auth/users/me/", {
           headers: {
             Authorization: `JWT ${token}`,
           },

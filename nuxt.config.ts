@@ -4,6 +4,15 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   css: ["@/assets/styles/app.scss"],
   ssr: false,
+  runtimeConfig: {
+    // Private keys are only available on the server
+    apiSecret: "123",
+
+    // Public keys that are exposed to the client
+    public: {
+      apiBase: process.env.NUXT_APP_API_URL,
+    },
+  },
   app: {
     pageTransition: { name: "page", mode: "out-in" },
     head: {

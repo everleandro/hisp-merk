@@ -7,6 +7,7 @@ export enum AppBarType {
 export interface BarButton {
   text?: boolean;
   icon?: string;
+  _public?: boolean;
   color?: string;
   small?: boolean;
   to?: string;
@@ -32,6 +33,7 @@ export class BarButton {
     text,
     icon,
     color,
+    _public,
     small,
     to,
     btnClass,
@@ -39,6 +41,7 @@ export class BarButton {
   }: BarButton = defaultBarButton) {
     this.text = typeof text === "boolean" ? text : defaultBarButton.text;
     this.icon = icon;
+    this._public = _public;
     this.color = color || "white";
     this.small = typeof small === "boolean" ? small : defaultBarButton.small;
     this.to = to;
@@ -57,9 +60,16 @@ const defaultAppBar: AppBar = {
   rigthButtonList: <Array<BarButton>>[
     new BarButton({
       icon: Icon.cart,
+      _public: false,
       to: "/cart",
     }),
     new BarButton({
+      icon: Icon.login,
+      to: "/login",
+      _public: true,
+    }),
+    new BarButton({
+      _public: false,
       icon: Icon.bell,
       to: "/cart",
     }),

@@ -1,18 +1,19 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('./icomoon.eot?j9iqvv');
-  src:  url('./icomoon.eot?j9iqvv#iefix') format('embedded-opentype'),
-    url('./icomoon.ttf?j9iqvv') format('truetype'),
-    url('./icomoon.woff?j9iqvv') format('woff'),
-    url('./icomoon.svg?j9iqvv#icomoon') format('svg');
+  font-family: "icomoon";
+  src: url("./icomoon.eot?j9iqvv");
+  src:
+    url("./icomoon.eot?j9iqvv#iefix") format("embedded-opentype"),
+    url("./icomoon.ttf?j9iqvv") format("truetype"),
+    url("./icomoon.woff?j9iqvv") format("woff"),
+    url("./icomoon.svg?j9iqvv#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
-
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: "icomoon" !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -25,6 +26,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-lock:before {
+  content: "\e990";
+}
+.icon-translate-variant:before {
+  content: "\e991";
+}
+.icon-account:before {
+  content: "\e992";
+}
+.icon-eye:before {
+  content: "\e993";
+}
+.icon-eye-off:before {
+  content: "\e994";
+}
+.icon-facebook:before {
+  content: "\e995";
+}
+.icon-google:before {
+  content: "\e996";
+}
 .icon-visa:before {
   content: "\e98f";
 }

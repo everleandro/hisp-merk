@@ -1,21 +1,21 @@
 <template>
     <e-bar app fixed :class="appBar.barClass" class="my-0 d-flex align-center">
-        <e-button v-for="(btn, key) in appBar.leftButtonList" :text="btn.text" :key :class="btn.btnClass"
-            :icon="btn.icon" :color="btn.color" @click="btn.action" small>
+        <e-button v-for="(btn, key) in leftButtonList" :text="btn.text" :key :class="btn.btnClass" :icon="btn.icon"
+            :color="btn.color" @click="btn.action" small>
         </e-button>
         <e-spacer />
         <h2 v-if="appBar.title" class="pr-8">{{ appBar.title }}</h2>
         <app-logo v-else-if="appBar.title === undefined" negative />
         <e-spacer />
-        <e-button v-for="(btn, key) in appBar.rigthButtonList" :key :class="btn.btnClass" :color="btn.color"
-            :text="btn.text" :to="btn.to" :icon="btn.icon" @click="btn.action" small>
+        <e-button v-for="(btn, key) in rigthButtonList" :key :class="btn.btnClass" :color="btn.color" :text="btn.text"
+            :to="btn.to" :icon="btn.icon" @click="btn.action" small>
         </e-button>
     </e-bar>
 
 </template>
 <script lang="ts" setup>
 import { OTHERS_LINKS, MOBILE_DRAWER_LINKS } from '@/constants/links'
-
+const auth = useAuthStore()
 let { appBar } = useAppBar();
 const route = useRoute();
 
@@ -24,15 +24,35 @@ watch(() => route, (_, to) => {
     if (result)
         switch (to?.path) {
             case '/home':
-                appBar.value.title = ''
+                appBar.value.title = undefined
                 break;
             case '/':
-                appBar.value.title = ''
+                appBar.value.title = undefined
                 break;
             default:
                 appBar.value.title = result.title
         }
 }, { deep: true, immediate: true });
+
+const leftButtonList = computed(() => {
+    console.log(appBar.value.leftButtonList?.[0]?._public)
+    return appBar.value.leftButtonList?.filter((item) => {
+        if (typeof item._public == 'undefined')
+            return true;
+
+        return auth.isAuthenticated ? !item._public : item._public
+
+    }) || []
+})
+const rigthButtonList = computed(() => {
+    return appBar.value.rigthButtonList?.filter((item) => {
+        if (typeof item._public == 'undefined')
+            return true;
+
+        return auth.isAuthenticated ? !item._public : item._public
+
+    }) || []
+})
 
 </script>
 <style lang="scss">

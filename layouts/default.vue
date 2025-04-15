@@ -1,5 +1,5 @@
 <template>
-  <e-app :type="$device.isMobile ? 'mobile-layout' : 'default-layout'">
+  <e-app type="default-layout">
     <app-bar />
     <app-drawer>
       <template #extra-links>
@@ -52,11 +52,11 @@ watch(route, () => {
 </script>
 
 <style lang="scss">
-body {
-  overflow: hidden;
-}
+// body {
+//   overflow: hidden;
+// }
 
-.e-app {
+.e-app[type="default-layout"] {
 
   .e-main {
     padding: 0 !important;
@@ -76,8 +76,8 @@ body {
   }
 
   .e-main {
-    overflow: auto;
-    max-height: 100vh;
+    // overflow: auto;
+    // max-height: 100vh;
 
     &__wrapper {
       position: unset;

@@ -45,6 +45,7 @@ watch(() => route.query, () => {
             leftButtonList: [
                 {
                     icon: icons.chevronLeft,
+                    _public: true,
                     action: () => router.push('/discover'),
                 },
             ]

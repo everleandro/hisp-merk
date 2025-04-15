@@ -1,72 +1,50 @@
-templ<template>
-    <div class="register-page pa-6">
-        <div class="register-page__content">
-            <div class="pa-4">
-                <h1 class="text-center mb-6">Create your account</h1>
-                <e-divider class="mb-3 secondary" />
-                <div class="register-page__form">
-                    <div>
-                        <e-form>
-                            <e-textfield cols="24" label="Name" />
-                            <e-textfield cols="24" label="Email" />
-                            <e-textfield cols="24" label="Password" />
-                            <e-textfield cols="24" label="Confirm" />
-                            <e-form-column>
-                                <e-spacer />
-                                <e-button rounded color="secondary">
-                                    <span class="px-3">Forgot password</span>
-                                </e-button>
-                            </e-form-column>
-                        </e-form>
-                    </div>
-                    <e-spacer></e-spacer>
-                    <div class="d-flex align-center mt-8">
-                        <p class="mb-0 mr-3 secondary--text"> Already have an account?</p>
-                        <e-button text to="/register/login" color="blue" style="text-decoration: underline;">Log
-                            in</e-button>
-                    </div>
-                </div>
-            </div>
+<template>
+    <centered-form title="Crear Cuenta">
+        <e-form v-model="data.formModel" color="secondary">
+            <e-textfield v-model="user.first_name" cols="24" :rules="[userRules._required]" placeholder="First Name" />
+            <e-textfield v-model="user.last_name" cols="24" :rules="[userRules._required]" placeholder="Last Name" />
+            <e-textfield v-model="user.email" cols="24" :rules="[userRules._email, userRules._required]"
+                placeholder="Email" />
+            <e-textfield v-model="user.password" cols="24" :rules="[userRules._required]" placeholder="Password"
+                type="password" />
+            <e-form-column>
+                <e-spacer />
+                <e-button rounded color="primary" block @click="create" :loading="data.loading"
+                    :disabled="!data.formModel">
+                    <span class="px-3">Crear</span>
+                </e-button>
+            </e-form-column>
+        </e-form>
+        <e-spacer></e-spacer>
+        <div class="d-flex align-center justify-center mt-8">
+            <p class="mb-0 mr-3 secondary--text"> Already have an account?</p>
+            <e-button text to="/login" color="blue" style="text-decoration: underline;">
+                Log in
+            </e-button>
         </div>
-    </div>
+    </centered-form>
 </template>
 <script lang="ts" setup>
 definePageMeta({
     layout: 'empty'
 })
-</script>
-<style lang="scss">
-.register-page {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: url('@/assets/images/header-bg.png') center center no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: relative;
-
-    &__content {
-        z-index: 1;
-
-        &>div {
-            border-radius: 4px;
-            backdrop-filter: blur(6px);
-            background-color: rgba(255, 255, 255, .7);
-        }
-    }
-
-    &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        // background: rgba(0, 0, 0, 0.7);
-        z-index: 0;
+import type { User } from '@/types/user'
+const profileStore = useProfileStore();
+const userRules = useRules();
+const userRouter = useRouter();
+const user = reactive<Partial<User>>({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+})
+const data = reactive({ loading: false, formModel: true })
+const create = async () => {
+    const { success, data } = await profileStore.register(user)
+    if (success) {
+        userRouter.push('/login')
+    }else{
+        
     }
 }
-</style>
+</script>

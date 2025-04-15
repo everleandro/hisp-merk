@@ -1,9 +1,10 @@
 <template>
     <e-drawer v-model="drawerModel" fixed :right="right" :data-type="mobile ? 'mobile' : 'desktop'" class="primary">
         <template #prepend>
-            <e-list-item :prepend-avatar="user" title="Jhon Smith" x-large class="mb-0" subtitle="smith.93@gmail.com"
-                color="white">
+            <e-list-item v-if="$auth.isAuthenticated" :prepend-avatar="user" :title="userData.get_full_name"
+                class="mb-0" :subtitle="userData.email" color="white">
             </e-list-item>
+            <div v-else></div>
             <e-divider />
         </template>
         <e-list>
@@ -33,8 +34,11 @@
 import user from "assets/images/user.png";
 import { useAuthStore } from '@/stores/auth';
 import { useBreakpoint } from 'drocket'
-import { OTHERS_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
+
 const authStore = useAuthStore();
+const userData = await authStore.getUser();
+import { OTHERS_LINKS, MOBILE_DRAWER_LINKS, EXTRA_LINKS } from '@/constants/links'
+import auth from "~/plugins/auth";
 
 const router = useRouter();
 const route = useRoute();
